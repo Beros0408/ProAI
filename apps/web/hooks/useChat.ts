@@ -2,6 +2,7 @@
 import { useState, useCallback } from 'react'
 import { generateId } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
+import type { AgentType } from '@proai/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
@@ -10,7 +11,7 @@ interface Message {
   conversationId: string
   role: 'user' | 'assistant'
   content: string
-  agentType?: string
+  agentType?: AgentType
   createdAt: string
 }
 
