@@ -19,7 +19,7 @@ export function AgentStatus() {
             key={agent.type}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#1E1E2E] transition-colors group"
           >
-            <span className="text-lg shrink-0">{agent.emoji}</span>
+            <span className="text-lg shrink-0 animate-float">{agent.emoji}</span>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-foreground">{agent.label}</span>

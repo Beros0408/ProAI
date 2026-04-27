@@ -9,7 +9,7 @@ interface Props {
 export default function ChatConversationPage({ params, searchParams }: Props) {
   const agentType = (searchParams.agent as AgentType) ?? 'general'
   return (
-    <div className="h-full flex flex-col -m-6">
+    <div className="h-full flex flex-col -m-6 animate-fade-in">
       <ChatContainer conversationId={params.id === 'new' ? null : params.id} agentType={agentType} />
     </div>
   )

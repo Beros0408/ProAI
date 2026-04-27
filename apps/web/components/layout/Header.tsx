@@ -16,7 +16,7 @@ export function Header() {
   const title = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1] ?? 'ProAI'
 
   return (
-    <header className="h-16 shrink-0 bg-surface border-b border-[#1E1E2E] flex items-center px-6 gap-4">
+    <header className="h-16 shrink-0 bg-surface border-b border-[#1E1E2E] flex items-center px-6 gap-4 animate-fade-down">
       <div className="flex-1 min-w-0">
         <h2 className="font-semibold text-foreground text-sm">{title}</h2>
       </div>

@@ -12,7 +12,7 @@ export function ActivityFeed() {
   return (
     <div className="bg-surface border border-[#1E1E2E] rounded-xl p-5 h-full">
       <h3 className="font-semibold text-foreground text-sm mb-4">Activité récente</h3>
-      <ul className="space-y-3">
+      <ul className="space-y-3 stagger-children">
         {ACTIVITIES.map((item, idx) => (
           <li key={item.id} className="flex gap-3 items-start">
             <div className="relative shrink-0 flex flex-col items-center">

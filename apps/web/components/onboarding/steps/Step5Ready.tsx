@@ -17,7 +17,7 @@ interface Props {
 
 export function Step5Ready({ data }: Props) {
   return (
-    <div className="space-y-6 text-center">
+    <div className="space-y-6 text-center animate-fade-up">
       <div>
         <div className="text-5xl mb-4">🚀</div>
         <h2 className="text-xl font-bold text-foreground">Vous êtes prêt, {data.firstName || 'ami'} !</h2>

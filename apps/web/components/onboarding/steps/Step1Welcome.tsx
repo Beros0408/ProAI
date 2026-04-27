@@ -5,7 +5,7 @@ interface Props {
 
 export function Step1Welcome({ data, onChange }: Props) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-up">
       <div className="text-center">
         <div className="text-5xl mb-4">👋</div>
         <h2 className="text-xl font-bold text-foreground">Bienvenue sur ProAI</h2>

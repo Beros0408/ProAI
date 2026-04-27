@@ -21,8 +21,8 @@ export function ChatContainer({ conversationId, agentType }: Props) {
   }, [messages, isStreaming])
 
   return (
-    <div className="flex flex-col h-full bg-base">
-      <div className="flex items-center gap-3 px-6 h-16 border-b border-[#1E1E2E] bg-surface shrink-0">
+    <div className="flex flex-col h-full bg-base animate-fade-in">
+      <div className="flex items-center gap-3 px-6 h-16 border-b border-[#1E1E2E] bg-surface shrink-0 animate-fade-down">
         <AgentBadge agentType={agentType} size="md" />
         {isStreaming && (
           <div className="flex items-center gap-1.5 text-xs text-muted ml-auto">
@@ -34,9 +34,9 @@ export function ChatContainer({ conversationId, agentType }: Props) {
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 stagger-children">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center gap-3">
+          <div className="flex flex-col items-center justify-center h-full text-center gap-3 animate-fade-in">
             <div className="text-4xl">💬</div>
             <p className="text-muted text-sm max-w-xs">
               Commencez la conversation. L&apos;agent est prêt à vous aider.

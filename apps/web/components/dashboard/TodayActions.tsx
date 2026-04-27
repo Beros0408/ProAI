@@ -25,9 +25,9 @@ export function TodayActions() {
         </div>
       </div>
 
-      <ul className="space-y-2">
+      <ul className="space-y-2 stagger-children">
         {ACTIONS.map(action => (
-          <li key={action.id} className="flex items-start gap-3 group">
+          <li key={action.id} className="flex items-start gap-3 group hover-lift">
             {action.done ? (
               <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
             ) : (

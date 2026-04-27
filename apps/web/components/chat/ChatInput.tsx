@@ -72,7 +72,7 @@ export function ChatInput({ onSend, disabled = false, placeholder = 'Écrivez vo
         type="button"
         onClick={handleSend}
         disabled={disabled || !value.trim()}
-        className="p-2.5 rounded-xl bg-primary hover:bg-[#4F46E5] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+        className="p-2.5 rounded-xl bg-primary hover:bg-[#4F46E5] text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed hover-press shrink-0"
         aria-label="Envoyer"
       >
         <Send className="w-4 h-4" />
