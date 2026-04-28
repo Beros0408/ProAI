@@ -5,19 +5,25 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/context'
+import { TranslationKey } from '@/lib/i18n/translations'
 
 const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/chat', label: 'Chat', icon: MessageSquare },
-  { href: '/automations', label: 'Automatisations', icon: Zap },
-  { href: '/analytics', label: 'Analytics', icon: BarChart2 },
-  { href: '/mindmap', label: 'Mind Map', icon: Network },
-  { href: '/settings', label: 'Paramètres', icon: Settings },
+  { href: '/dashboard', key: 'dashboard' as TranslationKey, icon: LayoutDashboard },
+  { href: '/chat', key: 'chat' as TranslationKey, icon: MessageSquare },
+  { href: '/automations', key: 'automations' as TranslationKey, icon: Zap },
+  { href: '/analytics', key: 'analytics' as TranslationKey, icon: BarChart2 },
+  { href: '/content', key: 'content' as TranslationKey, icon: Network },
+  { href: '/analyze', key: 'analyze' as TranslationKey, icon: Network },
+  { href: '/templates', key: 'templates' as TranslationKey, icon: Network },
+  { href: '/mindmap', key: 'mindmap' as TranslationKey, icon: Network },
+  { href: '/settings', key: 'settings' as TranslationKey, icon: Settings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <>
@@ -59,7 +65,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ href, key, icon: Icon }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
           return (
             <Link
@@ -74,7 +80,7 @@ export function Sidebar() {
               )}
             >
               <Icon className="w-4 h-4 shrink-0" />
-              <span className="flex-1">{label}</span>
+              <span className="flex-1">{t(key)}</span>
               {active && <ChevronRight className="w-3.5 h-3.5" />}
             </Link>
           )
@@ -87,8 +93,8 @@ export function Sidebar() {
             <span className="text-primary text-xs font-bold">U</span>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium text-foreground truncate">Mon espace</div>
-            <div className="text-xs text-muted">Plan Free</div>
+            <div className="text-xs font-medium text-foreground truncate">{t('my_space')}</div>
+            <div className="text-xs text-muted">{t('free_plan')}</div>
           </div>
         </div>
       </div>

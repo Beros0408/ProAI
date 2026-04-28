@@ -1,33 +1,219 @@
-import { TodayActions } from '@/components/dashboard/TodayActions'
-import { AgentStatus } from '@/components/dashboard/AgentStatus'
-import { KPICard } from '@/components/dashboard/KPICard'
-import { ActivityFeed } from '@/components/dashboard/ActivityFeed'
-import { MessageSquare, Zap, TrendingUp, Clock } from 'lucide-react'
+'use client'
+
+import { useState } from 'react'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
+import { MessageSquare, Zap, TrendingUp, Clock, Bot, Activity, CheckCircle, AlertCircle } from 'lucide-react'
+
+const kpiData = [
+  { name: 'Jan', conversations: 120, tasks: 30, leads: 20 },
+  { name: 'Fév', conversations: 132, tasks: 35, leads: 22 },
+  { name: 'Mar', conversations: 101, tasks: 28, leads: 18 },
+  { name: 'Avr', conversations: 134, tasks: 38, leads: 24 },
+  { name: 'Mai', conversations: 90, tasks: 25, leads: 16 },
+  { name: 'Jun', conversations: 230, tasks: 42, leads: 28 },
+]
+
+const pieData = [
+  { name: 'Actifs', value: 4, color: '#0ea5e9' },
+  { name: 'Inactifs', value: 2, color: '#fb923c' },
+]
+
+const agents = [
+  { name: 'Agent Commercial', status: 'active', lastActivity: '2 min ago' },
+  { name: 'Agent Support', status: 'active', lastActivity: '5 min ago' },
+  { name: 'Agent Marketing', status: 'idle', lastActivity: '1h ago' },
+  { name: 'Agent Analyse', status: 'active', lastActivity: '30 sec ago' },
+  { name: 'Agent Créatif', status: 'idle', lastActivity: '3h ago' },
+  { name: 'Agent Automatisation', status: 'active', lastActivity: '1 min ago' },
+]
+
+const activities = [
+  { time: '14:32', action: 'Nouvelle conversation démarrée', agent: 'Agent Commercial' },
+  { time: '14:28', action: 'Lead généré automatiquement', agent: 'Agent Marketing' },
+  { time: '14:25', action: 'Tâche d\'analyse terminée', agent: 'Agent Analyse' },
+  { time: '14:20', action: 'Email envoyé', agent: 'Agent Support' },
+  { time: '14:15', action: 'Rapport généré', agent: 'Agent Automatisation' },
+]
 
 export default function DashboardPage() {
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null)
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="animate-fade-up">
-        <h1 className="text-2xl font-bold text-foreground gradient-text">Tableau de bord</h1>
-        <p className="text-muted text-sm mt-1">Vue d&apos;ensemble de vos agents IA</p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
-        <KPICard title="Conversations" value="142" delta="+12%" icon={MessageSquare} />
-        <KPICard title="Tâches auto." value="38" delta="+8%" icon={Zap} />
-        <KPICard title="Leads générés" value="24" delta="+5%" icon={TrendingUp} />
-        <KPICard title="Temps économisé" value="6h" delta="+2h" icon={Clock} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <TodayActions />
-          <AgentStatus />
+    <div className="min-h-screen bg-[#0c1220] text-white p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#fb923c] bg-clip-text text-transparent">
+            ProAI Dashboard
+          </h1>
+          <p className="text-gray-400 mt-2">Real-time monitoring of your AI agents</p>
         </div>
-        <div>
-          <ActivityFeed />
+
+        {/* KPI Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Conversations</p>
+                <p className="text-2xl font-bold text-[#0ea5e9]">142</p>
+                <p className="text-green-400 text-sm">+12% ce mois</p>
+              </div>
+              <MessageSquare className="w-8 h-8 text-[#0ea5e9]" />
+            </div>
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={kpiData.slice(-4)}>
+                  <Bar dataKey="conversations" fill="#0ea5e9" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Automated Tasks</p>
+                <p className="text-2xl font-bold text-[#fb923c]">38</p>
+                <p className="text-green-400 text-sm">+8% ce mois</p>
+              </div>
+              <Zap className="w-8 h-8 text-[#fb923c]" />
+            </div>
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={kpiData.slice(-4)}>
+                  <Line type="monotone" dataKey="tasks" stroke="#fb923c" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Generated Leads</p>
+                <p className="text-2xl font-bold text-[#0ea5e9]">24</p>
+                <p className="text-green-400 text-sm">+5% ce mois</p>
+              </div>
+              <TrendingUp className="w-8 h-8 text-[#0ea5e9]" />
+            </div>
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={kpiData.slice(-4)}>
+                  <Bar dataKey="leads" fill="#0ea5e9" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-400 text-sm">Time Saved</p>
+                <p className="text-2xl font-bold text-[#fb923c]">6h</p>
+                <p className="text-green-400 text-sm">+2h ce mois</p>
+              </div>
+              <Clock className="w-8 h-8 text-[#fb923c]" />
+            </div>
+            <div className="mt-4 h-16">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" innerRadius={20} outerRadius={30}>
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Agent Status */}
+          <div className="lg:col-span-2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <h2 className="text-xl font-semibold mb-4 text-white">Agent Status</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {agents.map((agent, index) => (
+                <div
+                  key={index}
+                  className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                    selectedAgent === agent.name
+                      ? 'border-[#0ea5e9] bg-[#0ea5e9]/10'
+                      : 'border-gray-600 bg-gray-700/30 hover:border-gray-500'
+                  }`}
+                  onClick={() => setSelectedAgent(agent.name)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Bot className="w-5 h-5 text-[#0ea5e9]" />
+                      <div>
+                        <p className="font-medium text-white">{agent.name}</p>
+                        <p className="text-sm text-gray-400">{agent.lastActivity}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {agent.status === 'active' ? (
+                        <CheckCircle className="w-4 h-4 text-green-400" />
+                      ) : (
+                        <AlertCircle className="w-4 h-4 text-yellow-400" />
+                      )}
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        agent.status === 'active'
+                          ? 'bg-green-500/20 text-green-400'
+                          : 'bg-yellow-500/20 text-yellow-400'
+                      }`}>
+                        {agent.status === 'active' ? 'Active' : 'Inactive'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Activity Feed */}
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+            <h2 className="text-xl font-semibold mb-4 text-white">Activity Feed</h2>
+            <div className="space-y-4">
+              {activities.map((activity, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <Activity className="w-4 h-4 text-[#fb923c] mt-1 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm text-white">{activity.action}</p>
+                    <p className="text-xs text-gray-400">{activity.time} • {activity.agent}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Performance Chart */}
+        <div className="mt-8 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+          <h2 className="text-xl font-semibold mb-4 text-white">Monthly Performance</h2>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={kpiData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="name" stroke="#9CA3AF" />
+                <YAxis stroke="#9CA3AF" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#1F2937',
+                    border: '1px solid #374151',
+                    borderRadius: '8px',
+                    color: '#FFFFFF'
+                  }}
+                />
+                <Line type="monotone" dataKey="conversations" stroke="#0ea5e9" strokeWidth={2} />
+                <Line type="monotone" dataKey="tasks" stroke="#fb923c" strokeWidth={2} />
+                <Line type="monotone" dataKey="leads" stroke="#10B981" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>
   )
 }
+

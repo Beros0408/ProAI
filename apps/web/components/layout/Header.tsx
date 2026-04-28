@@ -2,18 +2,22 @@
 
 import { usePathname } from 'next/navigation'
 import { Bell, Search } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 
 const PAGE_TITLES: Record<string, string> = {
-  '/dashboard': 'Tableau de bord',
+  '/dashboard': 'Dashboard',
   '/chat': 'Chat',
-  '/automations': 'Automatisations',
+  '/automations': 'Automations',
   '/analytics': 'Analytics',
-  '/settings': 'Paramètres',
+  '/content': 'AI Content',
+  '/analyze': 'Analyzer',
+  '/templates': 'Templates',
+  '/settings': 'Settings',
 }
 
 export function Header() {
   const pathname = usePathname()
-  const title = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1] ?? 'ProAI'
+  const title = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1] || 'ProAI'
 
   return (
     <header className="h-16 shrink-0 bg-surface border-b border-[#1E1E2E] flex items-center px-6 gap-4 animate-fade-down">
@@ -24,9 +28,11 @@ export function Header() {
       <div className="flex items-center gap-2">
         <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-base border border-[#1E1E2E] text-muted text-xs hover:border-primary/40 transition-colors">
           <Search className="w-3.5 h-3.5" />
-          <span>Rechercher...</span>
+          <span>Search...</span>
           <kbd className="ml-1 px-1 rounded bg-[#1E1E2E] text-[10px] font-mono">⌘K</kbd>
         </button>
+
+        <LanguageSwitcher />
 
         <button className="relative p-2 rounded-lg text-muted hover:bg-[#1E1E2E] hover:text-foreground transition-colors">
           <Bell className="w-4 h-4" />
