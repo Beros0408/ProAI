@@ -18,3 +18,9 @@ coverage/
 .pytest_cache/
 .turbo/
 *.log
+
+.env
+.env.local
+api/.env
+
+.mcp.json
