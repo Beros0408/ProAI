@@ -3,10 +3,10 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-INTENTS = ("marketing", "sales", "general")
+INTENTS = ("marketing", "sales", "general", "social_media", "communication")
 
 _SYSTEM = """You are an intent classifier for a B2B SaaS AI assistant.
-Classify the user's message into exactly one intent: marketing, sales, or general.
+Classify the user's message into exactly one intent: marketing, sales, general, social_media, or communication.
 Reply with ONLY the intent word, nothing else."""
 
 _prompt = ChatPromptTemplate.from_messages([

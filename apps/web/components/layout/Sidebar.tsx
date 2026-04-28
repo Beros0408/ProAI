@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
@@ -10,14 +11,46 @@ const NAV_ITEMS = [
   { href: '/chat', label: 'Chat', icon: MessageSquare },
   { href: '/automations', label: 'Automatisations', icon: Zap },
   { href: '/analytics', label: 'Analytics', icon: BarChart2 },
+  { href: '/mindmap', label: 'Mind Map', icon: Network },
   { href: '/settings', label: 'Paramètres', icon: Settings },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   return (
-    <aside className="w-60 shrink-0 bg-surface border-r border-[#1E1E2E] flex flex-col h-full animate-fade-in">
+    <>
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileOpen(true)}
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-surface border border-[#1E1E2E] rounded-lg hover:bg-[#1E1E2E] transition-colors"
+      >
+        <Menu className="w-5 h-5 text-foreground" />
+      </button>
+
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMobileOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={cn(
+        "w-60 shrink-0 bg-surface border-r border-[#1E1E2E] flex flex-col h-full animate-fade-in transition-transform duration-300 ease-in-out",
+        "lg:translate-x-0 lg:static lg:z-auto",
+        "fixed left-0 top-0 z-50",
+        isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}>
+        {/* Close Button Mobile */}
+        <button
+          onClick={() => setIsMobileOpen(false)}
+          className="lg:hidden absolute top-4 right-4 p-2 hover:bg-[#1E1E2E] rounded-lg transition-colors"
+        >
+          <X className="w-5 h-5 text-foreground" />
+        </button>
       <div className="flex items-center gap-2.5 px-5 h-16 border-b border-[#1E1E2E] shrink-0">
         <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
           <span className="text-white font-bold text-sm">P</span>
@@ -32,6 +65,7 @@ export function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={() => setIsMobileOpen(false)}
               className={cn(
                 'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group',
                 active
@@ -59,5 +93,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   )
 }

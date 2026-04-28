@@ -7,6 +7,8 @@ const AGENT_CONFIG: Record<AgentType, { label: string; emoji: string; color: str
   sales: { label: 'Ventes', emoji: '💼', color: 'bg-green-500/10 text-green-300 border-green-500/20' },
   automation: { label: 'Automatisation', emoji: '⚡', color: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/20' },
   analytics: { label: 'Analytics', emoji: '📊', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
+  social_media: { label: 'Social Media', emoji: '📱', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
+  communication: { label: 'Communication', emoji: '💬', color: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20' },
 }
 
 interface Props {

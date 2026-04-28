@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import get_settings
 from core.redis import close_redis
-from routers import health, auth, chat, conversations, memory
+from routers import health, auth, chat, conversations, memory, mindmap
 
 settings = get_settings()
 
@@ -38,6 +38,7 @@ app.include_router(auth.router, prefix="/api/v1")
 app.include_router(chat.router, prefix="/api/v1")
 app.include_router(conversations.router, prefix="/api/v1")
 app.include_router(memory.router, prefix="/api/v1")
+app.include_router(mindmap.router, prefix="/api/v1/mindmap")
 
 @app.get("/")
 async def root():

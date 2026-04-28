@@ -2,11 +2,23 @@
 
 import { motion, useMotionValue, useTransform } from 'framer-motion'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function LandingPage() {
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
+  const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 })
+
+  useEffect(() => {
+    const updateWindowSize = () => {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+    }
+
+    updateWindowSize()
+    window.addEventListener('resize', updateWindowSize)
+
+    return () => window.removeEventListener('resize', updateWindowSize)
+  }, [])
 
   const handleMouseMove = (e: React.MouseEvent) => {
     mouseX.set(e.clientX)
@@ -64,8 +76,8 @@ export default function LandingPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 style={{
-                  x: useTransform(mouseX, [0, window.innerWidth], [-10, 10]),
-                  y: useTransform(mouseY, [0, window.innerHeight], [-10, 10]),
+                  x: useTransform(mouseX, [0, windowSize.width], [-10, 10]),
+                  y: useTransform(mouseY, [0, windowSize.height], [-10, 10]),
                 }}
               >
                 <Link href="/signup" className="px-8 py-4 bg-primary text-white rounded-lg text-lg font-semibold hover:bg-primary/80 transition-colors hover-lift">
