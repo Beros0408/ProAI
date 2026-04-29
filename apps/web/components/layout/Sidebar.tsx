@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X, Users, GitBranch, Calendar } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/context'
 import { TranslationKey } from '@/lib/i18n/translations'
@@ -17,6 +17,9 @@ const NAV_ITEMS = [
   { href: '/analyze', key: 'analyze' as TranslationKey, icon: Network },
   { href: '/templates', key: 'templates' as TranslationKey, icon: Network },
   { href: '/mindmap', key: 'mindmap' as TranslationKey, icon: Network },
+  { href: '/crm', key: 'crm' as TranslationKey, icon: Users },
+  { href: '/workflows', key: 'workflows' as TranslationKey, icon: GitBranch },
+  { href: '/schedule', key: 'schedule' as TranslationKey, icon: Calendar },
   { href: '/settings', key: 'settings' as TranslationKey, icon: Settings },
 ]
 
