@@ -3,21 +3,25 @@
 import { usePathname } from 'next/navigation'
 import { Bell, Search } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
+import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
-const PAGE_TITLES: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/chat': 'Chat',
-  '/automations': 'Automations',
-  '/analytics': 'Analytics',
-  '/content': 'AI Content',
-  '/analyze': 'Analyzer',
-  '/templates': 'Templates',
-  '/settings': 'Settings',
+const PAGE_TITLES: Record<string, TranslationKey> = {
+  '/dashboard': 'dashboard',
+  '/chat': 'chat',
+  '/automations': 'automations',
+  '/analytics': 'analytics',
+  '/content': 'content',
+  '/analyze': 'analyze',
+  '/templates': 'templates',
+  '/settings': 'settings',
 }
 
 export function Header() {
   const pathname = usePathname()
-  const title = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1] || 'ProAI'
+  const { t } = useTranslation()
+  const foundKey = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1]
+  const title = foundKey ? t(foundKey) : 'ProAI'
 
   return (
     <header className="h-16 shrink-0 bg-surface border-b border-[#1E1E2E] flex items-center px-6 gap-4 animate-fade-down">
@@ -28,7 +32,7 @@ export function Header() {
       <div className="flex items-center gap-2">
         <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-base border border-[#1E1E2E] text-muted text-xs hover:border-primary/40 transition-colors">
           <Search className="w-3.5 h-3.5" />
-          <span>Search...</span>
+          <span>{t('search')}</span>
           <kbd className="ml-1 px-1 rounded bg-[#1E1E2E] text-[10px] font-mono">⌘K</kbd>
         </button>
 

@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import ReactFlow, { Node, Edge, addEdge, useNodesState, useEdgesState, Controls, Background } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { motion } from 'framer-motion'
+import { useTranslation } from '@/lib/i18n/context'
 
 const initialNodes: Node[] = []
 const initialEdges: Edge[] = []
 
 export default function MindMapPage() {
+  const { t } = useTranslation()
   const router = useRouter()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
@@ -18,7 +20,7 @@ export default function MindMapPage() {
 
   const generateMindMap = async () => {
     if (!idea.trim()) {
-      alert('Veuillez décrire votre idée')
+      alert(t('mindmap_error_no_idea'))
       return
     }
 
@@ -33,17 +35,17 @@ export default function MindMapPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la génération')
+        throw new Error(t('mindmap_generation_error'))
       }
 
       const data = await response.json()
 
       setNodes(data.nodes)
       setEdges(data.edges)
-      alert('Mind map générée avec succès !')
+      alert(t('mindmap_success'))
     } catch (error) {
       console.error('Erreur:', error)
-      alert('Erreur lors de la génération de la mind map')
+      alert(t('mindmap_generation_error'))
     } finally {
       setIsLoading(false)
     }
@@ -66,15 +68,15 @@ export default function MindMapPage() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-2xl font-bold text-foreground gradient-text mb-2">Mind Map IA</h1>
-          <p className="text-muted mb-4">Transformez vos idées en cartes mentales interactives avec l'IA</p>
+          <h1 className="text-2xl font-bold text-foreground gradient-text mb-2">{t('mindmap_header')}</h1>
+          <p className="text-muted mb-4">{t('mindmap_description')}</p>
 
           <div className="flex gap-4">
             <input
               type="text"
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
-              placeholder="Décrivez votre idée ou projet..."
+              placeholder={t('describe_your_idea_placeholder')}
               className="flex-1 px-4 py-2 bg-base border border-[#1E1E2E] rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
               onKeyPress={(e) => e.key === 'Enter' && generateMindMap()}
             />
@@ -83,7 +85,7 @@ export default function MindMapPage() {
               disabled={isLoading}
               className="px-6 py-2 bg-primary hover:bg-primary/80 text-white rounded-lg transition-colors disabled:opacity-50 hover-lift"
             >
-              {isLoading ? 'Génération...' : 'Générer la Mind Map'}
+              {isLoading ? t('generating') : t('generate_mind_map')}
             </button>
           </div>
         </motion.div>

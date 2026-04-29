@@ -1,82 +1,87 @@
 'use client'
 
+import type { ComponentType } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, MessageSquare, Calendar, FileText, Share2, Database, Bot, Workflow } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
-const INTEGRATIONS = [
+const INTEGRATIONS: Array<{ name: string; icon: React.ComponentType<{ className?: string }>; descriptionKey: TranslationKey; connected: boolean }> = [
   {
     name: 'Gmail',
     icon: Mail,
-    description: 'Synchronisez vos emails et automatisez les réponses',
+    descriptionKey: 'integration_gmail_description',
     connected: false,
   },
   {
     name: 'LinkedIn',
     icon: Share2,
-    description: 'Publiez et analysez vos posts LinkedIn automatiquement',
+    descriptionKey: 'integration_linkedin_description',
     connected: false,
   },
   {
     name: 'Slack',
     icon: MessageSquare,
-    description: 'Intégrez vos canaux Slack pour la communication IA',
+    descriptionKey: 'integration_slack_description',
     connected: false,
   },
   {
     name: 'Instagram',
     icon: () => <span className="text-2xl">📷</span>,
-    description: 'Gérez vos posts et stories Instagram',
+    descriptionKey: 'integration_instagram_description',
     connected: false,
   },
   {
     name: 'Facebook',
     icon: () => <span className="text-2xl">📘</span>,
-    description: 'Automatisez vos publications Facebook',
+    descriptionKey: 'integration_facebook_description',
     connected: false,
   },
   {
     name: 'Notion',
     icon: () => <span className="text-2xl">📝</span>,
-    description: 'Synchronisez vos bases de données Notion',
+    descriptionKey: 'integration_notion_description',
     connected: false,
   },
   {
     name: 'Google Calendar',
     icon: Calendar,
-    description: 'Planifiez et gérez vos rendez-vous automatiquement',
+    descriptionKey: 'integration_google_calendar_description',
     connected: false,
   },
   {
     name: 'Google Sheets',
     icon: FileText,
-    description: 'Analysez et mettez à jour vos feuilles de calcul',
+    descriptionKey: 'integration_google_sheets_description',
     connected: false,
   },
   {
     name: 'n8n',
     icon: Workflow,
-    description: 'Connectez vos workflows d\'automatisation',
+    descriptionKey: 'integration_n8n_description',
     connected: false,
   },
   {
     name: 'Make',
     icon: Bot,
-    description: 'Intégrez vos scénarios Make (Integromat)',
+    descriptionKey: 'integration_make_description',
     connected: false,
   },
 ]
 
 export default function IntegrationsPage() {
+  const { t } = useTranslation()
+
   const handleConnect = (integration: string) => {
-    alert(`Connexion à ${integration} - Bientôt disponible !`)
+    alert(`${t('connect_action')} ${integration} - ${t('coming_soon')}`)
   }
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="animate-fade-up">
-        <h1 className="text-2xl font-bold text-foreground gradient-text">Intégrations</h1>
-        <p className="text-muted text-sm mt-1">Connectez vos outils préférés à ProAI</p>
+        <h1 className="text-2xl font-bold text-foreground gradient-text">{t('integrations')}</h1>
+        <p className="text-muted text-sm mt-1">{t('integrations_description')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -100,12 +105,12 @@ export default function IntegrationsPage() {
                     ? "bg-green-500/20 text-green-400"
                     : "bg-gray-500/20 text-gray-400"
                 )}>
-                  {integration.connected ? 'Connecté' : 'Non connecté'}
+                  {integration.connected ? t('connected') : t('not_connected')}
                 </span>
               </div>
 
               <h3 className="text-lg font-semibold text-foreground mb-2">{integration.name}</h3>
-              <p className="text-muted text-sm mb-4">{integration.description}</p>
+              <p className="text-muted text-sm mb-4">{t(integration.descriptionKey as any)}</p>
 
               <button
                 onClick={() => handleConnect(integration.name)}

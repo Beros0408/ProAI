@@ -1,55 +1,68 @@
 'use client'
 
+import type { TranslationKey } from '@/lib/i18n/translations'
 import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from '@/lib/i18n/context'
 
-const templates = [
+type TemplateCard = {
+  key: string
+  title: TranslationKey
+  description: TranslationKey
+}
+
+const templates: TemplateCard[] = [
   {
-    title: 'Lancement de produit',
-    description: 'Annonce un lancement avec un ton énergique et une proposition claire.',
+    key: 'launch_product',
+    title: 'launch_product',
+    description: 'launch_product_description',
   },
   {
-    title: 'Résumé d’article',
-    description: 'Transforme un article long en résumé clair et actionnable.',
+    key: 'article_summary',
+    title: 'article_summary',
+    description: 'article_summary_description',
   },
   {
-    title: 'Post LinkedIn',
-    description: 'Rédige un post LinkedIn qui capte l’attention et génère de l’engagement.',
+    key: 'linkedin_post_template',
+    title: 'linkedin_post_template',
+    description: 'linkedin_post_template_description',
   },
   {
-    title: 'Email de relance',
-    description: 'Crée un email de suivi personnalisé pour réactiver un prospect.',
+    key: 'follow_up_email',
+    title: 'follow_up_email',
+    description: 'follow_up_email_description',
   },
 ]
 
 export default function TemplatesPage() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <div className="space-y-8 p-6 lg:p-10">
       <div className="rounded-3xl border border-slate-800 bg-slate-950/80 p-8 shadow-xl shadow-slate-950/20">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-white">Bibliothèque de templates</h1>
-            <p className="mt-2 text-slate-400">Utilise des formats testés pour accélérer la création de contenu.</p>
+            <h1 className="text-3xl font-semibold text-white">{t('templates_page_title')}</h1>
+            <p className="mt-2 text-slate-400">{t('templates_page_description')}</p>
           </div>
           <Button onClick={() => router.push('/content')} variant="secondary">
-            Aller à Contenu IA
+            {t('templates_cta')}
           </Button>
         </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {templates.map((template) => (
-          <article key={template.title} className="rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-sm shadow-slate-950/10">
+          <article key={template.key} className="rounded-3xl border border-slate-800 bg-slate-950/90 p-6 shadow-sm shadow-slate-950/10">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-white">{template.title}</h2>
+                <h2 className="text-xl font-semibold text-white">{t(template.title)}</h2>
               </div>
             </div>
-            <p className="mt-4 text-slate-400">{template.description}</p>
+            <p className="mt-4 text-slate-400">{t(template.description)}</p>
             <div className="mt-6 flex justify-end">
-              <Button variant="secondary" onClick={() => router.push('/content')}>Utiliser</Button>
+              <Button variant="secondary" onClick={() => router.push('/content')}>{t('use')}</Button>
             </div>
           </article>
         ))}

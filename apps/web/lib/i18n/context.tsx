@@ -34,7 +34,8 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }
 
   const t = (key: TranslationKey): string => {
-    return translations[locale][key] || key
+    const localeTranslations = translations[locale] as Record<TranslationKey, string>
+    return localeTranslations[key] || key
   }
 
   // Prevent render until mounted to avoid hydration mismatch
@@ -52,7 +53,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 export function useTranslation() {
   const context = useContext(I18nContext)
   if (!context) {
-    throw new Error('useTranslation must be used within I18nProvider')
+    return {
+      t: (key: string) => key,
+      locale: 'fr' as const,
+      switchLanguage: () => {},
+    }
   }
   return context
 }

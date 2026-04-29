@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/Textarea';
+import { useTranslation } from '@/lib/i18n/context';
 
 const presets = [
   { label: 'LinkedIn post', value: 'Generate a high-engagement LinkedIn post about' },
@@ -19,6 +20,7 @@ const tones = [
 
 export default function ContentPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [topic, setTopic] = useState('');
   const [preset, setPreset] = useState(presets[0].value);
   const [tone, setTone] = useState(tones[0].value);
@@ -37,9 +39,9 @@ export default function ContentPage() {
       });
 
       const data = await response.json();
-      setResult(data.content || 'Aucun résultat.');
+      setResult(data.content || t('no_result'));
     } catch (error) {
-      setResult('Erreur lors de la génération.');
+      setResult(t('generation_error'));
     } finally {
       setLoading(false);
     }
@@ -63,14 +65,12 @@ export default function ContentPage() {
       <div className="rounded-3xl border border-slate-800 bg-slate-950/80 p-8 shadow-xl shadow-slate-950/20">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-white">AI Content Studio</h1>
-            <p className="mt-2 text-slate-400">
-              Génère des messages, emails et newsletters optimisés pour ton audience.
-            </p>
+            <h1 className="text-3xl font-semibold text-white">{t('ai_content_studio')}</h1>
+            <p className="mt-2 text-slate-400">{t('generate_messages_emails_newsletters')}</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button onClick={() => router.push('/dashboard')} variant="secondary">
-              Retour au tableau de bord
+              {t('back_to_dashboard')}
             </Button>
           </div>
         </div>
@@ -79,15 +79,13 @@ export default function ContentPage() {
       <div className="grid gap-6 lg:grid-cols-[1.3fr,0.7fr]">
         <section className="space-y-6 rounded-3xl border border-slate-800 bg-slate-950/90 p-6">
           <div className="space-y-3">
-            <h2 className="text-xl font-semibold text-white">Prépare ton contenu</h2>
-            <p className="text-slate-400">
-              Choisis un modèle, définis ton ton et décris le sujet pour créer un contenu prêt à publier.
-            </p>
+            <h2 className="text-xl font-semibold text-white">{t('prepare_your_content')}</h2>
+            <p className="text-slate-400">{t('choose_template_define_tone_describe_topic')}</p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm text-slate-300">Modèle</label>
+              <label className="text-sm text-slate-300">{t('template')}</label>
               <select
                 value={preset}
                 onChange={(event) => setPreset(event.target.value)}
@@ -102,7 +100,7 @@ export default function ContentPage() {
             </div>
 
             <div>
-              <label className="text-sm text-slate-300">Ton</label>
+              <label className="text-sm text-slate-300">{t('tone')}</label>
               <select
                 value={tone}
                 onChange={(event) => setTone(event.target.value)}
@@ -118,11 +116,11 @@ export default function ContentPage() {
           </div>
 
           <div>
-            <label className="text-sm text-slate-300">Sujet</label>
+            <label className="text-sm text-slate-300">{t('topic')}</label>
             <Textarea
               value={topic}
               onChange={(event) => setTopic(event.target.value)}
-              placeholder="Décris l'idée principale ici..."
+              placeholder={t('describe_your_topic')}
               rows={5}
               className="mt-2 bg-slate-900 text-white"
             />
@@ -130,30 +128,30 @@ export default function ContentPage() {
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Button onClick={handleGenerate} disabled={loading || !topic.trim()}>
-              {loading ? 'Génération...' : 'Générer'}
+              {loading ? t('generating') : t('generate')}
             </Button>
-            <p className="text-sm text-slate-500">Convertis ton briefing en contenu engageant.</p>
+            <p className="text-sm text-slate-500">{t('content_action_description')}</p>
           </div>
         </section>
 
         <aside className="space-y-4 rounded-3xl border border-slate-800 bg-slate-950/90 p-6">
           <div className="rounded-3xl bg-slate-900 p-5">
-            <h3 className="text-lg font-semibold text-white">Astuces</h3>
+            <h3 className="text-lg font-semibold text-white">{t('tips')}</h3>
             <ul className="mt-3 space-y-2 text-slate-400">
-              <li>• Mentionne le public cible pour plus de précision.</li>
-              <li>• Ajoute des mots-clés importants.</li>
-              <li>• Change de ton pour varier les messages.</li>
+              <li>• {t('mention_target_audience')}</li>
+              <li>• {t('add_keywords')}</li>
+              <li>• {t('change_tone')}</li>
             </ul>
           </div>
 
           <div className="rounded-3xl bg-slate-900 p-5">
-            <h3 className="text-lg font-semibold text-white">Actions</h3>
+            <h3 className="text-lg font-semibold text-white">{t('actions')}</h3>
             <div className="mt-4 flex flex-col gap-3">
               <Button disabled={!result} onClick={handleCopy} variant="secondary">
-                Copier le contenu
+                {t('copy')}
               </Button>
               <Button disabled={!result} onClick={handleDownload} variant="secondary">
-                Télécharger le fichier
+                {t('download')}
               </Button>
             </div>
           </div>
@@ -163,16 +161,16 @@ export default function ContentPage() {
       <section className="rounded-3xl border border-slate-800 bg-slate-950/90 p-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold text-white">Résultat généré</h2>
-            <p className="text-sm text-slate-500">Tu peux régénérer ou copier en un clic.</p>
+            <h2 className="text-xl font-semibold text-white">{t('generated_result')}</h2>
+            <p className="text-sm text-slate-500">{t('generated_result_description')}</p>
           </div>
           <Button onClick={handleGenerate} disabled={loading || !topic.trim()}>
-            {loading ? 'Régénération...' : 'Régénération'}
+            {loading ? t('generating') : t('regenerate')}
           </Button>
         </div>
 
         <div className="mt-6 rounded-3xl border border-slate-800 bg-slate-950 p-6 min-h-[260px] text-slate-300">
-          {result ? <pre className="whitespace-pre-wrap break-words text-sm">{result}</pre> : <p className="text-slate-500">Le contenu généré apparaîtra ici.</p>}
+          {result ? <pre className="whitespace-pre-wrap break-words text-sm">{result}</pre> : <p className="text-slate-500">{t('generated_content_placeholder')}</p>}
         </div>
       </section>
     </div>

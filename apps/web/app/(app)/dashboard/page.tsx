@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslation } from '@/lib/i18n/context'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
 import { MessageSquare, Zap, TrendingUp, Clock, Bot, Activity, CheckCircle, AlertCircle } from 'lucide-react'
 
@@ -37,6 +38,7 @@ const activities = [
 
 export default function DashboardPage() {
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-[#0c1220] text-white p-6">
@@ -44,9 +46,9 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-[#0ea5e9] to-[#fb923c] bg-clip-text text-transparent">
-            ProAI Dashboard
+            {t('dashboard_page_title')}
           </h1>
-          <p className="text-gray-400 mt-2">Real-time monitoring of your AI agents</p>
+          <p className="text-gray-400 mt-2">{t('dashboard_overview')}</p>
         </div>
 
         {/* KPI Cards */}
@@ -54,7 +56,7 @@ export default function DashboardPage() {
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Conversations</p>
+                <p className="text-gray-400 text-sm">{t('conversations')}</p>
                 <p className="text-2xl font-bold text-[#0ea5e9]">142</p>
                 <p className="text-green-400 text-sm">+12% ce mois</p>
               </div>
@@ -72,7 +74,7 @@ export default function DashboardPage() {
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Automated Tasks</p>
+                <p className="text-gray-400 text-sm">{t('auto_tasks')}</p>
                 <p className="text-2xl font-bold text-[#fb923c]">38</p>
                 <p className="text-green-400 text-sm">+8% ce mois</p>
               </div>
@@ -90,7 +92,7 @@ export default function DashboardPage() {
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Generated Leads</p>
+                <p className="text-gray-400 text-sm">{t('generated_leads')}</p>
                 <p className="text-2xl font-bold text-[#0ea5e9]">24</p>
                 <p className="text-green-400 text-sm">+5% ce mois</p>
               </div>
@@ -108,7 +110,7 @@ export default function DashboardPage() {
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Time Saved</p>
+                <p className="text-gray-400 text-sm">{t('time_saved')}</p>
                 <p className="text-2xl font-bold text-[#fb923c]">6h</p>
                 <p className="text-green-400 text-sm">+2h ce mois</p>
               </div>
@@ -131,7 +133,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Agent Status */}
           <div className="lg:col-span-2 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-            <h2 className="text-xl font-semibold mb-4 text-white">Agent Status</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">{t('agent_status')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {agents.map((agent, index) => (
                 <div
@@ -162,7 +164,7 @@ export default function DashboardPage() {
                           ? 'bg-green-500/20 text-green-400'
                           : 'bg-yellow-500/20 text-yellow-400'
                       }`}>
-                        {agent.status === 'active' ? 'Active' : 'Inactive'}
+                        {agent.status === 'active' ? t('connected') : t('not_connected')}
                       </span>
                     </div>
                   </div>
@@ -173,7 +175,7 @@ export default function DashboardPage() {
 
           {/* Activity Feed */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-            <h2 className="text-xl font-semibold mb-4 text-white">Activity Feed</h2>
+            <h2 className="text-xl font-semibold mb-4 text-white">{t('recent_activity')}</h2>
             <div className="space-y-4">
               {activities.map((activity, index) => (
                 <div key={index} className="flex items-start gap-3">
@@ -190,7 +192,7 @@ export default function DashboardPage() {
 
         {/* Performance Chart */}
         <div className="mt-8 bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
-          <h2 className="text-xl font-semibold mb-4 text-white">Monthly Performance</h2>
+          <h2 className="text-xl font-semibold mb-4 text-white">{t('monthly_revenue')}</h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={kpiData}>
