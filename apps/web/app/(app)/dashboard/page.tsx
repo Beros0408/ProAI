@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useTranslation } from '@/lib/i18n/context'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
@@ -186,6 +187,47 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr,0.9fr]">
+          <div className="rounded-3xl border border-gray-700 bg-[#111827]/80 p-6 shadow-xl shadow-black/20">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">Actions rapides</p>
+                <h2 className="mt-2 text-xl font-semibold text-white">Accès direct aux workflows</h2>
+              </div>
+            </div>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {[
+                { href: '/crm', label: 'Nouveau lead' },
+                { href: '/workflows', label: 'Créer workflow' },
+                { href: '/schedule', label: 'Planifier post' },
+                { href: '/content', label: 'Générer contenu' },
+                { href: '/predictions', label: 'Voir prédictions' },
+                { href: '/reports', label: 'Rapport hebdo' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group rounded-3xl border border-slate-700 bg-slate-950/90 px-4 py-4 text-left transition hover:border-primary/60 hover-lift hover-glow"
+                >
+                  <p className="text-sm font-semibold text-white">{item.label}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-gray-700 bg-gradient-to-br from-[#0ea5e9]/10 to-[#7c3aed]/10 p-6 shadow-xl shadow-black/20">
+            <div className="flex items-center gap-3 text-white">
+              <div className="rounded-2xl bg-white/10 p-3">
+                <TrendingUp className="h-6 w-6 text-[#0ea5e9]" />
+              </div>
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-slate-300">Prédiction express</p>
+                <p className="mt-2 text-xl font-semibold">Vos ventes devraient augmenter de 15% ce mois-ci basé sur votre pipeline actuel.</p>
+              </div>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X, Users, GitBranch, Calendar } from 'lucide-react'
+import { LayoutDashboard, MessageSquare, Zap, BarChart2, Settings, ChevronRight, Network, Menu, X, Users, GitBranch, Calendar, CalendarDays, FileText, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from '@/lib/i18n/context'
 import { TranslationKey } from '@/lib/i18n/translations'
@@ -14,6 +14,9 @@ const NAV_ITEMS = [
   { href: '/automations', key: 'automations' as TranslationKey, icon: Zap },
   { href: '/analytics', key: 'analytics' as TranslationKey, icon: BarChart2 },
   { href: '/content', key: 'content' as TranslationKey, icon: Network },
+  { href: '/agenda', key: 'agenda' as TranslationKey, icon: CalendarDays },
+  { href: '/reports', key: 'reports' as TranslationKey, icon: FileText },
+  { href: '/predictions', key: 'predictions' as TranslationKey, icon: TrendingUp },
   { href: '/analyze', key: 'analyze' as TranslationKey, icon: Network },
   { href: '/templates', key: 'templates' as TranslationKey, icon: Network },
   { href: '/mindmap', key: 'mindmap' as TranslationKey, icon: Network },
