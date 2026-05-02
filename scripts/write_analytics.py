@@ -1,4 +1,13 @@
-'use client'
+# Script Python pour creer la page Analytics Mission Control de ProAI
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "app", "(app)", "analytics", "page.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = r"""'use client'
 
 import { useState, useEffect } from 'react'
 import { Sparkles, TrendingUp, TrendingDown, Activity, Zap, Users, Clock, BarChart3, Radio } from 'lucide-react'
@@ -360,3 +369,10 @@ export default function AnalyticsPage() {
     </div>
   )
 }
+"""
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE.lstrip())
+
+print(f"[OK] Fichier cree : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")

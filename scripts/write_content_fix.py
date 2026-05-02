@@ -1,3 +1,12 @@
+# Script Python pour corriger content.py du backend ProAI
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "api", "routers", "content.py"
+)
+
+CODE = '''\
 from __future__ import annotations
 from typing import Literal
 from pydantic import BaseModel, Field
@@ -231,3 +240,10 @@ async def generate_video_script(body: VideoScriptRequest):
         ])
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
+'''
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE)
+
+print(f"[OK] Fichier cree : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")

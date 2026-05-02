@@ -1,4 +1,13 @@
-'use client'
+# Script Python pour creer la page Agenda de ProAI
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "app", "(app)", "agenda", "page.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = r"""'use client'
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
@@ -294,3 +303,10 @@ export default function AgendaPage() {
     </div>
   )
 }
+"""
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE.lstrip())
+
+print(f"[OK] Fichier cree : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")
