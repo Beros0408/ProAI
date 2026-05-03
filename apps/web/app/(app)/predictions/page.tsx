@@ -82,7 +82,7 @@ export default function PredictionsPage() {
         <div className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">Prédictions IA</p>
+              <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">{t('predictions.title')}</p>
               <h1 className="mt-2 text-3xl font-semibold text-white">Anticipez les ventes, le churn et les tendances</h1>
               <p className="mt-2 max-w-2xl text-sm text-slate-400">Des insights concrets pour mieux piloter votre pipeline et vos actions prioritaires.</p>
             </div>
@@ -97,7 +97,7 @@ export default function PredictionsPage() {
           <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <TrendingUp className="h-5 w-5 text-[#0ea5e9]" />
-              <span>Prévision de ventes</span>
+              <span>{t('predictions.sales')}</span>
             </div>
             <h2 className="mt-4 text-xl font-semibold text-white">Projection 3 mois</h2>
             <p className="mt-2 text-sm text-slate-400">Données actuelles en bleu plein et projection en pointillé.</p>
@@ -118,7 +118,7 @@ export default function PredictionsPage() {
           <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <ShieldCheck className="h-5 w-5 text-[#fb923c]" />
-              <span>Risque de churn</span>
+              <span>{t('predictions.churn')}</span>
             </div>
             <h2 className="mt-4 text-xl font-semibold text-white">Clients à surveiller</h2>
             <div className="mt-6 space-y-4">
@@ -148,7 +148,7 @@ export default function PredictionsPage() {
           <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <Sparkles className="h-5 w-5 text-[#fb923c]" />
-              <span>Tendances marché</span>
+              <span>{t('predictions.trends')}</span>
             </div>
             <h2 className="mt-4 text-xl font-semibold text-white">Détections IA</h2>
             <div className="mt-6 space-y-4">

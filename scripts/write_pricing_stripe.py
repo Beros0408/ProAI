@@ -1,4 +1,13 @@
-'use client'
+# Script Python pour creer la page Pricing connectee a Stripe
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "app", "(app)", "pricing", "page.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = r"""'use client'
 
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -280,3 +289,10 @@ export default function PricingPage() {
     </div>
   )
 }
+"""
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE.lstrip())
+
+print(f"[OK] Page Pricing Stripe creee : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")

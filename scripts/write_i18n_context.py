@@ -1,3 +1,13 @@
+# Script Python pour creer le contexte i18n
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "lib", "i18n", "context.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = """\
 'use client'
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
@@ -59,3 +69,10 @@ export function useTranslation() {
   }
   return context
 }
+"""
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE)
+
+print(f"[OK] Context i18n cree : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")

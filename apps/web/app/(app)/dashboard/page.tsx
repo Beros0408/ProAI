@@ -195,7 +195,7 @@ export default function DashboardPage() {
           <div className="rounded-3xl border border-gray-700 bg-[#111827]/80 p-6 shadow-xl shadow-black/20">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">Actions rapides</p>
+                <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">{t('dashboard.quickactions')}</p>
                 <h2 className="mt-2 text-xl font-semibold text-white">Accès direct aux workflows</h2>
               </div>
             </div>

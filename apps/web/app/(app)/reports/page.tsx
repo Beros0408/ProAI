@@ -122,7 +122,7 @@ export default function ReportsPage() {
           <section className="space-y-6 rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <FileText className="h-5 w-5 text-[#0ea5e9]" />
-              <span>Rapport hebdomadaire</span>
+              <span>{t('reports.weekly')}</span>
             </div>
             <div className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-6">
               <h2 className="text-xl font-semibold text-white">Résumé IA</h2>
