@@ -1,4 +1,13 @@
-'use client'
+# Script Python pour creer la page Predictions Premium ProAI
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "app", "(app)", "predictions", "page.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = r"""'use client'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -395,3 +404,10 @@ export default function PredictionsPage() {
     </div>
   )
 }
+"""
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE.lstrip())
+
+print(f"[OK] Page Predictions Premium cr\u00e9\u00e9e : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")

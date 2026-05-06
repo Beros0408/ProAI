@@ -4,16 +4,16 @@ from datetime import datetime
 
 class ConversationCreate(BaseModel):
     title: str | None = None
+    agent_type: str | None = "general"
 
 
 class ConversationResponse(BaseModel):
     id: str
-    title: str | None = None
-    organization_id: str | None = None
     user_id: str | None = None
+    agent_type: str | None = "general"
+    title: str | None = None
     created_at: datetime
     updated_at: datetime
-    message_count: int = 0
 
 
 class ConversationList(BaseModel):

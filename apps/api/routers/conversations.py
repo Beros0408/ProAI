@@ -40,7 +40,13 @@ async def list_conversations(
             .order("updated_at", desc=True)
             .execute()
         )
-        conversations = [ConversationResponse(**row) for row in (result.data or [])]
+        rows = result.data or []
+        conversations = []
+        for row in rows:
+            try:
+                conversations.append(ConversationResponse(**row))
+            except Exception:
+                pass
         return ConversationList(conversations=conversations, total=len(conversations))
     except Exception as exc:
         logger.warning("Supabase unavailable for conversations (GET): %s", exc)
@@ -56,13 +62,12 @@ async def create_conversation(
     user_id = current_user["user_id"]
     now = datetime.now(timezone.utc).isoformat()
     row = {
-        "id":              str(uuid.uuid4()),
-        "user_id":         user_id,
-        "organization_id": current_user.get("organization_id"),
-        "title":           body.title or "Nouvelle conversation",
-        "created_at":      now,
-        "updated_at":      now,
-        "message_count":   0,
+        "id":         str(uuid.uuid4()),
+        "user_id":    user_id,
+        "agent_type": body.agent_type or "general",
+        "title":      body.title or "Nouvelle conversation",
+        "created_at": now,
+        "updated_at": now,
     }
     try:
         result = supabase.table(TABLE).insert(row).execute()
@@ -104,7 +109,13 @@ async def list_messages(
             .order("created_at", desc=False)
             .execute()
         )
-        return [MessageResponse(**row) for row in (result.data or [])]
+        messages = []
+        for row in (result.data or []):
+            try:
+                messages.append(MessageResponse(**row))
+            except Exception:
+                pass
+        return messages
     except Exception as exc:
         logger.warning("Supabase unavailable for messages (GET): %s", exc)
         return []
