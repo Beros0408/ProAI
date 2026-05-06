@@ -40,6 +40,16 @@ export function Step2Organization({ data, onChange }: Props) {
           </select>
         </div>
         <div>
+          <label className="block text-sm font-medium text-foreground mb-1.5">Cible client principale</label>
+          <input
+            type="text"
+            value={data.targetAudience ?? ''}
+            onChange={e => onChange('targetAudience', e.target.value)}
+            placeholder="Ex : PME e-commerce, freelances tech, startups B2B…"
+            className="w-full px-3 py-2.5 rounded-lg bg-base border border-[#1E1E2E] text-foreground placeholder-muted focus:outline-none focus:border-primary transition-colors text-sm"
+          />
+        </div>
+        <div>
           <label className="block text-sm font-medium text-foreground mb-1.5">Taille de l&apos;équipe</label>
           <select
             value={data.teamSize ?? ''}

@@ -79,7 +79,7 @@ export default function PredictionsPage() {
   return (
     <div className="min-h-screen bg-[#0c1220] text-white animate-fade-up">
       <div className="max-w-7xl mx-auto space-y-6 px-4 pb-10 lg:px-6">
-        <div className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+        <div className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">{t('predictions.title')}</p>
@@ -87,14 +87,14 @@ export default function PredictionsPage() {
               <p className="mt-2 max-w-2xl text-sm text-slate-400">Des insights concrets pour mieux piloter votre pipeline et vos actions prioritaires.</p>
             </div>
             <Button onClick={handleRefresh} disabled={loading}>
-              {loading ? 'Actualisation...' : 'Actualiser les prédictions'}
+              {loading ? 'Actualisation...' : t('predictions.refresh')}
             </Button>
           </div>
           {message ? <p className="mt-4 text-sm text-slate-300">{message}</p> : null}
         </div>
 
         <div className="grid gap-6 xl:grid-cols-3">
-          <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+          <section className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <TrendingUp className="h-5 w-5 text-[#0ea5e9]" />
               <span>{t('predictions.sales')}</span>
@@ -115,7 +115,7 @@ export default function PredictionsPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+          <section className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <ShieldCheck className="h-5 w-5 text-[#fb923c]" />
               <span>{t('predictions.churn')}</span>
@@ -123,7 +123,7 @@ export default function PredictionsPage() {
             <h2 className="mt-4 text-xl font-semibold text-white">Clients à surveiller</h2>
             <div className="mt-6 space-y-4">
               {churnData.map((client) => (
-                <div key={client.id} className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-4">
+                <div key={client.id} className="rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5" style={{ background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <p className="font-medium text-white">{client.name}</p>
@@ -140,12 +140,13 @@ export default function PredictionsPage() {
                 </div>
               ))}
             </div>
-            <button className="mt-6 w-full rounded-2xl bg-[#0ea5e9] px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-[#0ea5e9]/90">
+            <button className="mt-6 w-full rounded-full px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110"
+              style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', boxShadow: '0 4px 20px rgba(14,165,233,0.35)' }}>
               Action recommandée
             </button>
           </section>
 
-          <section className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+          <section className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <Sparkles className="h-5 w-5 text-[#fb923c]" />
               <span>{t('predictions.trends')}</span>
@@ -153,7 +154,7 @@ export default function PredictionsPage() {
             <h2 className="mt-4 text-xl font-semibold text-white">Détections IA</h2>
             <div className="mt-6 space-y-4">
               {trends.map((trend) => (
-                <div key={trend.id} className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-4">
+                <div key={trend.id} className="rounded-xl p-4 transition-all duration-200 hover:-translate-y-0.5" style={{ background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-sm text-slate-200">{trend.trend}</p>
                     <span className={`rounded-full px-2 py-1 text-xs font-semibold ${trend.impact === 'Fort' ? 'bg-red-500/15 text-red-300' : trend.impact === 'Moyen' ? 'bg-orange-500/15 text-orange-300' : 'bg-sky-500/15 text-sky-300'}`}>

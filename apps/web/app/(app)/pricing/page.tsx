@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslation } from '@/lib/i18n/context'
 import { Check, Zap, Star, Shield, ArrowRight, MessageSquare, Info, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
@@ -22,6 +23,7 @@ const TESTIMONIALS = [
 ]
 
 export default function PricingPage() {
+  const { t } = useTranslation()
   const [annual, setAnnual] = useState(false)
   const [showAgents, setShowAgents] = useState(false)
   const [loading, setLoading] = useState<string | null>(null)

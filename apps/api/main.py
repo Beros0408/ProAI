@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import get_settings
 from core.redis import close_redis
-from routers import health, auth, chat, conversations, memory, mindmap, content, analyze, upload, billing, crm, workflows, agenda, reports, predictions
+from routers import health, auth, chat, conversations, memory, mindmap, content, analyze, upload, billing, crm, workflows, agenda, reports, predictions, schedule, onboarding
 
 settings = get_settings()
 
@@ -47,6 +47,8 @@ app.include_router(analyze.router, prefix="/api/v1/analyze")
 app.include_router(upload.router, prefix="/api/v1/upload")
 app.include_router(crm.router, prefix="/api/v1/crm")
 app.include_router(workflows.router, prefix="/api/v1/workflows")
+app.include_router(schedule.router, prefix="/api/v1")
+app.include_router(onboarding.router, prefix="/api/v1")
 
 app.include_router(billing.router, prefix="/api/v1")
 

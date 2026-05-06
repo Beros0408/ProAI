@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from '@/lib/i18n/context'
 import {
   CalendarDays, Plus, Sparkles, ChevronLeft, ChevronRight,
   Clock, CheckSquare, Square, Trash2, GripVertical,
@@ -73,6 +74,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 
 export default function AgendaPage() {
   const router = useRouter()
+  const { t } = useTranslation()
   const [weekOffset, setWeekOffset] = useState(0)
   const [view, setView] = useState<'day' | 'week' | 'month'>('week')
   const [events, setEvents] = useState<CalEvent[]>(INITIAL_EVENTS)
@@ -120,26 +122,26 @@ export default function AgendaPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#0ea5e9' }}>Agenda intelligent</span>
+            <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#0ea5e9' }}>{t('agenda.title')}</span>
             <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}><Sparkles size={10} /> IA</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Planifiez votre semaine et vos rappels</h1>
+          <h1 className="text-2xl font-bold text-white">{t('agenda.subtitle')}</h1>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs" style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#111827' }}>
-            <span style={{ color: '#94a3b8' }}>Charge</span>
+            <span style={{ color: '#94a3b8' }}>{t('agenda.charge')}</span>
             <div className="w-16 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
               <div className="h-full rounded-full transition-all duration-500" style={{ width: `${chargeLevel}%`, background: chargeColor }} />
             </div>
             <span style={{ color: chargeColor }}>{chargeLevel}%</span>
           </div>
           <button onClick={handleAiPlan} disabled={aiLoading} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 4px 20px rgba(139,92,246,0.3)' }}>
-            <Sparkles size={14} />{aiLoading ? 'Analyse en cours...' : 'Planifier avec IA'}
+            <Sparkles size={14} />{aiLoading ? t('agenda.analyzing') : t('agenda.planwithia')}
           </button>
           <div className="flex rounded-full overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
             {(['day', 'week', 'month'] as const).map(v => (
               <button key={v} onClick={() => setView(v)} className="px-4 py-1.5 text-xs font-medium transition-colors" style={{ background: view === v ? '#0ea5e9' : 'transparent', color: view === v ? 'white' : '#94a3b8' }}>
-                {v === 'day' ? 'Jour' : v === 'week' ? 'Semaine' : 'Mois'}
+                {v === 'day' ? t('agenda.day') : v === 'week' ? t('agenda.week') : t('agenda.month')}
               </button>
             ))}
           </div>
@@ -147,18 +149,18 @@ export default function AgendaPage() {
       </div>
       <div className="flex items-center gap-3 mb-4">
         <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: '#94a3b8' }}><ChevronLeft size={18} /></button>
-        <button onClick={() => setWeekOffset(0)} className="px-3 py-1 rounded-full text-xs font-medium hover:bg-[#1a2236]" style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>Aujourd'hui</button>
+        <button onClick={() => setWeekOffset(0)} className="px-3 py-1 rounded-full text-xs font-medium hover:bg-[#1a2236]" style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>{t('agenda.today')}</button>
         <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: '#94a3b8' }}><ChevronRight size={18} /></button>
         <span className="text-sm font-semibold text-white ml-2">{weekDates[0].toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</span>
       </div>
       {showAiSuggestions && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 animate-fade-up" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
           <Sparkles size={16} style={{ color: '#a78bfa' }} />
-          <span className="text-sm" style={{ color: '#c4b5fd' }}>L'IA a suggere 2 creneaux optimaux. Acceptez ou rejetez-les.</span>
+          <span className="text-sm" style={{ color: '#c4b5fd' }}>{t('agenda.aiSuggested')}</span>
         </div>
       )}
       <div className="flex gap-4 flex-1 min-h-0">
-        <div className="flex-1 rounded-xl overflow-hidden" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="flex-1 rounded-2xl overflow-hidden" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="grid grid-cols-8 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
             <div className="p-3 text-xs font-medium" style={{ color: '#64748b' }}><Clock size={14} /></div>
             {weekDates.map((d, i) => (
@@ -187,7 +189,7 @@ export default function AgendaPage() {
                     <div key={dayIdx} className="relative border-l transition-colors cursor-pointer" style={{ borderColor: 'rgba(255,255,255,0.04)', background: isToday(d) ? 'rgba(14,165,233,0.03)' : isHovered ? 'rgba(255,255,255,0.02)' : 'transparent' }} onMouseEnter={() => setHoveredCell(cellKey)} onMouseLeave={() => setHoveredCell(null)} onClick={() => cellEvents.length === 0 && openAddModal(dayIdx, hour)}>
                       {isHovered && cellEvents.length === 0 && (
                         <div className="absolute inset-0 flex items-center justify-center z-10">
-                          <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium" style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8', border: '1px dashed rgba(14,165,233,0.3)' }}><Plus size={10} /> Ajouter</div>
+                          <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium" style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8', border: '1px dashed rgba(14,165,233,0.3)' }}><Plus size={10} /> {t('agenda.add')}</div>
                         </div>
                       )}
                       {cellEvents.map(event => {
@@ -200,7 +202,7 @@ export default function AgendaPage() {
                             <div className="text-[9px] mt-0.5" style={{ color: colors.text, opacity: 0.7 }}>{`${event.startHour.toString().padStart(2, '0')}:${event.startMin.toString().padStart(2, '0')} - ${event.endHour.toString().padStart(2, '0')}:${event.endMin.toString().padStart(2, '0')}`}</div>
                             {event.aiSuggested && (
                               <div className="flex items-center gap-1 mt-1">
-                                <button onClick={e => { e.stopPropagation(); acceptSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(52,211,153,0.2)', color: '#34d399' }}>Accepter</button>
+                                <button onClick={e => { e.stopPropagation(); acceptSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(52,211,153,0.2)', color: '#34d399' }}>{t('agenda.accept')}</button>
                                 <button onClick={e => { e.stopPropagation(); dismissSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px]" style={{ color: '#94a3b8' }}><X size={10} /></button>
                               </div>
                             )}
@@ -218,13 +220,13 @@ export default function AgendaPage() {
             ))}
           </div>
         </div>
-        <div className="w-72 flex-shrink-0 rounded-xl p-4 flex flex-col gap-4" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="w-72 flex-shrink-0 rounded-2xl p-4 flex flex-col gap-4" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#0ea5e9' }}>Taches du jour</h3>
-            <p className="text-lg font-bold text-white">Checklist intelligente</p>
+            <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#0ea5e9' }}>{t('agenda.tasks')}</h3>
+            <p className="text-lg font-bold text-white">{t('agenda.checklist')}</p>
           </div>
           <button onClick={() => router.push('/chat?agent=automation')} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all hover:-translate-y-0.5" style={{ background: 'rgba(139,92,246,0.1)', color: '#a78bfa', border: '1px dashed rgba(139,92,246,0.3)' }}>
-            <Sparkles size={12} /> Demander a l'IA d'organiser
+            <Sparkles size={12} /> {t('agenda.askia')}
           </button>
           <div className="flex-1 overflow-y-auto space-y-2">
             {tasks.map(task => {
@@ -241,16 +243,16 @@ export default function AgendaPage() {
               )
             })}
           </div>
-          <button onClick={() => setTasks(prev => [...prev, { id: `t${Date.now()}`, text: 'Nouvelle tache', done: false, priority: 'medium' }])} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium" style={{ color: '#94a3b8', border: '1px dashed rgba(255,255,255,0.1)' }}>
-            <Plus size={12} /> Ajouter une tache
+          <button onClick={() => setTasks(prev => [...prev, { id: `t${Date.now()}`, text: t('agenda.newTask'), done: false, priority: 'medium' }])} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium" style={{ color: '#94a3b8', border: '1px dashed rgba(255,255,255,0.1)' }}>
+            <Plus size={12} /> {t('agenda.addtask')}
           </button>
           <div className="pt-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-            <p className="text-[10px] uppercase font-semibold mb-2" style={{ color: '#64748b' }}>Legende</p>
+            <p className="text-[10px] uppercase font-semibold mb-2" style={{ color: '#64748b' }}>{t('agenda.legend')}</p>
             <div className="grid grid-cols-2 gap-1">
               {Object.entries(EVENT_COLORS).map(([key, val]) => (
                 <div key={key} className="flex items-center gap-1.5 text-[10px]" style={{ color: val.text }}>
                   <div className="w-2 h-2 rounded-full" style={{ background: val.border }} />
-                  {key === 'meeting' ? 'Reunion' : key === 'focus' ? 'Focus' : key === 'call' ? 'Appel' : key === 'break' ? 'Pause' : 'IA'}
+                  {key === 'meeting' ? t('agenda.meeting') : key === 'focus' ? t('agenda.focus') : key === 'call' ? t('agenda.call') : key === 'break' ? t('agenda.break') : 'IA'}
                 </div>
               ))}
             </div>
@@ -258,34 +260,34 @@ export default function AgendaPage() {
         </div>
       </div>
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)' }}>
-          <div className="rounded-2xl p-6 w-full max-w-md animate-fade-up" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+          <div className="rounded-2xl p-6 w-full max-w-md animate-scale-in" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)' }}>
             <div className="flex items-center justify-between mb-5">
-              <h3 className="text-lg font-bold text-white">Nouvel evenement</h3>
+              <h3 className="text-lg font-bold text-white">{t('agenda.newevent')}</h3>
               <button onClick={() => setShowModal(false)} style={{ color: '#94a3b8' }}><X size={18} /></button>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#94a3b8] mb-1">Titre</label>
+                <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.title2')}</label>
                 <input value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Ex: Sprint planning" className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-[#64748b]" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#94a3b8] mb-1">Type</label>
+                  <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.type')}</label>
                   <select value={newType} onChange={e => setNewType(e.target.value)} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <option value="meeting">Reunion</option><option value="focus">Focus</option><option value="call">Appel</option><option value="break">Pause</option>
+                    <option value="meeting">{t('agenda.meeting')}</option><option value="focus">{t('agenda.focus')}</option><option value="call">{t('agenda.call')}</option><option value="break">{t('agenda.break')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#94a3b8] mb-1">Duree</label>
+                  <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.duration')}</label>
                   <select value={newDuration} onChange={e => setNewDuration(Number(e.target.value))} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }}>
                     <option value={30}>30 min</option><option value={45}>45 min</option><option value={60}>1h</option><option value={90}>1h30</option><option value={120}>2h</option>
                   </select>
                 </div>
               </div>
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}>Annuler</button>
-                <button onClick={addEvent} className="flex-1 py-2.5 rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)' }}>Ajouter</button>
+                <button onClick={() => setShowModal(false)} className="flex-1 py-2.5 rounded-full text-sm font-medium" style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}>{t('common.cancel')}</button>
+                <button onClick={addEvent} className="flex-1 py-2.5 rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)' }}>{t('agenda.add')}</button>
               </div>
             </div>
           </div>

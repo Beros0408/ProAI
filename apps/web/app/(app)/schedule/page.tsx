@@ -97,7 +97,7 @@ export default function SchedulePage() {
   const [showModal, setShowModal] = useState(false)
   const [selectedDay, setSelectedDay] = useState('')
   const [selectedEvent, setSelectedEvent] = useState<ScheduledEvent | null>(null)
-  const [formData, setFormData] = useState({ platform: 'linkedin' as const, content: '', time: '10:00' })
+  const [formData, setFormData] = useState<{ platform: ScheduledEvent['platform']; content: string; time: string }>({ platform: 'linkedin', content: '', time: '10:00' })
 
   const handlePrevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))
   const handleNextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))
@@ -142,7 +142,7 @@ export default function SchedulePage() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-[28px] font-[700] text-white">{t('calendar.title') || 'Calendrier de publication'}</h1>
+            <h1 className="text-[28px] font-[700] text-white">{t('schedule.title')}</h1>
             <p className="mt-2 max-w-2xl text-sm text-[#94a3b8]">Organisez vos campagnes sociales dans un tableau mensuel clair et visuel.</p>
           </div>
 
@@ -155,7 +155,7 @@ export default function SchedulePage() {
           </button>
         </div>
 
-        <div className="rounded-[24px] border border-[#1d2442] bg-[#0b1220] p-6 shadow-[0_15px_40px_rgba(0,0,0,0.30)]">
+        <div className="rounded-[24px] p-6" style={{ background: 'rgba(11,18,32,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)', boxShadow: '0 15px 40px rgba(0,0,0,0.3)' }}>
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="text-[28px] font-[700] text-white">{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</div>
@@ -244,8 +244,8 @@ export default function SchedulePage() {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
-          <div className="w-full max-w-lg rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[#111827] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
+          <div className="w-full max-w-lg rounded-[24px] p-6 animate-scale-in" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)' }}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold text-white">Ajouter un événement</h2>

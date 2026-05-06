@@ -112,7 +112,7 @@ export default function ReportsPage() {
               <p className="mt-2 max-w-2xl text-sm text-slate-400">Générez des rapports faciles à partager et suivez l’historique des performances.</p>
             </div>
             <Button onClick={handleGenerateReport} disabled={loading}>
-              {loading ? 'Génération...' : 'Générer le rapport'}
+              {loading ? 'Génération...' : t('reports.generate')}
             </Button>
           </div>
           {message ? <p className="mt-4 text-sm text-slate-300">{message}</p> : null}
@@ -130,17 +130,20 @@ export default function ReportsPage() {
                 {selectedReport ? selectedReport.report : 'Générez un rapport pour voir un résumé détaillé de la semaine.'}
               </p>
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                <div className="rounded-3xl bg-[#111827] p-4">
-                  <p className="text-sm text-slate-400">Actions réalisées</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">{selectedReport?.metrics.actionsCompleted ?? 0}</p>
+                <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)', boxShadow: '0 0 20px rgba(14,165,233,0.04)' }}>
+                  <p className="text-sm text-[#94a3b8]">Actions réalisées</p>
+                  <p className="mt-2 text-2xl font-bold text-white">{selectedReport?.metrics.actionsCompleted ?? 0}</p>
                 </div>
-                <div className="rounded-3xl bg-[#111827] p-4">
-                  <p className="text-sm text-slate-400">KPIs clés</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">{selectedReport?.metrics.kpis ?? 0}%</p>
+                <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 0 20px rgba(139,92,246,0.04)' }}>
+                  <p className="text-sm text-[#94a3b8]">KPIs clés</p>
+                  <p className="mt-2 text-2xl font-bold text-[#a78bfa]">{selectedReport?.metrics.kpis ?? 0}%</p>
                 </div>
-                <div className="rounded-3xl bg-[#111827] p-4">
-                  <p className="text-sm text-slate-400">Productivité</p>
-                  <p className="mt-2 text-2xl font-semibold text-white">{selectedReport?.metrics.productivity ?? 0}%</p>
+                <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+                  style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.15)', boxShadow: '0 0 20px rgba(52,211,153,0.04)' }}>
+                  <p className="text-sm text-[#94a3b8]">Productivité</p>
+                  <p className="mt-2 text-2xl font-bold text-[#34d399]">{selectedReport?.metrics.productivity ?? 0}%</p>
                 </div>
               </div>
             </div>
@@ -171,23 +174,34 @@ export default function ReportsPage() {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {reports.map((report) => (
-                <div key={report.id} className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-4 transition hover:border-primary/50 hover:bg-[#111827]/90">
+                <div key={report.id} className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer group"
+                  style={{ background: 'rgba(15,23,42,0.8)', border: '1px solid rgba(255,255,255,0.06)' }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(14,165,233,0.25)'
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(14,165,233,0.08)'
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.06)'
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+                  }}
+                >
                   <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-sm text-slate-400">{report.date}</p>
-                      <p className="mt-2 text-sm text-slate-200 line-clamp-2">{report.report}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-[#64748b] font-mono">{report.date}</p>
+                      <p className="mt-1.5 text-sm text-[#cbd5e1] line-clamp-2 leading-relaxed">{report.report}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => setSelectedReport(report)} className="rounded-2xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200 transition hover:border-primary/60">
-                        <Eye className="inline-block h-4 w-4" /> Voir
+                    <div className="flex flex-col items-end gap-2 shrink-0">
+                      <button onClick={() => setSelectedReport(report)}
+                        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium text-[#38bdf8] transition-all duration-200 hover:scale-105"
+                        style={{ background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.2)' }}>
+                        <Eye className="w-3.5 h-3.5" /> Voir
                       </button>
-                      <button
-                        onClick={() => exportReport(report)}
-                        className="rounded-2xl border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200 transition hover:border-primary/60"
-                      >
-                        <Download className="inline-block h-4 w-4" /> PDF
+                      <button onClick={() => exportReport(report)}
+                        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium text-[#94a3b8] transition-all duration-200 hover:scale-105"
+                        style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <Download className="w-3.5 h-3.5" /> PDF
                       </button>
                     </div>
                   </div>

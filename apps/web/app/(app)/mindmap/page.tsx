@@ -62,28 +62,33 @@ export default function MindMapPage() {
   return (
     <div className="h-screen flex flex-col bg-base">
       {/* Header */}
-      <div className="p-6 border-b border-[#1E1E2E] bg-surface/50">
+      <div className="p-5 shrink-0"
+        style={{ background: 'rgba(11,18,32,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-2xl font-bold text-foreground gradient-text mb-2">{t('mindmap_header')}</h1>
-          <p className="text-muted mb-4">{t('mindmap_description')}</p>
+          <h1 className="text-xl font-bold text-white gradient-text mb-1">{t('mindmap_header')}</h1>
+          <p className="text-[#64748b] text-sm mb-4">{t('mindmap_description')}</p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <input
               type="text"
               value={idea}
               onChange={(e) => setIdea(e.target.value)}
               placeholder={t('describe_your_idea_placeholder')}
-              className="flex-1 px-4 py-2 bg-base border border-[#1E1E2E] rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+              className="flex-1 px-4 py-2.5 rounded-xl text-[#e2e8f0] placeholder-[#475569] text-sm outline-none transition-all duration-200"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              onFocus={(e) => { e.currentTarget.style.border = '1px solid rgba(14,165,233,0.4)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.08)' }}
+              onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
               onKeyPress={(e) => e.key === 'Enter' && generateMindMap()}
             />
             <button
               onClick={generateMindMap}
               disabled={isLoading}
-              className="px-6 py-2 bg-primary hover:bg-primary/80 text-white rounded-lg transition-colors disabled:opacity-50 hover-lift"
+              className="px-6 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', boxShadow: '0 4px 16px rgba(14,165,233,0.35)' }}
             >
               {isLoading ? t('generating') : t('generate_mind_map')}
             </button>

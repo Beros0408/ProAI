@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Sparkles, TrendingUp, TrendingDown, Activity, Zap, Users, Clock, BarChart3, Radio } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n/context'
 
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec']
 const REVENUE_DATA = [12, 15, 17, 21, 24, 28, 33, 36, 39, 42, 45, 50]
@@ -73,6 +74,7 @@ function GridBackground() {
 }
 
 export default function AnalyticsPage() {
+  const { t } = useTranslation()
   const [activeLog, setActiveLog] = useState(0)
   const [cursorX, setCursorX] = useState<number | null>(null)
   const [aiTyping, setAiTyping] = useState(true)

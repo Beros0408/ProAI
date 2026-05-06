@@ -71,7 +71,15 @@ def build_graph() -> StateGraph:
 _graph = build_graph()
 
 
-async def run_orchestrator(message: str, history: list[dict] | None = None) -> dict:
-    initial: AgentState = {"message": message, "history": history or [], "intent": "", "response": ""}
+async def run_orchestrator(
+    message: str,
+    history: list[dict] | None = None,
+    business_context: str | None = None,
+) -> dict:
+    augmented = list(history or [])
+    if business_context:
+        # Prepend as system message so every agent receives the business profile
+        augmented.insert(0, ("system", business_context))
+    initial: AgentState = {"message": message, "history": augmented, "intent": "", "response": ""}
     final = await _graph.ainvoke(initial)
     return {"response": final["response"], "intent": final["intent"]}

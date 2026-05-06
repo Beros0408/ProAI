@@ -105,7 +105,7 @@ export default function IntegrationsPage() {
                     ? "bg-green-500/20 text-green-400"
                     : "bg-gray-500/20 text-gray-400"
                 )}>
-                  {integration.connected ? t('connected') : t('not_connected')}
+                  {integration.connected ? t('settings.connected') : t('settings.notconnected')}
                 </span>
               </div>
 

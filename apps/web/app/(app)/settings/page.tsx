@@ -32,8 +32,9 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Navigation */}
         <div className="lg:col-span-1">
-          <div className="bg-surface border border-[#1E1E2E] rounded-xl p-4">
-            <nav className="space-y-2">
+          <div className="rounded-2xl p-3"
+            style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <nav className="space-y-0.5">
               {SETTINGS_ITEMS.map(({ href, labelKey, icon: Icon }) => {
                 const active = pathname === href
                 return (
@@ -41,13 +42,20 @@ export default function SettingsPage() {
                     key={href}
                     href={href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative',
                       active
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-muted hover:bg-[#1E1E2E] hover:text-foreground',
+                        ? 'text-[#38bdf8] font-semibold'
+                        : 'text-[#64748b] hover:text-[#94a3b8]',
                     )}
+                    style={active ? {
+                      background: 'rgba(14,165,233,0.1)',
+                      boxShadow: 'inset 0 0 0 1px rgba(14,165,233,0.15)',
+                    } : undefined}
+                    onMouseEnter={(e) => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.04)' }}
+                    onMouseLeave={(e) => { if (!active) (e.currentTarget as HTMLAnchorElement).style.background = '' }}
                   >
-                    <Icon className="w-4 h-4 shrink-0" />
+                    {active && <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-[#0ea5e9] shadow-[0_0_8px_rgba(14,165,233,0.8)]" />}
+                    <Icon className={cn('w-4 h-4 shrink-0', active ? 'text-[#0ea5e9]' : 'text-[#64748b] group-hover:text-[#94a3b8]')} />
                     <span>{t(labelKey)}</span>
                   </Link>
                 )
@@ -58,9 +66,10 @@ export default function SettingsPage() {
 
         {/* Content */}
         <div className="lg:col-span-3">
-          <div className="bg-surface border border-[#1E1E2E] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-foreground mb-4">{t('select_section')}</h2>
-            <p className="text-muted">{t('choose_category_menu')}</p>
+          <div className="rounded-2xl p-6"
+            style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+            <h2 className="text-base font-semibold text-white mb-3">{t('select_section')}</h2>
+            <p className="text-[#64748b] text-sm">{t('choose_category_menu')}</p>
           </div>
         </div>
       </div>

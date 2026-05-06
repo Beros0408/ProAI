@@ -202,26 +202,26 @@ export default function WorkflowsPage() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-[28px] font-[700] text-white">Workflow Builder</h1>
-            <p className="mt-1 text-sm text-[#94a3b8]">Créez des workflows d'automation pour vos campagnes</p>
+            <p className="mt-1 text-sm text-[#94a3b8]">{t('workflows.subtitle2')}</p>
           </div>
           <button
             onClick={createNewWorkflow}
             className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#f97316] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
           >
-            <Plus className="mr-2 h-4 w-4" /> Nouveau workflow
+            <Plus className="mr-2 h-4 w-4" /> {t('workflows.new')}
           </button>
         </div>
       </div>
 
       <div className="flex flex-1 gap-6 p-6 min-h-0">
-        <div className="flex-1 rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[#111827] overflow-hidden flex flex-col" style={{ width: '75%' }}>
+        <div className="flex-1 rounded-[24px] overflow-hidden flex flex-col" style={{ width: '75%', background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
             <div>
               <input
                 value={workflowName}
                 onChange={(e) => setWorkflowName(e.target.value)}
                 className="bg-transparent text-[20px] font-[600] text-white outline-none border-none"
-                placeholder="Nom du workflow"
+                placeholder={t('workflows.namePlaceholder')}
               />
             </div>
             <span
@@ -231,7 +231,7 @@ export default function WorkflowsPage() {
                   : 'bg-[#4b5563] text-[#cbd5e1]'
               }`}
             >
-              {selectedWorkflow?.active ? 'Actif' : 'Brouillon'}
+              {selectedWorkflow?.active ? t('workflows.active') : t('workflows.draft')}
             </span>
           </div>
 
@@ -241,14 +241,14 @@ export default function WorkflowsPage() {
                 <GitBranch className="w-16 h-16 text-[#0ea5e9]" style={{ animation: 'float 3s ease-in-out infinite' }} />
               </div>
               <div className="text-center">
-                <h2 className="text-[24px] font-[700] text-white">Créez votre premier workflow</h2>
-                <p className="mt-2 text-[14px] text-[#94a3b8]">Glissez un élément depuis le panneau ou cliquez ci-dessous</p>
+                <h2 className="text-[24px] font-[700] text-white">{t('workflows.empty')}</h2>
+                <p className="mt-2 text-[14px] text-[#94a3b8]">{t('workflows.emptydesc')}</p>
               </div>
               <button
                 onClick={() => addNode(TRIGGER_TEMPLATES[0])}
                 className="rounded-full bg-[#0ea5e9] px-5 py-3 text-sm font-semibold text-black transition hover:brightness-110"
               >
-                + Commencer
+                + {t('workflows.start')}
               </button>
             </div>
           ) : (
@@ -280,9 +280,9 @@ export default function WorkflowsPage() {
           )}
         </div>
 
-        <div className="rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[#111827] flex flex-col overflow-hidden" style={{ width: '25%' }}>
+        <div className="rounded-[24px] flex flex-col overflow-hidden" style={{ width: '25%', background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
-            <h2 className="text-[16px] font-[600] text-white">Éléments</h2>
+            <h2 className="text-[16px] font-[600] text-white">{t('workflows.elements')}</h2>
           </div>
 
           <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
@@ -328,14 +328,14 @@ export default function WorkflowsPage() {
               onClick={saveWorkflow}
               className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              <Save className="mr-2 h-4 w-4 inline" /> Sauvegarder
+              <Save className="mr-2 h-4 w-4 inline" /> {t('workflows.save')}
             </button>
             <button
               onClick={() => selectedWorkflow && toggleWorkflowActive(selectedWorkflow.id)}
               className="w-full rounded-full bg-[#0ea5e9] px-4 py-3 text-sm font-semibold text-black transition hover:brightness-110"
             >
               <Power className="mr-2 h-4 w-4 inline" />
-              {selectedWorkflow?.active ? 'Désactiver' : 'Activer le workflow'}
+              {selectedWorkflow?.active ? t('workflows.deactivate') : t('workflows.activate')}
             </button>
           </div>
         </div>
@@ -343,7 +343,7 @@ export default function WorkflowsPage() {
 
       <div className="border-t border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-[16px] font-[600] text-white">Workflows sauvegardés</h3>
+          <h3 className="text-[16px] font-[600] text-white">{t('workflows.saved')}</h3>
           <span className="text-xs text-[#94a3b8]">{workflows.length} workflow(s)</span>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -354,7 +354,7 @@ export default function WorkflowsPage() {
               className={`rounded-[16px] p-4 border transition cursor-pointer ${
                 selectedWorkflow?.id === workflow.id
                   ? 'border-[#0ea5e9] bg-[#0ea5e9]/10'
-                  : 'border-[rgba(255,255,255,0.08)] bg-[#111827] hover:border-[#0ea5e9]'
+                  : 'border-[rgba(255,255,255,0.07)] bg-[rgba(17,24,39,0.6)] hover:border-[#0ea5e9] hover:shadow-[0_4px_20px_rgba(14,165,233,0.08)]'
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-2">
@@ -370,10 +370,10 @@ export default function WorkflowsPage() {
                       : 'bg-[#4b5563] text-[#cbd5e1] hover:bg-[#4b5563]/80'
                   }`}
                 >
-                  {workflow.active ? 'Actif' : 'Inactif'}
+                  {workflow.active ? t('workflows.active') : t('workflows.inactive')}
                 </button>
               </div>
-              <p className="text-xs text-[#94a3b8]">Créé le {workflow.createdAt}</p>
+              <p className="text-xs text-[#94a3b8]">{t('workflows.createdAt')} {workflow.createdAt}</p>
             </div>
           ))}
         </div>

@@ -79,40 +79,52 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
   return (
     <div
       ref={setNodeRef}
-      style={style}
       {...attributes}
       {...listeners}
-      className="bg-surface border border-[#1E1E2E] rounded-xl p-4 cursor-grab active:cursor-grabbing hover-lift space-y-3 group"
+      className="rounded-xl p-4 cursor-grab active:cursor-grabbing space-y-3 group transition-all duration-200 hover:-translate-y-0.5"
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08)'
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+      }}
+      style={{
+        ...style,
+        background: 'rgba(26,34,54,0.8)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.06)',
+      }}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="font-semibold text-foreground text-sm">{lead.name}</h3>
-          <p className="text-muted text-xs mt-1">{lead.company}</p>
+          <h3 className="font-semibold text-[#e2e8f0] text-sm">{lead.name}</h3>
+          <p className="text-[#64748b] text-xs mt-1">{lead.company}</p>
         </div>
         <button
           onClick={() => onDelete(lead.id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-500/20 rounded"
+          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-500/20 rounded-lg"
         >
           <Trash2 className="w-4 h-4 text-red-400" />
         </button>
       </div>
 
       <div className="space-y-2 text-xs">
-        <div className="flex items-center gap-2 text-muted">
+        <div className="flex items-center gap-2 text-[#64748b]">
           <Mail className="w-3 h-3" />
           {lead.email}
         </div>
-        <div className="flex items-center gap-2 text-foreground font-medium">
-          <DollarSign className="w-3 h-3 text-accent" />
+        <div className="flex items-center gap-2 text-[#e2e8f0] font-semibold">
+          <DollarSign className="w-3 h-3 text-[#fb923c]" />
           {lead.estimatedValue.toLocaleString()} €
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-[#1E1E2E]">
-        <span className={`text-xs px-2 py-1 rounded-full ${SCORE_COLORS[lead.score].bg} ${SCORE_COLORS[lead.score].text}`}>
+      <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${SCORE_COLORS[lead.score].bg} ${SCORE_COLORS[lead.score].text}`}>
           {SCORE_COLORS[lead.score].label}
         </span>
-        <span className="text-muted text-xs">{lead.dateAdded}</span>
+        <span className="text-[#64748b] text-xs">{lead.dateAdded}</span>
       </div>
     </div>
   )
@@ -129,17 +141,24 @@ function Column({ stage, leads, onDelete }: { stage: Stage; leads: Lead[]; onDel
   return (
     <div
       ref={setNodeRef}
-      className="flex-1 min-w-80 bg-base rounded-xl p-4 border border-[#1E1E2E]"
+      className="flex-1 min-w-80 rounded-2xl p-4"
+      style={{
+        background: 'rgba(11,18,32,0.6)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255,255,255,0.06)',
+      }}
     >
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
-          <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${STAGE_COLORS[stage]}`} />
-          <h3 className="font-semibold text-foreground">{STAGE_LABELS[stage]}</h3>
-          <span className="ml-auto text-xs bg-primary/20 text-primary px-2 py-1 rounded-full">
+          <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${STAGE_COLORS[stage]} shadow-lg`} />
+          <h3 className="font-semibold text-[#e2e8f0] text-sm">{STAGE_LABELS[stage]}</h3>
+          <span className="ml-auto text-xs px-2.5 py-1 rounded-full font-semibold"
+            style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
             {leads.length}
           </span>
         </div>
-        <p className="text-xs text-muted">
+        <p className="text-xs text-[#64748b]">
           Valeur: {totalValue.toLocaleString()} €
         </p>
       </div>
@@ -303,28 +322,31 @@ export default function CRMPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between animate-fade-up">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-            <Users className="w-6 h-6 text-primary" />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.2), rgba(14,165,233,0.08))', border: '1px solid rgba(14,165,233,0.25)', boxShadow: '0 0 20px rgba(14,165,233,0.15)' }}>
+            <Users className="w-5 h-5 text-[#0ea5e9]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-foreground gradient-text">CRM Pipeline</h1>
-            <p className="text-muted text-sm mt-0.5">Gérez vos leads et opportunités commerciales</p>
+            <h1 className="text-2xl font-bold text-white gradient-text">CRM Pipeline</h1>
+            <p className="text-[#64748b] text-sm mt-0.5">Gérez vos leads et opportunités commerciales</p>
           </div>
         </div>
         <Button onClick={() => setShowModal(true)} className="gap-2">
           <Plus className="w-4 h-4" />
-          Ajouter un lead
+          {t('crm.newlead.full')}
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-surface border border-[#1E1E2E] rounded-xl p-4">
-          <p className="text-muted text-sm">Leads total</p>
-          <p className="text-3xl font-bold text-foreground mt-2">{totalStats.count}</p>
+        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+          style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)', boxShadow: '0 0 20px rgba(14,165,233,0.04)' }}>
+          <p className="text-[#64748b] text-sm">Leads total</p>
+          <p className="text-3xl font-bold text-white mt-2">{totalStats.count}</p>
         </div>
-        <div className="bg-surface border border-[#1E1E2E] rounded-xl p-4">
-          <p className="text-muted text-sm">Valeur pipeline</p>
-          <p className="text-3xl font-bold text-accent mt-2">{(totalStats.value / 1000).toFixed(0)}K €</p>
+        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+          style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)', boxShadow: '0 0 20px rgba(251,146,60,0.04)' }}>
+          <p className="text-[#64748b] text-sm">Valeur pipeline</p>
+          <p className="text-3xl font-bold text-[#fb923c] mt-2">{(totalStats.value / 1000).toFixed(0)}K €</p>
         </div>
       </div>
 
@@ -342,61 +364,64 @@ export default function CRMPage() {
       </DndContext>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
-          <div className="bg-surface border border-[#1E1E2E] rounded-xl p-6 w-full max-w-md space-y-4 animate-fade-up">
-            <h2 className="text-xl font-bold text-foreground">Ajouter un lead</h2>
+        <div className="fixed inset-0 flex items-center justify-center z-50 animate-fade-in"
+          style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+          <div className="w-full max-w-md space-y-4 animate-scale-in p-6 rounded-2xl"
+            style={{
+              background: 'rgba(17,24,39,0.95)',
+              backdropFilter: 'blur(24px)',
+              WebkitBackdropFilter: 'blur(24px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)',
+            }}>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                style={{ background: 'rgba(14,165,233,0.12)', border: '1px solid rgba(14,165,233,0.2)' }}>
+                <Users className="w-4 h-4 text-[#0ea5e9]" />
+              </div>
+              <h2 className="text-lg font-bold text-white">{t('crm.newlead.full')}</h2>
+            </div>
 
             <div className="space-y-3">
+              {[
+                { label: 'Nom', type: 'text', key: 'name' as const, placeholder: 'Nom complet' },
+                { label: 'Email', type: 'email', key: 'email' as const, placeholder: 'email@example.com' },
+                { label: 'Entreprise', type: 'text', key: 'company' as const, placeholder: "Nom de l'entreprise" },
+              ].map(field => (
+                <div key={field.key}>
+                  <label className="text-xs font-medium text-[#94a3b8]">{field.label}</label>
+                  <input
+                    type={field.type}
+                    value={formData[field.key] as string}
+                    onChange={(e) => setFormData({ ...formData, [field.key]: e.target.value })}
+                    className="w-full mt-1 rounded-xl px-3 py-2.5 text-[#e2e8f0] placeholder-[#475569] text-sm outline-none transition-all duration-200"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    onFocus={(e) => { e.currentTarget.style.border = '1px solid rgba(14,165,233,0.4)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.08)' }}
+                    onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ))}
               <div>
-                <label className="text-sm text-muted">Nom</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full mt-1 bg-base border border-[#1E1E2E] rounded-lg px-3 py-2 text-foreground placeholder-muted text-sm focus:border-primary focus:outline-none"
-                  placeholder="Nom complet"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-muted">Email</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full mt-1 bg-base border border-[#1E1E2E] rounded-lg px-3 py-2 text-foreground placeholder-muted text-sm focus:border-primary focus:outline-none"
-                  placeholder="email@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-muted">Entreprise</label>
-                <input
-                  type="text"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full mt-1 bg-base border border-[#1E1E2E] rounded-lg px-3 py-2 text-foreground placeholder-muted text-sm focus:border-primary focus:outline-none"
-                  placeholder="Nom de l'entreprise"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-muted">Valeur estimée (€)</label>
+                <label className="text-xs font-medium text-[#94a3b8]">Valeur estimée (€)</label>
                 <input
                   type="number"
                   value={formData.estimatedValue}
                   onChange={(e) => setFormData({ ...formData, estimatedValue: Number(e.target.value) })}
-                  className="w-full mt-1 bg-base border border-[#1E1E2E] rounded-lg px-3 py-2 text-foreground placeholder-muted text-sm focus:border-primary focus:outline-none"
+                  className="w-full mt-1 rounded-xl px-3 py-2.5 text-[#e2e8f0] placeholder-[#475569] text-sm outline-none transition-all duration-200"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  onFocus={(e) => { e.currentTarget.style.border = '1px solid rgba(14,165,233,0.4)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.08)' }}
+                  onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
                   placeholder="0"
                 />
               </div>
             </div>
 
-            <div className="flex gap-2 justify-end pt-4">
+            <div className="flex gap-2 justify-end pt-2">
               <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Annuler
+                {t('common.cancel')}
               </Button>
-              <Button onClick={handleAddLead}>Ajouter</Button>
+              <Button onClick={handleAddLead}>{t('agenda.add')}</Button>
             </div>
           </div>
         </div>

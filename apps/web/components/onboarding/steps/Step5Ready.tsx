@@ -26,10 +26,11 @@ export function Step5Ready({ data }: Props) {
 
       <div className="bg-base border border-[#1E1E2E] rounded-xl p-4 text-left space-y-3">
         {[
-          { label: 'Organisation', value: data.orgName || '—' },
-          { label: 'Secteur', value: data.industry || '—' },
-          { label: "Cas d'usage", value: USE_CASE_LABELS[data.useCase] || data.useCase || '—' },
-          { label: 'Moteur IA', value: PROVIDER_LABELS[data.llmProvider] || data.llmProvider || '—' },
+          { label: 'Organisation',  value: data.orgName || '—' },
+          { label: 'Secteur',       value: data.industry || '—' },
+          { label: 'Cible client',  value: data.targetAudience || '—' },
+          { label: "Cas d'usage",   value: USE_CASE_LABELS[data.useCase] || data.useCase || '—' },
+          { label: 'Moteur IA',     value: PROVIDER_LABELS[data.llmProvider] || data.llmProvider || '—' },
         ].map(item => (
           <div key={item.label} className="flex items-center justify-between">
             <span className="text-xs text-muted">{item.label}</span>
