@@ -1,12 +1,14 @@
+import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { AgentBadge } from './AgentBadge'
 import { cn } from '@/lib/utils'
 import type { IMessage } from '@proai/types'
 import type { AgentType } from '@proai/types'
+import type { ActionCard } from '@/hooks/useChat'
 
 interface Props {
-  message: IMessage
+  message: IMessage & { actions?: ActionCard[] }
   agentType?: AgentType
 }
 
@@ -48,6 +50,26 @@ export function ChatMessage({ message, agentType }: Props) {
             </ReactMarkdown>
           )}
         </div>
+
+        {/* Action cards */}
+        {!isUser && message.actions && message.actions.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-1">
+            {message.actions.map((action, i) => (
+              <Link
+                key={i}
+                href={action.href}
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200',
+                  action.variant === 'primary'
+                    ? 'bg-[#0ea5e9]/20 text-[#0ea5e9] border border-[#0ea5e9]/30 hover:bg-[#0ea5e9]/30 hover:border-[#0ea5e9]/50'
+                    : 'bg-white/5 text-[#94a3b8] border border-white/10 hover:bg-white/10 hover:text-white',
+                )}
+              >
+                {action.label}
+              </Link>
+            ))}
+          </div>
+        )}
 
         <span className="text-[10px] text-muted">
           {new Date(message.createdAt).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })}

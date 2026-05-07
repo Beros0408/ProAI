@@ -1,8 +1,11 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { CalendarDays, CheckCircle, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
+import { api } from '@/lib/api'
 
 type ContentTab =
   | 'linkedin'
@@ -13,6 +16,8 @@ type ContentTab =
   | 'twitter'
   | 'blog'
   | 'video-script'
+
+type SchedulePlatform = 'linkedin' | 'instagram' | 'facebook' | 'twitter'
 
 const tabs: Array<{ key: ContentTab; label: string }> = [
   { key: 'linkedin',      label: 'LinkedIn' },
@@ -26,9 +31,9 @@ const tabs: Array<{ key: ContentTab; label: string }> = [
 ]
 
 const toneOptions = [
-  { value: 'professional',  label: 'Professional' },
-  { value: 'casual',        label: 'Casual' },
-  { value: 'inspirational', label: 'Inspirational' },
+  { value: 'professional',  label: 'Professionnel' },
+  { value: 'casual',        label: 'Décontracté' },
+  { value: 'inspirational', label: 'Inspirant' },
 ]
 
 const lengths = [
@@ -77,7 +82,30 @@ const TAB_INACTIVE: React.CSSProperties = {
   border: '1px solid rgba(255,255,255,0.07)',
 }
 
+function tabToSchedulePlatform(tab: ContentTab): SchedulePlatform {
+  if (tab === 'instagram') return 'instagram'
+  if (tab === 'facebook')  return 'facebook'
+  if (tab === 'twitter')   return 'twitter'
+  return 'linkedin'
+}
+
+// Presets de formulaire par clé de template
+const TEMPLATE_PRESETS: Record<string, {
+  tab: ContentTab
+  topic?: string
+  tone?: string
+  sections?: string
+  type?: string
+  context?: string
+}> = {
+  launch_product:         { tab: 'linkedin',    topic: 'Lancement de produit SaaS', tone: 'inspirational' },
+  article_summary:        { tab: 'newsletter',  topic: 'Résumé hebdomadaire', sections: '4' },
+  linkedin_post_template: { tab: 'linkedin',    tone: 'professional' },
+  follow_up_email:        { tab: 'email',       type: 'followup', context: 'Suite à notre échange précédent, je souhaitais faire un point.' },
+}
+
 export default function ContentPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<ContentTab>('linkedin')
   const [loading, setLoading]     = useState(false)
   const [result, setResult]       = useState('')
@@ -96,6 +124,39 @@ export default function ContentPage() {
     platform: 'YouTube',
     duration: '3 min',
   })
+
+  // Modal de planification
+  const [showScheduleModal, setShowScheduleModal] = useState(false)
+  const [scheduleLoading, setScheduleLoading]     = useState(false)
+  const [scheduleSuccess, setScheduleSuccess]     = useState('')
+  const [scheduleForm, setScheduleForm] = useState<{
+    platform: SchedulePlatform
+    date:     string
+    time:     string
+  }>({
+    platform: 'linkedin',
+    date:     new Date().toISOString().slice(0, 10),
+    time:     '10:00',
+  })
+
+  // Pré-remplissage depuis le query param ?template=xxx
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const templateKey = params.get('template')
+    if (!templateKey) return
+    const preset = TEMPLATE_PRESETS[templateKey]
+    if (!preset) return
+    setActiveTab(preset.tab)
+    setForm(prev => ({
+      ...prev,
+      ...(preset.topic    !== undefined && { topic:    preset.topic    }),
+      ...(preset.tone     !== undefined && { tone:     preset.tone     }),
+      ...(preset.sections !== undefined && { sections: preset.sections }),
+      ...(preset.type     !== undefined && { type:     preset.type     }),
+      ...(preset.context  !== undefined && { context:  preset.context  }),
+    }))
+  }, [])
 
   const endpoint = useMemo(() => {
     const map: Record<ContentTab, string> = {
@@ -163,12 +224,46 @@ export default function ContentPage() {
     URL.revokeObjectURL(anchor.href)
   }
 
+  const openScheduleModal = () => {
+    setScheduleForm(prev => ({
+      ...prev,
+      platform: tabToSchedulePlatform(activeTab),
+      date:     new Date().toISOString().slice(0, 10),
+    }))
+    setScheduleSuccess('')
+    setShowScheduleModal(true)
+  }
+
+  const handleSchedule = async () => {
+    setScheduleLoading(true)
+    setScheduleSuccess('')
+    try {
+      await api.post('/api/v1/schedule/posts', {
+        platform:       scheduleForm.platform,
+        content:        result,
+        scheduled_date: scheduleForm.date,
+        scheduled_time: scheduleForm.time,
+      })
+      setScheduleSuccess('Post planifié avec succès ! Retrouvez-le dans votre calendrier.')
+      setTimeout(() => {
+        setShowScheduleModal(false)
+        setScheduleSuccess('')
+      }, 2200)
+    } catch {
+      setScheduleSuccess('Erreur lors de la planification. Réessayez.')
+    } finally {
+      setScheduleLoading(false)
+    }
+  }
+
   const inputProps = {
     className: 'w-full rounded-xl px-4 py-3 text-[#e2e8f0] placeholder-[#475569] text-sm outline-none transition-all duration-200',
     style:    INPUT_BASE as React.CSSProperties,
     onFocus:  (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => { Object.assign(e.currentTarget.style, INPUT_FOCUS) },
     onBlur:   (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => { Object.assign(e.currentTarget.style, INPUT_BLUR) },
   }
+
+  const modalInputCls = 'w-full rounded-xl px-4 py-3 text-[#e2e8f0] text-sm outline-none transition-all'
 
   return (
     <div className="space-y-8 p-6 lg:p-10">
@@ -182,7 +277,8 @@ export default function ContentPage() {
             <p className="mt-2 text-[#64748b] text-sm">Sélectionnez une plateforme, définissez votre message et laissez l&apos;IA créer un contenu optimisé.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button variant="secondary" onClick={() => window.history.back()}>Retour</Button>
+            <Button variant="secondary" onClick={() => router.push('/templates')}>Voir les templates</Button>
+            <Button variant="secondary" onClick={() => router.push('/schedule')}>Voir le calendrier</Button>
           </div>
         </div>
       </div>
@@ -224,7 +320,7 @@ export default function ContentPage() {
                 <input
                   value={form.topic}
                   onChange={(e) => setForm({ ...form, topic: e.target.value })}
-                  placeholder="Ex: lancement produit SaaS"
+                  placeholder="Ex : lancement produit SaaS"
                   {...inputProps}
                 />
               </label>
@@ -257,7 +353,7 @@ export default function ContentPage() {
             {activeTab === 'newsletter' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Sections
+                  Nombre de sections
                   <input
                     type="number" min={2} max={6}
                     value={form.sections}
@@ -308,7 +404,7 @@ export default function ContentPage() {
                   Type
                   <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} {...inputProps}>
                     <option value="post">Post</option>
-                    <option value="event">Event</option>
+                    <option value="event">Événement</option>
                     <option value="publicite">Publicité</option>
                   </select>
                 </label>
@@ -333,7 +429,7 @@ export default function ContentPage() {
               <div className="space-y-4">
                 <label className="space-y-2 text-sm text-slate-300">
                   Mots-clés
-                  <input value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="ex: SEO, génération de leads" {...inputProps} />
+                  <input value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="ex : SEO, génération de leads" {...inputProps} />
                 </label>
                 <label className="space-y-2 text-sm text-slate-300">
                   Longueur
@@ -368,7 +464,7 @@ export default function ContentPage() {
               <Textarea
                 value={form.context}
                 onChange={(e) => setForm({ ...form, context: e.target.value })}
-                placeholder="Ajoutez des détails pour aider l'IA"
+                placeholder="Ajoutez des détails pour aider l'IA à personnaliser le contenu"
                 className="mt-2 bg-slate-900"
               />
             </div>
@@ -377,7 +473,7 @@ export default function ContentPage() {
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Button onClick={handleGenerate} disabled={loading}>
-                {loading ? 'Génération...' : 'Générer le contenu'}
+                {loading ? 'Génération en cours...' : 'Générer le contenu'}
               </Button>
               <p className="text-sm text-slate-500">Un contenu prêt à publier, optimisé pour chaque canal.</p>
             </div>
@@ -386,13 +482,31 @@ export default function ContentPage() {
           {/* PREVIEW SIDEBAR */}
           <aside className="space-y-4 rounded-2xl p-6" style={GLASS_SECTION}>
             <div>
-              <h3 className="text-lg font-semibold text-white">Aperçu</h3>
-              <p className="mt-2 text-sm text-slate-400">Copiez ou téléchargez votre version finalisée en un clic.</p>
+              <h3 className="text-lg font-semibold text-white">Actions</h3>
+              <p className="mt-2 text-sm text-slate-400">Gérez votre contenu généré.</p>
             </div>
             <div className="grid gap-3">
               <Button disabled={!result} onClick={handleCopy} variant="secondary">Copier le contenu</Button>
-              <Button disabled={!result} onClick={handleDownload} variant="secondary">Télécharger</Button>
+              <Button disabled={!result} onClick={handleDownload} variant="secondary">Télécharger (.txt)</Button>
+              {/* Bouton Planifier — visible uniquement si un résultat existe */}
+              {result && (
+                <button
+                  type="button"
+                  onClick={openScheduleModal}
+                  className="flex items-center justify-center gap-2 w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
+                  style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', boxShadow: '0 4px 16px rgba(251,146,60,0.3)' }}
+                >
+                  <CalendarDays size={15} />
+                  Planifier ce post
+                </button>
+              )}
             </div>
+            {result && (
+              <div className="mt-2 p-3 rounded-xl text-xs text-[#94a3b8]" style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.12)' }}>
+                Contenu généré pour <span className="font-semibold text-[#38bdf8]">{tabs.find(t => t.key === activeTab)?.label}</span>.
+                Cliquez sur « Planifier » pour l&apos;envoyer dans votre calendrier.
+              </div>
+            )}
           </aside>
         </div>
 
@@ -404,18 +518,121 @@ export default function ContentPage() {
               <p className="text-sm text-slate-500">Le contenu final s&apos;affiche ici après validation.</p>
             </div>
             <Button onClick={handleGenerate} disabled={loading}>
-              {loading ? 'Génération...' : 'Régénérer'}
+              {loading ? 'Génération en cours...' : 'Régénérer'}
             </Button>
           </div>
           <div className="mt-6 rounded-xl p-6 min-h-[260px] text-slate-300" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)' }}>
             {result
               ? <pre className="whitespace-pre-wrap break-words text-sm">{result}</pre>
-              : <p className="text-slate-500">Aucun contenu généré pour le moment.</p>
+              : <p className="text-slate-500">Aucun contenu généré pour le moment. Remplissez le formulaire et cliquez sur « Générer ».</p>
             }
           </div>
         </div>
 
       </div>
+
+      {/* MODAL PLANIFICATION */}
+      {showScheduleModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
+          <div className="w-full max-w-md rounded-2xl p-6 animate-scale-in"
+            style={{ background: 'rgba(17,24,39,0.98)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}>
+
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h3 className="text-lg font-bold text-white">Planifier ce post</h3>
+                <p className="text-xs text-[#94a3b8] mt-0.5">Le contenu sera ajouté à votre calendrier de publication.</p>
+              </div>
+              <button type="button" onClick={() => setShowScheduleModal(false)} style={{ color: '#94a3b8' }} className="hover:text-white transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+
+            {scheduleSuccess ? (
+              <div className="flex flex-col items-center gap-3 py-6">
+                <CheckCircle size={40} style={{ color: '#34d399' }} />
+                <p className="text-sm text-center font-medium" style={{ color: scheduleSuccess.startsWith('Erreur') ? '#ef4444' : '#34d399' }}>
+                  {scheduleSuccess}
+                </p>
+                {!scheduleSuccess.startsWith('Erreur') && (
+                  <button
+                    type="button"
+                    onClick={() => { setShowScheduleModal(false); window.location.href = '/schedule' }}
+                    className="mt-2 text-xs text-[#38bdf8] underline hover:no-underline"
+                  >
+                    Voir le calendrier →
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
+                  Plateforme
+                  <select
+                    value={scheduleForm.platform}
+                    onChange={(e) => setScheduleForm({ ...scheduleForm, platform: e.target.value as SchedulePlatform })}
+                    className={modalInputCls}
+                    style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                  >
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="twitter">Twitter / X</option>
+                  </select>
+                </label>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
+                    Date
+                    <input
+                      type="date"
+                      value={scheduleForm.date}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
+                      className={modalInputCls}
+                      style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                    />
+                  </label>
+                  <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
+                    Heure
+                    <input
+                      type="time"
+                      value={scheduleForm.time}
+                      onChange={(e) => setScheduleForm({ ...scheduleForm, time: e.target.value })}
+                      className={modalInputCls}
+                      style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                    />
+                  </label>
+                </div>
+
+                <div className="rounded-xl p-3 text-xs text-[#94a3b8] line-clamp-3"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {result.slice(0, 180)}{result.length > 180 ? '…' : ''}
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowScheduleModal(false)}
+                    className="flex-1 py-2.5 rounded-full text-sm font-medium transition-colors"
+                    style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSchedule}
+                    disabled={scheduleLoading}
+                    className="flex-1 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:brightness-110 disabled:opacity-60"
+                    style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
+                  >
+                    {scheduleLoading ? 'Planification...' : 'Planifier'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

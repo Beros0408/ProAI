@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
+import { api } from '@/lib/api'
 import {
   CalendarDays, Plus, Sparkles, ChevronLeft, ChevronRight,
   Clock, CheckSquare, Square, Trash2, GripVertical,
@@ -89,6 +90,7 @@ export default function AgendaPage() {
   const [newDuration, setNewDuration] = useState(60)
   const [aiLoading, setAiLoading] = useState(false)
   const [chargeLevel, setChargeLevel] = useState(0)
+  const [scheduledPostDates, setScheduledPostDates] = useState<Set<string>>(new Set())
   const gridRef = useRef<HTMLDivElement>(null)
 
   const weekDates = getWeekDates(weekOffset)
@@ -102,6 +104,15 @@ export default function AgendaPage() {
   }, [events])
 
   useEffect(() => { if (gridRef.current) gridRef.current.scrollTop = Math.max(0, (currentHour - 8) * 80 - 40) }, [])
+
+  useEffect(() => {
+    api.get<{ scheduled_date: string }[]>('/api/v1/schedule/posts')
+      .then((posts) => {
+        const dates = new Set(posts.map((p) => p.scheduled_date))
+        setScheduledPostDates(dates)
+      })
+      .catch(() => {})
+  }, [])
 
   const handleAiPlan = () => { setAiLoading(true); setTimeout(() => { setShowAiSuggestions(true); setEvents(prev => [...prev, ...AI_SUGGESTIONS]); setAiLoading(false) }, 1500) }
   const acceptSuggestion = (id: string) => setEvents(prev => prev.map(e => e.id === id ? { ...e, aiSuggested: false, type: 'focus' } : e))
@@ -135,6 +146,9 @@ export default function AgendaPage() {
             </div>
             <span style={{ color: chargeColor }}>{chargeLevel}%</span>
           </div>
+          <button onClick={() => router.push('/schedule')} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'rgba(14,165,233,0.12)', border: '1px solid rgba(14,165,233,0.25)', color: '#38bdf8' }}>
+            <CalendarDays size={14} /> Calendrier de publication
+          </button>
           <button onClick={handleAiPlan} disabled={aiLoading} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 4px 20px rgba(139,92,246,0.3)' }}>
             <Sparkles size={14} />{aiLoading ? t('agenda.analyzing') : t('agenda.planwithia')}
           </button>
@@ -163,13 +177,20 @@ export default function AgendaPage() {
         <div className="flex-1 rounded-2xl overflow-hidden" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="grid grid-cols-8 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
             <div className="p-3 text-xs font-medium" style={{ color: '#64748b' }}><Clock size={14} /></div>
-            {weekDates.map((d, i) => (
-              <div key={i} className={`p-3 text-center ${isToday(d) ? 'bg-[rgba(14,165,233,0.08)]' : ''}`}>
-                <div className="text-[10px] uppercase font-semibold tracking-wider" style={{ color: i >= 5 ? '#fb923c' : '#64748b' }}>{DAYS_SHORT[i]}</div>
-                <div className={`text-lg font-bold mt-0.5 ${isToday(d) ? 'text-[#0ea5e9]' : 'text-white'}`}>{d.getDate()}</div>
-                {isToday(d) && <div className="w-1.5 h-1.5 rounded-full mx-auto mt-1" style={{ background: '#0ea5e9', boxShadow: '0 0 6px #0ea5e9' }} />}
-              </div>
-            ))}
+            {weekDates.map((d, i) => {
+              const isoDate = d.toISOString().slice(0, 10)
+              const hasPost = scheduledPostDates.has(isoDate)
+              return (
+                <div key={i} className={`p-3 text-center ${isToday(d) ? 'bg-[rgba(14,165,233,0.08)]' : ''}`}>
+                  <div className="text-[10px] uppercase font-semibold tracking-wider" style={{ color: i >= 5 ? '#fb923c' : '#64748b' }}>{DAYS_SHORT[i]}</div>
+                  <div className={`text-lg font-bold mt-0.5 ${isToday(d) ? 'text-[#0ea5e9]' : 'text-white'}`}>{d.getDate()}</div>
+                  <div className="flex items-center justify-center gap-1 mt-1">
+                    {isToday(d) && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#0ea5e9', boxShadow: '0 0 6px #0ea5e9' }} />}
+                    {hasPost && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#fb923c', boxShadow: '0 0 6px #fb923c' }} title="Post planifié ce jour" />}
+                  </div>
+                </div>
+              )
+            })}
           </div>
           <div ref={gridRef} className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 340px)' }}>
             {HOURS.map(hour => (

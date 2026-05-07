@@ -1,3 +1,13 @@
+# Script Python - Sidebar complete v3 avec accordeons fonctionnels
+import os
+
+TARGET = os.path.join(
+    "C:", os.sep, "Users", "bkabe", "Desktop", "Porjet - ProAI",
+    "ProAI", "apps", "web", "components", "layout", "Sidebar.tsx"
+)
+os.makedirs(os.path.dirname(TARGET), exist_ok=True)
+
+CODE = """\
 'use client'
 
 import { useState } from 'react'
@@ -53,7 +63,7 @@ const SECTIONS = [
       { href: '/automations', icon: Zap, label: 'Automatisations' },
       { href: '/analytics', icon: BarChart3, label: 'Analytics' },
       { href: '/reports', icon: FileText, label: 'Rapports' },
-      { href: '/predictions', icon: TrendingUp, label: 'Prédictions' },
+      { href: '/predictions', icon: TrendingUp, label: 'Pr\\u00e9dictions' },
     ],
   },
 ]
@@ -74,6 +84,10 @@ export function Sidebar() {
 
   const handleToggle = (key: string) => {
     setOpenKey(prev => prev === key ? null : key)
+  }
+
+  const handleHover = (key: string) => {
+    setOpenKey(key)
   }
 
   return (
@@ -136,6 +150,7 @@ export function Sidebar() {
                 <button
                   type="button"
                   onClick={() => handleToggle(section.key)}
+                  onMouseEnter={() => handleHover(section.key)}
                   className={`w-full flex items-center gap-2.5 rounded-xl cursor-pointer transition-all duration-200 ${compact ? 'justify-center px-2 py-3' : 'px-3 py-3'}`}
                   style={{
                     background: isOpen || hasActive ? section.glow : 'transparent',
@@ -147,24 +162,16 @@ export function Sidebar() {
                     <>
                       <span className="text-[12px] font-bold uppercase tracking-wider flex-1 text-left"
                         style={{ color: isOpen || hasActive ? section.color : '#64748b' }}>{section.label}</span>
-                      <ChevronDown size={14}
-                        style={{
-                          color: isOpen ? section.color : '#475569',
-                          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                          transition: 'transform 0.3s ease-in-out, color 0.2s ease',
-                        }} />
+                      <ChevronDown size={14} className="transition-transform duration-300"
+                        style={{ color: isOpen ? section.color : '#475569', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                     </>
                   )}
                 </button>
 
                 {/* SOUS-MENU ANIME */}
                 {!compact && (
-                  <div className="overflow-hidden"
-                    style={{
-                      maxHeight: isOpen ? '250px' : '0px',
-                      opacity: isOpen ? 1 : 0,
-                      transition: 'max-height 0.3s ease-in-out, opacity 0.25s ease-in-out',
-                    }}>
+                  <div className="overflow-hidden transition-all duration-300 ease-in-out"
+                    style={{ maxHeight: isOpen ? '250px' : '0px', opacity: isOpen ? 1 : 0 }}>
                     <div className="pl-3 pt-2 space-y-1">
                       {section.items.map(item => {
                         const active = pathname === item.href
@@ -212,7 +219,7 @@ export function Sidebar() {
           className={`flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}`}
           style={{ color: pathname === '/settings' ? '#38bdf8' : '#64748b', background: pathname === '/settings' ? 'rgba(14,165,233,0.1)' : 'transparent' }}>
           <Settings size={17} />
-          {!compact && <span className="text-[13px] font-medium" style={{ color: '#94a3b8' }}>Paramètres</span>}
+          {!compact && <span className="text-[13px] font-medium" style={{ color: '#94a3b8' }}>Param\\u00e8tres</span>}
         </Link>
       </div>
 
@@ -222,7 +229,7 @@ export function Sidebar() {
           className={`w-full flex items-center gap-3 rounded-xl py-2.5 transition-all duration-200 hover:bg-[rgba(255,255,255,0.03)] ${compact ? 'justify-center px-2' : 'px-3'}`}
           style={{ color: '#475569' }}>
           {compact ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
-          {!compact && <span className="text-[11px] font-medium">Réduire</span>}
+          {!compact && <span className="text-[11px] font-medium">R\\u00e9duire</span>}
         </button>
       </div>
 
@@ -246,3 +253,22 @@ export function Sidebar() {
     </aside>
   )
 }
+"""
+
+# Fix accents - replace unicode escapes with real characters
+CODE = CODE.replace("Param\\u00e8tres", "Param\u00e8tres")
+CODE = CODE.replace("R\\u00e9duire", "R\u00e9duire")
+CODE = CODE.replace("Pr\\u00e9dictions", "Pr\u00e9dictions")
+
+with open(TARGET, "w", encoding="utf-8") as f:
+    f.write(CODE.lstrip())
+
+print(f"[OK] Sidebar v3 cr\u00e9\u00e9e : {TARGET}")
+print(f"[OK] Taille : {os.path.getsize(TARGET)} octets")
+print("[OK] Corrections :")
+print("  - Espacement mb-6 entre Principal et accordeons")
+print("  - space-y-4 entre les 3 blocs accordeon")
+print("  - Hover ouvre les sous-menus (onMouseEnter)")
+print("  - Click toggle les sous-menus")
+print("  - Accents corriges (Parametres, Reduire, Predictions)")
+print("  - Animation fluide maxHeight 0 -> 250px")

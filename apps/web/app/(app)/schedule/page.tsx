@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
+import { api } from '@/lib/api'
 
 interface ScheduledEvent {
   id: string
-  platform: 'linkedin' | 'instagram' | 'facebook'
+  platform: 'linkedin' | 'instagram' | 'facebook' | 'twitter'
   content: string
   date: string
   time: string
@@ -40,12 +42,14 @@ const PLATFORM_PILL_STYLE: Record<ScheduledEvent['platform'], string> = {
   linkedin: 'bg-[#0ea5e9] text-white',
   instagram: 'bg-[#f472b6] text-white',
   facebook: 'bg-[#8b5cf6] text-white',
+  twitter: 'bg-[#1da1f2] text-white',
 }
 
 const PLATFORM_DOT_STYLE: Record<ScheduledEvent['platform'], string> = {
   linkedin: 'bg-[#0ea5e9]',
   instagram: 'bg-[#f472b6]',
   facebook: 'bg-[#8b5cf6]',
+  twitter: 'bg-[#1da1f2]',
 }
 
 function generateCalendarDays(year: number, month: number): CalendarCell[] {
@@ -90,10 +94,30 @@ function truncateText(text: string, maxLength: number) {
 }
 
 export default function SchedulePage() {
+  const router = useRouter()
   const { t } = useTranslation()
   const today = new Date(2026, 3, 30)
   const [currentDate, setCurrentDate] = useState(new Date(2026, 3))
   const [events, setEvents] = useState<ScheduledEvent[]>(INITIAL_EVENTS)
+
+  useEffect(() => {
+    api.get<{ id: string; platform: string; content: string; scheduled_date: string; scheduled_time: string }[]>('/api/v1/schedule/posts')
+      .then((posts) => {
+        const apiEvents: ScheduledEvent[] = posts.map((p) => ({
+          id: p.id,
+          platform: p.platform as ScheduledEvent['platform'],
+          content: p.content,
+          date: p.scheduled_date,
+          time: p.scheduled_time,
+        }))
+        setEvents((prev) => {
+          const existingIds = new Set(prev.map((e) => e.id))
+          const newOnes = apiEvents.filter((e) => !existingIds.has(e.id))
+          return [...prev, ...newOnes]
+        })
+      })
+      .catch(() => {})
+  }, [])
   const [showModal, setShowModal] = useState(false)
   const [selectedDay, setSelectedDay] = useState('')
   const [selectedEvent, setSelectedEvent] = useState<ScheduledEvent | null>(null)
@@ -146,13 +170,22 @@ export default function SchedulePage() {
             <p className="mt-2 max-w-2xl text-sm text-[#94a3b8]">Organisez vos campagnes sociales dans un tableau mensuel clair et visuel.</p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleCellClick(currentDate.toISOString().slice(0, 10))}
-            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#f97316] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-          >
-            <Plus className="mr-2 h-4 w-4" /> + Nouveau post
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => router.push('/agenda')}
+              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+            >
+              Voir mon agenda
+            </button>
+            <button
+              type="button"
+              onClick={() => handleCellClick(currentDate.toISOString().slice(0, 10))}
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#f97316] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+            >
+              <Plus className="mr-2 h-4 w-4" /> + Nouveau post
+            </button>
+          </div>
         </div>
 
         <div className="rounded-[24px] p-6" style={{ background: 'rgba(11,18,32,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)', boxShadow: '0 15px 40px rgba(0,0,0,0.3)' }}>
@@ -265,6 +298,7 @@ export default function SchedulePage() {
                   <option value="linkedin">LinkedIn</option>
                   <option value="instagram">Instagram</option>
                   <option value="facebook">Facebook</option>
+                  <option value="twitter">Twitter / X</option>
                 </select>
               </label>
 

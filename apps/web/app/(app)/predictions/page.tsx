@@ -10,22 +10,22 @@ import {
 
 const SALES_DATA = [0, 0, 12, 28, 45, 68, 85, 98, 110, 125]
 const PREDICTION_DATA = [null, null, null, null, null, null, null, 98, 118, 135, 148, 162]
-const MONTHS = ['Jan', 'F\u00e9v', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Ao\u00fbt', 'Sep', 'Oct', 'Nov', 'D\u00e9c']
+const MONTHS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
 const MAX_VAL = 170
 
 const CLIENTS = [
-  { name: 'Client A', action: 'Proposition de valeur personnalis\u00e9e', risk: 82, color: '#ef4444' },
-  { name: 'Client B', action: 'Relance cibl\u00e9e', risk: 72, color: '#ef4444' },
-  { name: 'Client C', action: 'R\u00e9union de satisfaction', risk: 61, color: '#fb923c' },
+  { name: 'Client A', action: 'Proposition de valeur personnalisée', risk: 82, color: '#ef4444' },
+  { name: 'Client B', action: 'Relance ciblée', risk: 72, color: '#ef4444' },
+  { name: 'Client C', action: 'Réunion de satisfaction', risk: 61, color: '#fb923c' },
   { name: 'Client D', action: "Offre d'engagement", risk: 48, color: '#0ea5e9' },
-  { name: 'Client E', action: "Newsletter d'actualit\u00e9s", risk: 34, color: '#0ea5e9' },
+  { name: 'Client E', action: "Newsletter d'actualités", risk: 34, color: '#0ea5e9' },
 ]
 
 const TRENDS = [
-  { text: 'La vid\u00e9o courte devient le format pr\u00e9f\u00e9r\u00e9 B2B', impact: 'Fort', icon: '🔥', color: '#ef4444', glow: 'rgba(239,68,68,0.15)' },
-  { text: 'Personnalisation des emails conduit \u00e0 +22% d\'ouverture', impact: 'Fort', icon: '⚡', color: '#fb923c', glow: 'rgba(251,146,60,0.15)' },
-  { text: 'Int\u00e9gration CRM et IA am\u00e9liore le suivi client', impact: 'Moyen', icon: '🌱', color: '#34d399', glow: 'rgba(52,211,153,0.15)' },
-  { text: 'Webinars interactifs renforcent la conversion', impact: 'Moyen', icon: '⚡', color: '#8b5cf6', glow: 'rgba(139,92,246,0.15)' },
+  { text: 'La vidéo courte devient le format préféré B2B', impact: 'Fort', icon: '🔥', color: '#ef4444', glow: 'rgba(239,68,68,0.15)' },
+  { text: 'La personnalisation des emails conduit à +22 % d\'ouverture', impact: 'Fort', icon: '⚡', color: '#fb923c', glow: 'rgba(251,146,60,0.15)' },
+  { text: 'L\'intégration CRM et IA améliore le suivi client', impact: 'Moyen', icon: '🌱', color: '#34d399', glow: 'rgba(52,211,153,0.15)' },
+  { text: 'Les webinaires interactifs renforcent la conversion', impact: 'Moyen', icon: '⚡', color: '#8b5cf6', glow: 'rgba(139,92,246,0.15)' },
   { text: 'Les micro-capsules sociales augmentent l\'engagement', impact: 'Faible', icon: '🌱', color: '#06b6d4', glow: 'rgba(6,182,212,0.15)' },
 ]
 
@@ -84,19 +84,19 @@ function SalesChart() {
         </g>
       ))}
 
-      {/* Month labels */}
+      {/* Étiquettes des mois */}
       {MONTHS.map((m, i) => (
         <text key={m} x={toX(i)} y={h - 5} fill="#64748b" fontSize="9" textAnchor="middle">{m}</text>
       ))}
 
-      {/* Prediction zone */}
+      {/* Zone de projection */}
       <rect x={toX(7)} y={0} width={toX(11) - toX(7)} height={chartH} fill="url(#predGrad)" rx="4" className={animated ? 'animate-pulse' : ''} style={{ animationDuration: '3s' }} />
       <text x={toX(9)} y={20} fill="#a78bfa" fontSize="9" textAnchor="middle" fontWeight="600">PROJECTION IA</text>
 
-      {/* Area under real line */}
+      {/* Aire sous la courbe réelle */}
       <polygon points={areaPoints} fill="url(#areaGrad)" className={`transition-opacity duration-1000 ${animated ? 'opacity-100' : 'opacity-0'}`} />
 
-      {/* Real line */}
+      {/* Courbe réelle */}
       <polyline
         points={realPoints}
         fill="none"
@@ -108,7 +108,7 @@ function SalesChart() {
         className={`transition-all duration-1000 ${animated ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/* Prediction line */}
+      {/* Courbe de projection */}
       <polyline
         points={predPoints || ''}
         fill="none"
@@ -120,7 +120,7 @@ function SalesChart() {
         className={`transition-all duration-1000 delay-500 ${animated ? 'opacity-100' : 'opacity-0'}`}
       />
 
-      {/* Real data points */}
+      {/* Points réels */}
       {SALES_DATA.map((v, i) => (
         <circle key={`r${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#0ea5e9" stroke="#0c1220" strokeWidth="2"
           className={`transition-all duration-500 ${animated ? 'opacity-100' : 'opacity-0'}`}
@@ -128,7 +128,7 @@ function SalesChart() {
         />
       ))}
 
-      {/* Prediction points */}
+      {/* Points de projection */}
       {PREDICTION_DATA.map((v, i) => v !== null && i >= SALES_DATA.length && (
         <circle key={`p${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#8b5cf6" stroke="#0c1220" strokeWidth="2"
           className={`transition-all duration-500 ${animated ? 'opacity-100' : 'opacity-0'}`}
@@ -136,11 +136,11 @@ function SalesChart() {
         />
       ))}
 
-      {/* Trigger annotation */}
+      {/* Annotation */}
       <g className={`transition-opacity duration-700 delay-1000 ${animated ? 'opacity-100' : 'opacity-0'}`}>
         <line x1={toX(9)} y1={toY(135)} x2={toX(9)} y2={toY(135) - 20} stroke="#34d399" strokeWidth="1" />
         <rect x={toX(9) - 45} y={toY(135) - 36} width="90" height="18" rx="4" fill="rgba(52,211,153,0.15)" stroke="rgba(52,211,153,0.3)" strokeWidth="1" />
-        <text x={toX(9)} y={toY(135) - 23} fill="#34d399" fontSize="9" textAnchor="middle" fontWeight="600">+15% MoM</text>
+        <text x={toX(9)} y={toY(135) - 23} fill="#34d399" fontSize="9" textAnchor="middle" fontWeight="600">+15 % MoM</text>
       </g>
     </svg>
   )
@@ -163,16 +163,16 @@ export default function PredictionsPage() {
 
   return (
     <div className="space-y-6 animate-fade-up">
-      {/* HEADER */}
+      {/* EN-TÊTE */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#8b5cf6' }}>
-              Pr\u00e9dictions IA
+              Prédictions IA
             </span>
             <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
               style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
-              <Activity size={10} /> Temps r\u00e9el
+              <Activity size={10} /> Temps réel
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white">
@@ -189,26 +189,26 @@ export default function PredictionsPage() {
           style={{ background: '#111827', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}
         >
           <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-          {refreshing ? 'Analyse en cours...' : 'Actualiser les pr\u00e9dictions'}
+          {refreshing ? 'Analyse en cours…' : 'Actualiser les prédictions'}
         </button>
       </div>
 
-      {/* MAIN GRID */}
+      {/* GRILLE PRINCIPALE */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-        {/* GRAPH PRINCIPAL */}
+        {/* GRAPHIQUE PRINCIPAL */}
         <div className="lg:col-span-2 rounded-2xl p-5 relative overflow-hidden"
           style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(14,165,233,0.05)' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp size={16} style={{ color: '#0ea5e9' }} />
-                <span className="text-sm font-bold text-white">Pr\u00e9vision de ventes</span>
+                <span className="text-sm font-bold text-white">Prévision de ventes</span>
               </div>
-              <p className="text-xs text-[#64748b]">Donn\u00e9es r\u00e9elles + projection IA sur 3 mois</p>
+              <p className="text-xs text-[#64748b]">Données réelles + projection IA sur 3 mois</p>
             </div>
             <div className="flex items-center gap-4 text-[10px]">
-              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#0ea5e9' }} /> R\u00e9el</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#0ea5e9' }} /> Réel</span>
               <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#8b5cf6', borderTop: '1px dashed #8b5cf6' }} /> Projection</span>
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function PredictionsPage() {
             <span className="text-sm font-bold text-white">Score IA global</span>
           </div>
 
-          {/* Circular score */}
+          {/* Score circulaire */}
           <div className="flex justify-center mb-4">
             <div className="relative w-32 h-32">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
@@ -241,7 +241,7 @@ export default function PredictionsPage() {
                 </defs>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-extrabold text-white">{aiScore}%</span>
+                <span className="text-3xl font-extrabold text-white">{aiScore} %</span>
                 <span className="text-[10px] text-[#94a3b8]">Performance</span>
               </div>
             </div>
@@ -249,17 +249,17 @@ export default function PredictionsPage() {
 
           <div className="flex items-center justify-center gap-1.5 mb-4">
             <TrendingUp size={12} style={{ color: '#34d399' }} />
-            <span className="text-xs font-bold" style={{ color: '#34d399' }}>+12% vs mois dernier</span>
+            <span className="text-xs font-bold" style={{ color: '#34d399' }}>+12 % vs mois dernier</span>
           </div>
 
-          {/* AI Insight */}
+          {/* Insight IA */}
           <div className="p-3 rounded-xl" style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)' }}>
             <div className="flex items-center gap-1.5 mb-2">
               <Sparkles size={12} style={{ color: '#a78bfa' }} />
               <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#a78bfa' }}>Insight IA</span>
             </div>
             <p className="text-xs text-[#e2e8f0] leading-relaxed">
-              Vos ventes devraient augmenter gr\u00e2ce \u00e0 la hausse des leads inbound et la baisse du churn sur le segment B.
+              Vos ventes devraient augmenter grâce à la hausse des leads inbound et à la baisse du churn sur le segment B.
             </p>
           </div>
 
@@ -269,15 +269,15 @@ export default function PredictionsPage() {
             className="w-full mt-4 py-2.5 rounded-full text-xs font-bold text-white flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5"
             style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 4px 20px rgba(139,92,246,0.3)' }}
           >
-            <Target size={12} /> Lancer une campagne de r\u00e9tention
+            <Target size={12} /> Lancer une campagne de rétention
           </button>
         </div>
       </div>
 
-      {/* BOTTOM ROW */}
+      {/* LIGNE DU BAS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        {/* CLIENTS A SURVEILLER */}
+        {/* CLIENTS À SURVEILLER */}
         <div className="rounded-2xl p-5"
           style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}>
           <div className="flex items-center justify-between mb-4">
@@ -286,7 +286,7 @@ export default function PredictionsPage() {
               <span className="text-sm font-bold text-white">Risque de churn</span>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: 'rgba(251,146,60,0.1)', color: '#fb923c' }}>
-              5 clients \u00e0 surveiller
+              5 clients à surveiller
             </span>
           </div>
 
@@ -305,11 +305,11 @@ export default function PredictionsPage() {
                       <p className="text-[11px] text-[#94a3b8]">{client.action}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold" style={{ color: riskColor }}>{client.risk}%</span>
+                      <span className="text-sm font-bold" style={{ color: riskColor }}>{client.risk} %</span>
                       {client.risk > 70 && <AlertTriangle size={12} style={{ color: '#ef4444' }} className="animate-pulse" />}
                     </div>
                   </div>
-                  {/* Risk bar */}
+                  {/* Barre de risque */}
                   <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
                     <div
                       className="h-full rounded-full transition-all duration-1000 ease-out"
@@ -320,11 +320,11 @@ export default function PredictionsPage() {
                       }}
                     />
                   </div>
-                  {/* Hover action */}
+                  {/* Action au survol */}
                   <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button className="text-[10px] px-2 py-1 rounded-full font-medium"
                       style={{ background: `${riskColor}15`, color: riskColor }}>
-                      Action recommand\u00e9e
+                      Action recommandée
                     </button>
                     <button className="text-[10px] px-2 py-1 rounded-full font-medium"
                       style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8' }}>
@@ -337,12 +337,12 @@ export default function PredictionsPage() {
           </div>
         </div>
 
-        {/* TENDANCES MARCHE */}
+        {/* TENDANCES MARCHÉ */}
         <div className="rounded-2xl p-5"
           style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}>
           <div className="flex items-center gap-2 mb-4">
             <Sparkles size={16} style={{ color: '#06b6d4' }} />
-            <span className="text-sm font-bold text-white">Tendances march\u00e9</span>
+            <span className="text-sm font-bold text-white">Tendances marché</span>
           </div>
 
           <div className="space-y-3">
@@ -354,7 +354,7 @@ export default function PredictionsPage() {
                   className="p-3 rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group"
                   style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}
                 >
-                  {/* Hover glow */}
+                  {/* Lueur au survol */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
                     style={{ background: `radial-gradient(circle at 100% 0%, ${trend.glow}, transparent 70%)` }} />
 
@@ -373,21 +373,21 @@ export default function PredictionsPage() {
             })}
           </div>
 
-          {/* AI recommendation */}
+          {/* Recommandation IA */}
           <div className="mt-4 p-3 rounded-xl" style={{ background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.15)' }}>
             <div className="flex items-center gap-1.5 mb-2">
               <Brain size={12} style={{ color: '#06b6d4' }} />
               <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#06b6d4' }}>Recommandation IA</span>
             </div>
             <p className="text-xs text-[#e2e8f0] leading-relaxed mb-2">
-              Investissez dans la vid\u00e9o courte et la personnalisation email pour maximiser votre ROI ce trimestre.
+              Investissez dans la vidéo courte et la personnalisation email pour maximiser votre ROI ce trimestre.
             </p>
             <button
               onClick={() => router.push('/content')}
               className="flex items-center gap-1.5 text-[10px] font-bold transition-colors"
               style={{ color: '#06b6d4' }}
             >
-              G\u00e9n\u00e9rer du contenu vid\u00e9o <ArrowRight size={10} />
+              Générer du contenu vidéo <ArrowRight size={10} />
             </button>
           </div>
         </div>

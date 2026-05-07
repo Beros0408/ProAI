@@ -6,6 +6,12 @@ import type { AgentType } from '@proai/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
+export interface ActionCard {
+  label: string
+  href: string
+  variant: 'primary' | 'secondary'
+}
+
 interface Message {
   id: string
   conversationId: string
@@ -13,12 +19,37 @@ interface Message {
   content: string
   agentType?: AgentType
   createdAt: string
+  actions?: ActionCard[]
 }
 
 export function useChat(conversationId: string | null, agentType: string) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
+
+  const addMessages = useCallback(
+    (userContent: string, assistantContent: string) => {
+      const now = new Date().toISOString()
+      setMessages(prev => [
+        ...prev,
+        {
+          id: generateId(),
+          conversationId: conversationId ?? 'temp',
+          role: 'user' as const,
+          content: userContent,
+          createdAt: now,
+        },
+        {
+          id: generateId(),
+          conversationId: conversationId ?? 'temp',
+          role: 'assistant' as const,
+          content: assistantContent,
+          createdAt: now,
+        },
+      ])
+    },
+    [conversationId],
+  )
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -65,6 +96,7 @@ export function useChat(conversationId: string | null, agentType: string) {
           content: data.message?.content || data.response || 'No response',
           agentType: data.agent_used || agentType,
           createdAt: new Date().toISOString(),
+          actions: data.actions || [],
         }
 
         setMessages(prev => [...prev, assistantMsg])
@@ -85,5 +117,5 @@ export function useChat(conversationId: string | null, agentType: string) {
     [conversationId, agentType],
   )
 
-  return { messages, sendMessage, isLoading, isStreaming }
+  return { messages, sendMessage, addMessages, isLoading, isStreaming }
 }

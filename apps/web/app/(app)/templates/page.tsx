@@ -75,7 +75,13 @@ export default function TemplatesPage() {
               <h2 className="text-base font-semibold text-white">{t(template.title)}</h2>
               <p className="mt-3 text-sm text-[#64748b] leading-relaxed">{t(template.description)}</p>
               <div className="mt-5 flex justify-end">
-                <Button variant="secondary" onClick={() => router.push('/content')}>{t('use')}</Button>
+                {/* Redirige vers /content avec le template pré-sélectionné via query param */}
+                <Button
+                  variant="secondary"
+                  onClick={() => router.push(`/content?template=${template.key}`)}
+                >
+                  {t('use')}
+                </Button>
               </div>
             </article>
           )

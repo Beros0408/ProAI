@@ -74,6 +74,10 @@ export const translations = {
     'automation_desc': 'Workflows automatisés et intégrations',
     'analytics_agent': 'Analytics',
     'analytics_desc': 'Rapports, KPIs et prédictions',
+    'social_media': 'Réseaux sociaux',
+    'social_media_desc': 'LinkedIn, Instagram, TikTok — contenus viraux et stratégie',
+    'communication': 'Communication',
+    'communication_desc': 'Cold emails, séquences de prospection et scripts',
 
     // Automations page (top-level keys)
     'automations': 'Automatisations',
@@ -399,6 +403,10 @@ export const translations = {
     'automation_desc': 'Automated workflows and integrations',
     'analytics_agent': 'Analytics',
     'analytics_desc': 'Reports, KPIs and predictions',
+    'social_media': 'Social Media',
+    'social_media_desc': 'LinkedIn, Instagram, TikTok — viral content and strategy',
+    'communication': 'Communication',
+    'communication_desc': 'Cold emails, prospecting sequences and scripts',
 
     // Automations page (top-level keys)
     'automations': 'Automations',

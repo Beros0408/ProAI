@@ -13,9 +13,16 @@ class ChatRequest(BaseModel):
     stream: bool = False
 
 
+class ActionCard(BaseModel):
+    label: str
+    href: str
+    variant: Literal["primary", "secondary"] = "secondary"
+
+
 class ChatResponse(BaseModel):
     conversation_id: str
     message: ChatMessage
     intent: str | None = None
     agent_used: str | None = None
     tokens_used: int | None = None
+    actions: list[ActionCard] = []

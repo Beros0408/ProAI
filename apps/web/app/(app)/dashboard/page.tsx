@@ -62,17 +62,35 @@ export default function DashboardPage() {
   const router = useRouter()
   const { t } = useTranslation()
   const [profile, setProfile] = useState<BusinessProfile | null>(null)
+  const [realKpis, setRealKpis] = useState({ conversations: 142, tasks: 38, leads: 24 })
 
   useEffect(() => {
     api.get<BusinessProfile>('/api/v1/onboarding/profile')
       .then(setProfile)
-      .catch(() => {}) // profile is optional — dashboard works without it
+      .catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    api.get<{ id: string }[]>('/api/v1/conversations')
+      .then((data) => setRealKpis((prev) => ({ ...prev, conversations: data.length || prev.conversations })))
+      .catch(() => {})
+
+    api.get<{ stats: { total: number } }>('/api/v1/crm/leads')
+      .then((data) => setRealKpis((prev) => ({ ...prev, leads: data.stats?.total ?? prev.leads })))
+      .catch(() => {})
+
+    api.get<{ id: string; done: boolean }[]>('/api/v1/agenda/tasks')
+      .then((data) => {
+        const done = data.filter((t) => t.done).length
+        if (done > 0) setRealKpis((prev) => ({ ...prev, tasks: done }))
+      })
+      .catch(() => {})
   }, [])
 
   const KPI_DATA = [
     {
       label: t('dashboard.conversations'),
-      value: '142',
+      value: String(realKpis.conversations),
       delta: '+12%',
       deltaType: 'up' as const,
       desc: 'opportunités générées ce mois',
@@ -83,18 +101,18 @@ export default function DashboardPage() {
     },
     {
       label: t('dashboard.autotasks'),
-      value: '38',
+      value: String(realKpis.tasks),
       delta: '+8%',
       deltaType: 'up' as const,
-      desc: 'workflows exécutés cette semaine',
+      desc: 'tâches complétées cette semaine',
       icon: Zap,
       color: '#34d399',
-      link: '/workflows',
+      link: '/agenda',
       sparkline: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32],
     },
     {
       label: t('dashboard.leads'),
-      value: '24',
+      value: String(realKpis.leads),
       delta: '+5%',
       deltaType: 'up' as const,
       desc: 'nouveaux prospects qualifiés',
@@ -153,7 +171,7 @@ export default function DashboardPage() {
               <TrendingUp size={12} /> +15% de croissance ce mois
             </span>
             <span className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
-              <Users size={12} /> 24 nouveaux leads
+              <Users size={12} /> {realKpis.leads} nouveaux leads
             </span>
           </div>
         </div>
