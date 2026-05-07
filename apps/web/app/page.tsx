@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import LandingPage from './(public)/page'
+import LandingPage from './(public)/LandingPage'
 
 export default async function RootPage() {
   const supabase = createClient()
