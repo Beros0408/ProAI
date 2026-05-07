@@ -71,8 +71,11 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    api.get<{ id: string }[]>('/api/v1/conversations')
-      .then((data) => setRealKpis((prev) => ({ ...prev, conversations: data.length || prev.conversations })))
+    api.get<{ conversations: unknown[]; total: number }>('/api/v1/conversations')
+      .then((data) => {
+        const count = data.total ?? data.conversations?.length ?? 0
+        if (count > 0) setRealKpis((prev) => ({ ...prev, conversations: count }))
+      })
       .catch(() => {})
 
     api.get<{ stats: { total: number } }>('/api/v1/crm/leads')

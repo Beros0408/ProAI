@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Users, Mail, Building2, DollarSign, Calendar, Trash2, Zap } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Plus, Users, Mail, Building2, DollarSign, Calendar, Trash2, Zap, MessageSquare } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
 import {
   DndContext,
@@ -61,6 +62,7 @@ const SCORE_COLORS: Record<'hot' | 'warm' | 'cold', { bg: string; text: string; 
 }
 
 function LeadCard({ lead, onDelete }: LeadCardProps) {
+  const router = useRouter()
   const {
     attributes,
     listeners,
@@ -124,7 +126,22 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
         <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${SCORE_COLORS[lead.score].bg} ${SCORE_COLORS[lead.score].text}`}>
           {SCORE_COLORS[lead.score].label}
         </span>
-        <span className="text-[#64748b] text-xs">{lead.dateAdded}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[#64748b] text-xs">{lead.dateAdded}</span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              router.push(`/chat/new?agent=sales&lead=${encodeURIComponent(lead.name)}`)
+            }}
+            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 hover:-translate-y-0.5"
+            style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}
+            title={`Contacter ${lead.name} via l'agent Sales`}
+          >
+            <MessageSquare className="w-3 h-3" />
+            Contacter
+          </button>
+        </div>
       </div>
     </div>
   )
