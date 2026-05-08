@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Sparkles, TrendingUp, TrendingDown, Activity, Zap, Users, Clock, BarChart3, Radio } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
-const MONTHS = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aout', 'Sep', 'Oct', 'Nov', 'Dec']
+const MONTHS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
 const REVENUE_DATA = [12, 15, 17, 21, 24, 28, 33, 36, 39, 42, 45, 50]
 const MAX_REV = 55
 
@@ -15,19 +15,34 @@ const SOCIAL_DATA = [
 ]
 const MAX_SOCIAL = 20000
 
-const KPI_CHANNELS = [
-  { label: 'CONVERSATIONS', value: '142', delta: '+12%', color: '#00f0ff', data: [30, 35, 28, 42, 38, 45, 50, 48, 55, 52, 60, 58] },
-  { label: 'AUTOMATIONS', value: '38', delta: '+8%', color: '#39ff14', data: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32] },
-  { label: 'LEADS', value: '24', delta: '+5%', color: '#ff00ff', data: [5, 8, 6, 10, 12, 9, 15, 14, 18, 16, 20, 22] },
-  { label: 'TEMPS ECON.', value: '6h', delta: '+2h', color: '#ffff00', data: [1, 1.5, 2, 2.5, 2, 3, 3.5, 4, 4.5, 5, 5.5, 6] },
+interface KpiChannel {
+  labelKey: TranslationKey
+  value: string
+  delta: string
+  color: string
+  data: number[]
+}
+
+const KPI_CHANNELS: KpiChannel[] = [
+  { labelKey: 'analytics.ch.conversations', value: '142', delta: '+12 %', color: '#00f0ff', data: [30, 35, 28, 42, 38, 45, 50, 48, 55, 52, 60, 58] },
+  { labelKey: 'analytics.ch.automations',   value: '38',  delta: '+8 %',  color: '#39ff14', data: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32] },
+  { labelKey: 'analytics.ch.leads',         value: '24',  delta: '+5 %',  color: '#ff00ff', data: [5, 8, 6, 10, 12, 9, 15, 14, 18, 16, 20, 22] },
+  { labelKey: 'analytics.ch.timesaved',     value: '6 h', delta: '+2 h',  color: '#ffff00', data: [1, 1.5, 2, 2.5, 2, 3, 3.5, 4, 4.5, 5, 5.5, 6] },
 ]
 
-const TRIGGER_LOGS = [
-  { time: '14:32:03', type: 'SPIKE', msg: 'Lead chaud detecte: Alice Dubois (+50K)', color: '#ff00ff' },
-  { time: '14:28:17', type: 'ALERT', msg: 'Chute engagement Instagram (-15%)', color: '#ff4444' },
-  { time: '14:15:42', type: 'INFO', msg: "Workflow 'Nurture' execute: 12 contacts", color: '#39ff14' },
-  { time: '13:58:11', type: 'SPIKE', msg: 'Pic de trafic LinkedIn: +234 visites', color: '#ff00ff' },
-  { time: '13:45:00', type: 'INFO', msg: 'Rapport auto genere et envoye', color: '#39ff14' },
+interface TriggerLog {
+  time: string
+  type: string
+  msgKey: TranslationKey
+  color: string
+}
+
+const TRIGGER_LOGS: TriggerLog[] = [
+  { time: '14:32:03', type: 'SPIKE', msgKey: 'analytics.log.hot_lead',  color: '#ff00ff' },
+  { time: '14:28:17', type: 'ALERTE', msgKey: 'analytics.log.instagram', color: '#ff4444' },
+  { time: '14:15:42', type: 'INFO',  msgKey: 'analytics.log.workflow',   color: '#39ff14' },
+  { time: '13:58:11', type: 'SPIKE', msgKey: 'analytics.log.linkedin',   color: '#ff00ff' },
+  { time: '13:45:00', type: 'INFO',  msgKey: 'analytics.log.report',     color: '#39ff14' },
 ]
 
 const XY_POINTS = [
@@ -87,8 +102,8 @@ export default function AnalyticsPage() {
   }, [])
 
   useEffect(() => {
-    const t = setTimeout(() => setAiTyping(false), 2000)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setAiTyping(false), 2000)
+    return () => clearTimeout(timer)
   }, [])
 
   const getCursorData = () => {
@@ -104,27 +119,27 @@ export default function AnalyticsPage() {
     <div className="min-h-screen relative" style={{ background: '#0a0a0f', fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
       <GridBackground />
 
-      {/* STATUS BAR */}
+      {/* BARRE DE STATUT */}
       <div className="relative z-10 flex items-center justify-between px-6 py-2 border-b" style={{ borderColor: '#1a1a2e', background: 'rgba(10,10,15,0.9)' }}>
         <div className="flex items-center gap-6">
-          <span className="text-sm font-bold tracking-wider" style={{ color: '#00f0ff' }}>PROAI MISSION CONTROL</span>
+          <span className="text-sm font-bold tracking-wider" style={{ color: '#00f0ff' }}>{t('analytics.mission_control')}</span>
           <span className="flex items-center gap-1.5 text-xs">
             <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#39ff14', boxShadow: '0 0 6px #39ff14' }} />
-            <span style={{ color: '#39ff14' }}>SYS: ONLINE</span>
+            <span style={{ color: '#39ff14' }}>{t('analytics.status.online')}</span>
           </span>
-          <span className="text-xs" style={{ color: '#ffff00' }}>LATENCY: 12ms</span>
-          <span className="text-xs" style={{ color: '#00f0ff' }}>AGENT IA: ACTIVE</span>
+          <span className="text-xs" style={{ color: '#ffff00' }}>{t('analytics.status.latency')}</span>
+          <span className="text-xs" style={{ color: '#00f0ff' }}>{t('analytics.status.agent')}</span>
         </div>
         <div className="flex items-center gap-6">
-          <span className="text-xs" style={{ color: '#ff00ff' }}>MODE: REAL-TIME</span>
-          <span className="text-xs" style={{ color: '#ffff00' }}>SAMPLING: 1KHz</span>
-          <span className="text-xs" style={{ color: '#c0c0d0' }}>PROAI v2.4.1</span>
+          <span className="text-xs" style={{ color: '#ff00ff' }}>{t('analytics.status.mode')}</span>
+          <span className="text-xs" style={{ color: '#ffff00' }}>{t('analytics.status.sampling')}</span>
+          <span className="text-xs" style={{ color: '#c0c0d0' }}>{t('analytics.version')}</span>
         </div>
       </div>
 
       <div className="relative z-10 p-4 space-y-4">
 
-        {/* KPI CHANNELS */}
+        {/* CANAUX KPI */}
         <div className="grid grid-cols-4 gap-3">
           {KPI_CHANNELS.map((ch, i) => (
             <div key={i} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02]" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
@@ -132,7 +147,7 @@ export default function AnalyticsPage() {
               <div className="relative z-10">
                 <div className="text-3xl font-bold mb-1" style={{ color: '#e0e0f0' }}>{ch.value}</div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] uppercase tracking-widest" style={{ color: '#606080' }}>CH{i + 1}: {ch.label}</span>
+                  <span className="text-[10px] uppercase tracking-widest" style={{ color: '#606080' }}>CH{i + 1}: {t(ch.labelKey)}</span>
                   <span className="text-xs font-bold" style={{ color: ch.color }}>{ch.delta}</span>
                 </div>
                 <MiniWaveform data={ch.data} color={ch.color} />
@@ -141,16 +156,16 @@ export default function AnalyticsPage() {
           ))}
         </div>
 
-        {/* MAIN ROW */}
+        {/* LIGNE PRINCIPALE */}
         <div className="grid grid-cols-3 gap-3" style={{ gridTemplateColumns: '2fr 1fr' }}>
 
-          {/* MAIN SCOPE - REVENUE */}
+          {/* PORTÉE PRINCIPALE — REVENUS */}
           <div className="rounded-lg p-4 relative" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs uppercase tracking-widest" style={{ color: '#606080' }}>MAIN SCOPE - REVENUE WAVEFORM (CH1)</span>
+              <span className="text-xs uppercase tracking-widest" style={{ color: '#606080' }}>{t('analytics.scope.title')}</span>
               {cursorData && (
                 <span className="text-xs px-2 py-1 rounded" style={{ background: '#ffff0020', color: '#ffff00', border: '1px solid #ffff0040' }}>
-                  CURSOR A: {cursorData.value}K - {cursorData.month} 2026
+                  {t('analytics.cursor.label')}: {cursorData.value} K — {cursorData.month} 2026
                 </span>
               )}
             </div>
@@ -164,7 +179,7 @@ export default function AnalyticsPage() {
               }}
               onMouseLeave={() => setCursorX(null)}
             >
-              {/* Grid lines */}
+              {/* Grille */}
               <svg width="100%" height="100%" className="absolute inset-0" style={{ opacity: 0.15 }}>
                 {[0, 1, 2, 3, 4].map(i => (
                   <line key={`h${i}`} x1="0" y1={`${(i / 4) * 100}%`} x2="100%" y2={`${(i / 4) * 100}%`} stroke="#00f0ff" strokeWidth="0.5" strokeDasharray="4,4" />
@@ -174,9 +189,9 @@ export default function AnalyticsPage() {
                 ))}
               </svg>
 
-              {/* Y axis labels */}
+              {/* Axe Y */}
               {[0, 15, 30, 45, 60].map((v, i) => (
-                <span key={i} className="absolute left-0 text-[10px]" style={{ color: '#606080', top: `${100 - (v / 60) * 100}%`, transform: 'translateY(-50%)' }}>{v}K</span>
+                <span key={i} className="absolute left-0 text-[10px]" style={{ color: '#606080', top: `${100 - (v / 60) * 100}%`, transform: 'translateY(-50%)' }}>{v} K</span>
               ))}
 
               {/* Waveform */}
@@ -204,20 +219,20 @@ export default function AnalyticsPage() {
                 ))}
               </svg>
 
-              {/* Trigger line */}
+              {/* Ligne de déclencheur */}
               <div className="absolute left-[30px] right-0 pointer-events-none" style={{ top: '30%' }}>
                 <div className="w-full h-px" style={{ borderTop: '1px dashed #ff00ff40' }} />
-                <span className="absolute right-0 -top-4 text-[10px] px-1" style={{ color: '#ff00ff' }}>TRIGGER: +15% MoM</span>
+                <span className="absolute right-0 -top-4 text-[10px] px-1" style={{ color: '#ff00ff' }}>{t('analytics.trigger.mom')}</span>
               </div>
 
-              {/* Cursor */}
+              {/* Curseur */}
               {cursorX !== null && (
                 <div className="absolute top-0 bottom-0 pointer-events-none" style={{ left: `${cursorX}%` }}>
                   <div className="w-px h-full" style={{ background: '#ffff0060', boxShadow: '0 0 4px #ffff00' }} />
                 </div>
               )}
 
-              {/* X axis */}
+              {/* Axe X */}
               <div className="absolute bottom-0 left-[30px] right-0 flex justify-between">
                 {MONTHS.map(m => (
                   <span key={m} className="text-[9px]" style={{ color: '#606080' }}>{m}</span>
@@ -226,9 +241,9 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* SPECTRUM ANALYZER */}
+          {/* ANALYSEUR DE SPECTRE */}
           <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
-            <span className="text-xs uppercase tracking-widest block mb-4" style={{ color: '#606080' }}>SPECTRUM ANALYZER - SOCIAL (CH2-4)</span>
+            <span className="text-xs uppercase tracking-widest block mb-4" style={{ color: '#606080' }}>{t('analytics.spectrum.title')}</span>
             <div className="flex items-end justify-around gap-4" style={{ height: '240px' }}>
               {SOCIAL_DATA.map((s, i) => {
                 const h = (s.value / MAX_SOCIAL) * 100
@@ -251,21 +266,20 @@ export default function AnalyticsPage() {
                 )
               })}
             </div>
-            {/* Y axis */}
             <div className="flex justify-between mt-2">
-              {['0', '5K', '10K', '15K', '20K'].map(v => (
+              {['0', '5 K', '10 K', '15 K', '20 K'].map(v => (
                 <span key={v} className="text-[9px]" style={{ color: '#606080' }}>{v}</span>
               ))}
             </div>
           </div>
         </div>
 
-        {/* BOTTOM ROW */}
+        {/* LIGNE DU BAS */}
         <div className="grid grid-cols-3 gap-3">
 
-          {/* XY PLOT */}
+          {/* GRAPHE XY */}
           <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
-            <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>XY PLOT - AUTO/TIME CORRELATION (CH2)</span>
+            <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>{t('analytics.xyplot.title')}</span>
             <div className="relative" style={{ height: '180px' }}>
               <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
                 {[0, 25, 50, 75, 100].map(v => (
@@ -286,18 +300,18 @@ export default function AnalyticsPage() {
                 ))}
               </svg>
               <div className="absolute bottom-0 left-0 right-0 flex justify-between">
-                {['0', '25', '50', '75', '100%'].map(v => (
+                {['0', '25', '50', '75', '100 %'].map(v => (
                   <span key={v} className="text-[9px]" style={{ color: '#606080' }}>{v}</span>
                 ))}
               </div>
-              <span className="absolute bottom-[-16px] left-1/2 -translate-x-1/2 text-[9px] uppercase" style={{ color: '#606080' }}>TAUX AUTOMATION</span>
-              <span className="absolute top-1/2 -left-4 -translate-y-1/2 -rotate-90 text-[9px] uppercase" style={{ color: '#606080' }}>TEMPS ECON.</span>
+              <span className="absolute bottom-[-16px] left-1/2 -translate-x-1/2 text-[9px] uppercase" style={{ color: '#606080' }}>{t('analytics.xyplot.xaxis')}</span>
+              <span className="absolute top-1/2 -left-4 -translate-y-1/2 -rotate-90 text-[9px] uppercase" style={{ color: '#606080' }}>{t('analytics.xyplot.yaxis')}</span>
             </div>
           </div>
 
-          {/* TRIGGER LOG */}
+          {/* JOURNAL DES DÉCLENCHEURS */}
           <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
-            <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>TRIGGER LOG - EVENT DETECTOR</span>
+            <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>{t('analytics.triggerlog.title')}</span>
             <div className="space-y-2">
               {TRIGGER_LOGS.map((log, i) => (
                 <div
@@ -307,52 +321,52 @@ export default function AnalyticsPage() {
                 >
                   <span className="text-[10px] flex-shrink-0" style={{ color: '#606080' }}>{log.time}</span>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded flex-shrink-0" style={{ color: log.color, background: `${log.color}15` }}>[{log.type}]</span>
-                  <span className="text-[11px]" style={{ color: '#c0c0d0' }}>{log.msg}</span>
+                  <span className="text-[11px]" style={{ color: '#c0c0d0' }}>{t(log.msgKey)}</span>
                 </div>
               ))}
             </div>
             <div className="flex items-center gap-1 mt-3">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#39ff14' }} />
-              <span className="text-[10px]" style={{ color: '#39ff14' }}>Monitoring actif</span>
+              <span className="text-[10px]" style={{ color: '#39ff14' }}>{t('analytics.monitoring')}</span>
             </div>
           </div>
 
-          {/* AGENT IA PANEL */}
+          {/* PANNEAU AGENT IA */}
           <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #ff00ff30' }}>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#ff00ff', boxShadow: '0 0 8px #ff00ff' }} />
-              <span className="text-xs uppercase tracking-widest font-bold" style={{ color: '#ff00ff' }}>AGENT ANALYTICS</span>
+              <span className="text-xs uppercase tracking-widest font-bold" style={{ color: '#ff00ff' }}>{t('analytics.agent.title')}</span>
             </div>
 
             <div className="text-[11px] mb-4" style={{ color: '#606080' }}>
               {aiTyping ? (
                 <span className="flex items-center gap-1">
-                  Analyse en temps reel
+                  {t('analytics.agent.analyzing')}
                   <span className="inline-flex gap-0.5">
                     <span className="w-1 h-1 rounded-full animate-bounce" style={{ background: '#ff00ff', animationDelay: '0ms' }} />
                     <span className="w-1 h-1 rounded-full animate-bounce" style={{ background: '#ff00ff', animationDelay: '150ms' }} />
                     <span className="w-1 h-1 rounded-full animate-bounce" style={{ background: '#ff00ff', animationDelay: '300ms' }} />
                   </span>
                 </span>
-              ) : 'Analyse terminee'}
+              ) : t('analytics.agent.done')}
             </div>
 
             <div className="space-y-3 text-[11px]" style={{ color: '#c0c0d0' }}>
               <div>
-                <span className="block mb-1" style={{ color: '#606080' }}>ANALYSE:</span>
-                <p>{'-> Tendance revenue: HAUSSE'}</p>
-                <p className="ml-3" style={{ color: '#00f0ff' }}>Acceleration +15% sur Q4</p>
+                <span className="block mb-1" style={{ color: '#606080' }}>{t('analytics.analysis.label')}</span>
+                <p>{t('analytics.trend.revenue')}</p>
+                <p className="ml-3" style={{ color: '#00f0ff' }}>{t('analytics.trend.revenue.detail')}</p>
               </div>
               <div>
-                <p>{'-> Canal LinkedIn: PERFORMANT'}</p>
-                <p className="ml-3" style={{ color: '#00f0ff' }}>42% du trafic total</p>
+                <p>{t('analytics.trend.linkedin')}</p>
+                <p className="ml-3" style={{ color: '#00f0ff' }}>{t('analytics.trend.linkedin.detail')}</p>
               </div>
               <div className="mt-4 rounded-lg p-3" style={{ background: '#ff00ff10', border: '1px solid #ff00ff30' }}>
-                <span className="text-[10px] block mb-1" style={{ color: '#ff00ff' }}>{'-> Recommandation:'}</span>
-                <p className="text-[11px]" style={{ color: '#e0e0f0' }}>Augmenter budget Instagram</p>
-                <p className="text-[10px]" style={{ color: '#606080' }}>(ROAS en baisse -12%)</p>
+                <span className="text-[10px] block mb-1" style={{ color: '#ff00ff' }}>{t('analytics.recommendation.label')}</span>
+                <p className="text-[11px]" style={{ color: '#e0e0f0' }}>{t('analytics.recommendation.text')}</p>
+                <p className="text-[10px]" style={{ color: '#606080' }}>{t('analytics.recommendation.reason')}</p>
                 <button className="mt-2 w-full py-1.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all hover:scale-[1.02]" style={{ background: 'linear-gradient(135deg, #ff00ff40, #ff00ff20)', color: '#ff00ff', border: '1px solid #ff00ff40' }}>
-                  Lancer analyse profonde {'->'}
+                  {t('analytics.deepanalysis')}
                 </button>
               </div>
             </div>

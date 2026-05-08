@@ -111,15 +111,15 @@ async def stripe_webhook(request: Request):
         session = event['data']['object']
         user_id = session.get('metadata', {}).get('user_id')
         plan = session.get('metadata', {}).get('plan')
-        print(f"[BILLING] Paiement reussi - User: {user_id}, Plan: {plan}")
+        print(f"[BILLING] Paiement réussi - User: {user_id}, Plan: {plan}")
 
     elif event_type == 'customer.subscription.deleted':
         subscription = event['data']['object']
-        print(f"[BILLING] Abonnement annule - Sub: {subscription.get('id')}")
+        print(f"[BILLING] Abonnement annulé - Sub: {subscription.get('id')}")
 
     elif event_type == 'invoice.payment_failed':
         invoice = event['data']['object']
-        print(f"[BILLING] Paiement echoue - Invoice: {invoice.get('id')}")
+        print(f"[BILLING] Paiement échoué - Invoice: {invoice.get('id')}")
 
     return {"status": "ok"}
 
@@ -134,10 +134,10 @@ async def get_plans():
                 "price_monthly": 0,
                 "price_annual": 0,
                 "features": [
-                    "1 agent IA specialise",
-                    "50 reponses IA / mois",
+                    "1 agent IA spécialisé",
+                    "50 réponses IA / mois",
                     "Dashboard avec KPIs de base",
-                    "Generateur de contenu (1 plateforme)",
+                    "Générateur de contenu (1 plateforme)",
                     "Mind map basique",
                 ],
             },
@@ -147,15 +147,15 @@ async def get_plans():
                 "price_monthly": 29,
                 "price_annual": 23,
                 "features": [
-                    "6 agents IA specialises inclus",
-                    "Conversations IA illimitees",
+                    "6 agents IA spécialisés inclus",
+                    "Conversations IA illimitées",
                     "CRM intelligent avec scoring",
-                    "Generateur multi-plateforme (8 canaux)",
-                    "Workflows automatises",
+                    "Générateur multi-plateforme (8 canaux)",
+                    "Workflows automatisés",
                     "Calendrier de publication",
                     "Rapports hebdomadaires automatiques",
-                    "Predictions IA (ventes, churn)",
-                    "Mind map avancee",
+                    "Prédictions IA (ventes, churn)",
+                    "Mind map avancée",
                     "Support prioritaire",
                 ],
             },
@@ -166,13 +166,13 @@ async def get_plans():
                 "price_annual": 79,
                 "features": [
                     "Tout le plan Pro inclus",
-                    "Agents IA illimites",
-                    "Mode equipe (multi-utilisateurs)",
-                    "Analytics avancees et benchmarks",
-                    "Acces API publique ProAI",
-                    "Integrations premium (Slack, CRM, n8n)",
-                    "Export rapports PDF personnalises",
-                    "Support dedie + onboarding",
+                    "Agents IA illimités",
+                    "Mode équipe (multi-utilisateurs)",
+                    "Analytics avancées et benchmarks",
+                    "Accès API publique ProAI",
+                    "Intégrations premium (Slack, CRM, n8n)",
+                    "Export rapports PDF personnalisés",
+                    "Support dédié + onboarding",
                     "White-label disponible",
                 ],
             },

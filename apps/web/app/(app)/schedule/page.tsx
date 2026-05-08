@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 import { api } from '@/lib/api'
 
 interface ScheduledEvent {
   id: string
   platform: 'linkedin' | 'instagram' | 'facebook' | 'twitter'
   content: string
+  contentKey?: TranslationKey
   date: string
   time: string
 }
@@ -21,21 +23,20 @@ interface CalendarCell {
   inCurrentMonth: boolean
 }
 
-const MONTHS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
-const DAYS_OF_WEEK = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+// MONTHS and DAYS_OF_WEEK are computed inside the component via Intl (locale-aware)
 
 const INITIAL_EVENTS: ScheduledEvent[] = [
-  { id: 'linkedin-3', platform: 'linkedin', content: 'Post LinkedIn sur la roadmap produit', date: '2026-04-03', time: '09:00' },
-  { id: 'linkedin-7', platform: 'linkedin', content: 'Annonce fonctionnalités proAI', date: '2026-04-07', time: '11:00' },
-  { id: 'linkedin-14', platform: 'linkedin', content: 'Conseil growth hacking', date: '2026-04-14', time: '14:00' },
-  { id: 'linkedin-21', platform: 'linkedin', content: 'Témoignage client', date: '2026-04-21', time: '16:00' },
-  { id: 'linkedin-28', platform: 'linkedin', content: 'Résumé du mois', date: '2026-04-28', time: '10:00' },
-  { id: 'instagram-5', platform: 'instagram', content: 'Story produit créative', date: '2026-04-05', time: '12:30' },
-  { id: 'instagram-12', platform: 'instagram', content: 'Post carousel client', date: '2026-04-12', time: '15:00' },
-  { id: 'instagram-19', platform: 'instagram', content: 'Vidéo coulisses équipe', date: '2026-04-19', time: '18:00' },
-  { id: 'instagram-26', platform: 'instagram', content: 'Reel de formation', date: '2026-04-26', time: '17:00' },
-  { id: 'facebook-10', platform: 'facebook', content: 'Annonce live événement', date: '2026-04-10', time: '13:00' },
-  { id: 'facebook-20', platform: 'facebook', content: 'Publication sponsorisée', date: '2026-04-20', time: '19:00' },
+  { id: 'linkedin-3', platform: 'linkedin', content: 'LinkedIn post on product roadmap', contentKey: 'schedule.mock.linkedin_roadmap', date: '2026-04-03', time: '09:00' },
+  { id: 'linkedin-7', platform: 'linkedin', content: 'ProAI features announcement', contentKey: 'schedule.mock.linkedin_features', date: '2026-04-07', time: '11:00' },
+  { id: 'linkedin-14', platform: 'linkedin', content: 'Growth hacking tip', contentKey: 'schedule.mock.linkedin_growth', date: '2026-04-14', time: '14:00' },
+  { id: 'linkedin-21', platform: 'linkedin', content: 'Customer testimonial', contentKey: 'schedule.mock.linkedin_testimonial', date: '2026-04-21', time: '16:00' },
+  { id: 'linkedin-28', platform: 'linkedin', content: 'Monthly wrap-up', contentKey: 'schedule.mock.linkedin_summary', date: '2026-04-28', time: '10:00' },
+  { id: 'instagram-5', platform: 'instagram', content: 'Creative product story', contentKey: 'schedule.mock.instagram_story', date: '2026-04-05', time: '12:30' },
+  { id: 'instagram-12', platform: 'instagram', content: 'Customer carousel post', contentKey: 'schedule.mock.instagram_carousel', date: '2026-04-12', time: '15:00' },
+  { id: 'instagram-19', platform: 'instagram', content: 'Behind-the-scenes video', contentKey: 'schedule.mock.instagram_video', date: '2026-04-19', time: '18:00' },
+  { id: 'instagram-26', platform: 'instagram', content: 'Training reel', contentKey: 'schedule.mock.instagram_reel', date: '2026-04-26', time: '17:00' },
+  { id: 'facebook-10', platform: 'facebook', content: 'Live event announcement', contentKey: 'schedule.mock.facebook_live', date: '2026-04-10', time: '13:00' },
+  { id: 'facebook-20', platform: 'facebook', content: 'Sponsored post', contentKey: 'schedule.mock.facebook_sponsored', date: '2026-04-20', time: '19:00' },
 ]
 
 const PLATFORM_PILL_STYLE: Record<ScheduledEvent['platform'], string> = {
@@ -95,7 +96,17 @@ function truncateText(text: string, maxLength: number) {
 
 export default function SchedulePage() {
   const router = useRouter()
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
+  const intlLocale = locale === 'fr' ? 'fr-FR' : 'en-US'
+  const MONTHS = Array.from({ length: 12 }, (_, i) => {
+    const name = new Intl.DateTimeFormat(intlLocale, { month: 'long' }).format(new Date(2000, i, 1))
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  })
+  // Jan 1 2024 = Monday — generates Mon–Sun in order
+  const DAYS_OF_WEEK = Array.from({ length: 7 }, (_, i) => {
+    const name = new Intl.DateTimeFormat(intlLocale, { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  })
   const today = new Date(2026, 3, 30)
   const [currentDate, setCurrentDate] = useState(new Date(2026, 3))
   const [events, setEvents] = useState<ScheduledEvent[]>(INITIAL_EVENTS)
@@ -167,7 +178,7 @@ export default function SchedulePage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h1 className="text-[28px] font-[700] text-white">{t('schedule.title')}</h1>
-            <p className="mt-2 max-w-2xl text-sm text-[#94a3b8]">Organisez vos campagnes sociales dans un tableau mensuel clair et visuel.</p>
+            <p className="mt-2 max-w-2xl text-sm text-[#94a3b8]">{t('schedule.subtitle2')}</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -176,14 +187,14 @@ export default function SchedulePage() {
               onClick={() => router.push('/agenda')}
               className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Voir mon agenda
+              {t('schedule.viewagenda')}
             </button>
             <button
               type="button"
               onClick={() => handleCellClick(currentDate.toISOString().slice(0, 10))}
               className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fb923c] to-[#f97316] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
             >
-              <Plus className="mr-2 h-4 w-4" /> + Nouveau post
+              <Plus className="mr-2 h-4 w-4" /> {t('schedule.newpost')}
             </button>
           </div>
         </div>
@@ -207,7 +218,7 @@ export default function SchedulePage() {
                 onClick={handleToday}
                 className="rounded-full border border-white/20 bg-transparent px-4 py-2 text-sm font-semibold uppercase tracking-[0.12em] text-white transition hover:bg-[#0ea5e9] hover:text-black"
               >
-                Aujourd&apos;hui
+                {t('schedule.today')}
               </button>
               <button
                 type="button"
@@ -239,7 +250,7 @@ export default function SchedulePage() {
                 >
                   <div className="flex items-center justify-between">
                     <span className={`text-[16px] font-[600] ${isWeekend ? 'text-[#fb923c]' : 'text-white'}`}>{cell.day}</span>
-                    {isToday && <span className="text-[10px] uppercase tracking-[0.2em] text-[#0ea5e9]">Aujourd&apos;hui</span>}
+                    {isToday && <span className="text-[10px] uppercase tracking-[0.2em] text-[#0ea5e9]">{t('schedule.today')}</span>}
                   </div>
 
                   <div className="mt-3 flex flex-col gap-2">
@@ -254,7 +265,7 @@ export default function SchedulePage() {
                           }}
                           className={`inline-flex w-full items-center rounded-full px-3 py-1 text-[11px] font-medium transition ${PLATFORM_PILL_STYLE[event.platform]}`}
                         >
-                          {event.platform} · {truncateText(event.content, 26)}
+                          {event.platform} · {truncateText(event.contentKey ? t(event.contentKey) : event.content, 26)}
                         </button>
                       ))}
                     </div>
@@ -266,7 +277,7 @@ export default function SchedulePage() {
                     </div>
 
                     {dayEvents.length > 3 && (
-                      <div className="text-[11px] text-[#94a3b8]">+{dayEvents.length - 3} autres</div>
+                      <div className="text-[11px] text-[#94a3b8]">+{dayEvents.length - 3} {t('schedule.others')}</div>
                     )}
                   </div>
                 </div>
@@ -281,15 +292,15 @@ export default function SchedulePage() {
           <div className="w-full max-w-lg rounded-[24px] p-6 animate-scale-in" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)' }}>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-white">Ajouter un événement</h2>
-                <p className="mt-1 text-sm text-[#94a3b8]">Date choisie: {selectedDay}</p>
+                <h2 className="text-xl font-semibold text-white">{t('schedule.addEvent')}</h2>
+                <p className="mt-1 text-sm text-[#94a3b8]">{t('schedule.selectedDate')} : {selectedDay}</p>
               </div>
-              <button type="button" onClick={() => setShowModal(false)} className="text-[#94a3b8] transition hover:text-white">Fermer</button>
+              <button type="button" onClick={() => setShowModal(false)} className="text-[#94a3b8] transition hover:text-white">{t('schedule.close')}</button>
             </div>
 
             <div className="mt-6 grid gap-4">
               <label className="space-y-2 text-sm text-[#cbd5e1]">
-                Plateforme
+                {t('schedule.platform')}
                 <select
                   value={formData.platform}
                   onChange={(event) => setFormData({ ...formData, platform: event.target.value as ScheduledEvent['platform'] })}
@@ -303,7 +314,7 @@ export default function SchedulePage() {
               </label>
 
               <label className="space-y-2 text-sm text-[#cbd5e1]">
-                Contenu
+                {t('schedule.content')}
                 <textarea
                   rows={4}
                   value={formData.content}
@@ -313,7 +324,7 @@ export default function SchedulePage() {
               </label>
 
               <label className="space-y-2 text-sm text-[#cbd5e1]">
-                Heure
+                {t('schedule.time')}
                 <input
                   type="time"
                   value={formData.time}
@@ -328,14 +339,14 @@ export default function SchedulePage() {
                   onClick={() => setShowModal(false)}
                   className="rounded-full border border-white/20 bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Annuler
+                  {t('common.cancel')}
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveEvent}
                   className="rounded-full bg-gradient-to-r from-[#fb923c] to-[#f97316] px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                 >
-                  Enregistrer
+                  {t('schedule.saveEvent')}
                 </button>
               </div>
             </div>
@@ -348,17 +359,17 @@ export default function SchedulePage() {
           <div className="w-full max-w-md rounded-[24px] border border-[rgba(255,255,255,0.08)] bg-[#111827] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.16em] text-[#94a3b8]">Détails</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-[#94a3b8]">{t('schedule.details')}</p>
                 <h3 className="mt-2 text-xl font-semibold text-white">{selectedEvent.platform} · {selectedEvent.time}</h3>
               </div>
-              <button type="button" onClick={() => setSelectedEvent(null)} className="text-[#94a3b8] transition hover:text-white">Fermer</button>
+              <button type="button" onClick={() => setSelectedEvent(null)} className="text-[#94a3b8] transition hover:text-white">{t('schedule.close')}</button>
             </div>
 
             <div className="mt-4 rounded-[20px] border border-[rgba(255,255,255,0.08)] bg-[#0c1220] p-4">
-              <p className="text-sm text-[#94a3b8]">Date</p>
+              <p className="text-sm text-[#94a3b8]">{t('schedule.date')}</p>
               <p className="mt-1 text-white">{selectedEvent.date}</p>
-              <p className="mt-4 text-sm text-[#94a3b8]">Contenu</p>
-              <p className="mt-1 text-white">{selectedEvent.content}</p>
+              <p className="mt-4 text-sm text-[#94a3b8]">{t('schedule.content')}</p>
+              <p className="mt-1 text-white">{selectedEvent.contentKey ? t(selectedEvent.contentKey) : selectedEvent.content}</p>
             </div>
           </div>
         </div>

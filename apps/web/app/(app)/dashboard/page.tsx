@@ -10,10 +10,8 @@ import {
   Activity, Shield, Award, Building2
 } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 import { api } from '@/lib/api'
-
-const HOUR = new Date().getHours()
-const GREETING = HOUR < 12 ? 'Bonjour' : HOUR < 18 ? 'Bon après-midi' : 'Bonsoir'
 
 interface BusinessProfile {
   business_name:   string | null
@@ -31,12 +29,12 @@ const AGENTS = [
   { name: 'Analytics', status: 'active', leads: 0, convos: 5, icon: '📊', color: '#06b6d4' },
 ]
 
-const ACTIVITIES = [
-  { icon: Send, text: 'Agent Marketing a généré 3 posts LinkedIn', time: 'Il y a 10 min', color: '#fb923c' },
-  { icon: Target, text: 'Lead qualifié ajouté au pipeline', time: 'Il y a 42 min', color: '#0ea5e9' },
-  { icon: Zap, text: 'Workflow de relance email exécuté', time: 'Il y a 1h', color: '#8b5cf6' },
-  { icon: FileText, text: 'Rapport hebdomadaire généré et envoyé', time: 'Il y a 2h', color: '#34d399' },
-  { icon: MessageSquare, text: 'Nouvelle conversation initiée par un visiteur', time: 'Il y a 3h', color: '#06b6d4' },
+const ACTIVITY_KEYS: Array<{ icon: typeof Send; textKey: TranslationKey; timeKey: TranslationKey; color: string }> = [
+  { icon: Send, textKey: 'dashboard.activity.1', timeKey: 'dashboard.time.10min', color: '#fb923c' },
+  { icon: Target, textKey: 'dashboard.activity.2', timeKey: 'dashboard.time.42min', color: '#0ea5e9' },
+  { icon: Zap, textKey: 'dashboard.activity.3', timeKey: 'dashboard.time.1h', color: '#8b5cf6' },
+  { icon: FileText, textKey: 'dashboard.activity.4', timeKey: 'dashboard.time.2h', color: '#34d399' },
+  { icon: MessageSquare, textKey: 'dashboard.activity.5', timeKey: 'dashboard.time.3h', color: '#06b6d4' },
 ]
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
@@ -63,6 +61,10 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const [profile, setProfile] = useState<BusinessProfile | null>(null)
   const [realKpis, setRealKpis] = useState({ conversations: 142, tasks: 38, leads: 24 })
+
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? t('dashboard.greeting.morning') : hour < 18 ? t('dashboard.greeting.afternoon') : t('dashboard.greeting.evening')
+  const ACTIVITIES = ACTIVITY_KEYS.map(a => ({ ...a, text: t(a.textKey), time: t(a.timeKey) }))
 
   useEffect(() => {
     api.get<BusinessProfile>('/api/v1/onboarding/profile')
@@ -96,7 +98,7 @@ export default function DashboardPage() {
       value: String(realKpis.conversations),
       delta: '+12%',
       deltaType: 'up' as const,
-      desc: 'opportunités générées ce mois',
+      desc: t('dashboard.kpi.conversations.desc'),
       icon: MessageSquare,
       color: '#0ea5e9',
       link: '/chat',
@@ -107,7 +109,7 @@ export default function DashboardPage() {
       value: String(realKpis.tasks),
       delta: '+8%',
       deltaType: 'up' as const,
-      desc: 'tâches complétées cette semaine',
+      desc: t('dashboard.kpi.tasks.desc'),
       icon: Zap,
       color: '#34d399',
       link: '/agenda',
@@ -118,7 +120,7 @@ export default function DashboardPage() {
       value: String(realKpis.leads),
       delta: '+5%',
       deltaType: 'up' as const,
-      desc: 'nouveaux prospects qualifiés',
+      desc: t('dashboard.kpi.leads.desc'),
       icon: Users,
       color: '#fb923c',
       link: '/crm',
@@ -129,7 +131,7 @@ export default function DashboardPage() {
       value: '12h',
       delta: '+3h',
       deltaType: 'up' as const,
-      desc: 'cette semaine vs travail manuel',
+      desc: t('dashboard.kpi.timesaved.desc'),
       icon: Clock,
       color: '#8b5cf6',
       link: '/analytics',
@@ -153,7 +155,7 @@ export default function DashboardPage() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
-            {GREETING}{profile?.business_name ? `, ${profile.business_name}` : ''} 👋
+            {greeting}{profile?.business_name ? `, ${profile.business_name}` : ''} 👋
           </h1>
           <p className="text-[#94a3b8] text-sm">
             {profile?.sector
@@ -171,10 +173,10 @@ export default function DashboardPage() {
           )}
           <div className="flex items-center gap-4 mt-3">
             <span className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>
-              <TrendingUp size={12} /> +15% de croissance ce mois
+              <TrendingUp size={12} /> {t('dashboard.growth.badge')}
             </span>
             <span className="flex items-center gap-1.5 text-xs px-3 py-1 rounded-full" style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
-              <Users size={12} /> {realKpis.leads} nouveaux leads
+              <Users size={12} /> {realKpis.leads} {t('dashboard.newleads.badge')}
             </span>
           </div>
         </div>
@@ -262,24 +264,24 @@ export default function DashboardPage() {
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.1)' }}>
               <TrendingUp size={16} style={{ color: '#34d399' }} className="mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-white font-medium">Croissance du chiffre d'affaires +15 % ce mois</p>
-                <p className="text-xs text-[#94a3b8] mt-0.5">Accélération portée par LinkedIn (+42 % trafic). Continuez cette stratégie.</p>
+                <p className="text-sm text-white font-medium">{t('dashboard.insight.growth.title')}</p>
+                <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.growth.desc')}</p>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.1)' }}>
               <AlertTriangle size={16} style={{ color: '#fb923c' }} className="mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-white font-medium">Agent Marketing en baisse (-23% engagement)</p>
-                <p className="text-xs text-[#94a3b8] mt-0.5">Optimisation possible : varier les formats de contenu (+18 leads estimés).</p>
+                <p className="text-sm text-white font-medium">{t('dashboard.insight.warning.title')}</p>
+                <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.warning.desc')}</p>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.1)' }}>
               <Lightbulb size={16} style={{ color: '#38bdf8' }} className="mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-white font-medium">Recommandation : lancer une campagne email</p>
-                <p className="text-xs text-[#94a3b8] mt-0.5">3 leads chauds détectés dans votre pipeline. Taux de conversion estimé : 67 %.</p>
+                <p className="text-sm text-white font-medium">{t('dashboard.insight.tip.title')}</p>
+                <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.tip.desc')}</p>
               </div>
             </div>
           </div>
@@ -291,10 +293,10 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-2 mb-1">
                   <Sparkles size={14} style={{ color: '#a78bfa' }} />
                   <span className="text-xs font-bold" style={{ color: '#a78bfa' }}>{t('dashboard.aiPrediction')}</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>Confiance 87%</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>{t('dashboard.prediction.confidence')}</span>
                 </div>
-                <p className="text-sm text-white font-medium">Vos ventes devraient augmenter de 15% ce mois</p>
-                <p className="text-xs text-[#94a3b8] mt-0.5">Basé sur votre pipeline actuel et les tendances marché.</p>
+                <p className="text-sm text-white font-medium">{t('dashboard.prediction.text')}</p>
+                <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.prediction.desc')}</p>
               </div>
               <button
                 onClick={() => router.push('/predictions')}
@@ -425,11 +427,11 @@ export default function DashboardPage() {
               <Award size={14} style={{ color: '#fb923c' }} />
               <span className="text-xs font-bold" style={{ color: '#fb923c' }}>{t('dashboard.todayGoal')}</span>
             </div>
-            <p className="text-xs text-[#94a3b8]">Générez 3 contenus pour débloquer le badge « Content Creator »</p>
+            <p className="text-xs text-[#94a3b8]">{t('dashboard.gamification.text')}</p>
             <div className="w-full h-1.5 rounded-full mt-2 overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
               <div className="h-full rounded-full" style={{ width: '33%', background: 'linear-gradient(90deg, #fb923c, #f97316)' }} />
             </div>
-            <p className="text-[10px] text-[#64748b] mt-1">1/3 réalisé</p>
+            <p className="text-[10px] text-[#64748b] mt-1">{t('dashboard.gamification.progress')}</p>
           </div>
         </div>
       </div>

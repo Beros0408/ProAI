@@ -6,6 +6,8 @@ import { CalendarDays, CheckCircle, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Textarea } from '@/components/ui/Textarea'
 import { api } from '@/lib/api'
+import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
 type ContentTab =
   | 'linkedin'
@@ -19,30 +21,30 @@ type ContentTab =
 
 type SchedulePlatform = 'linkedin' | 'instagram' | 'facebook' | 'twitter'
 
-const tabs: Array<{ key: ContentTab; label: string }> = [
-  { key: 'linkedin',      label: 'LinkedIn' },
-  { key: 'newsletter',    label: 'Newsletter' },
-  { key: 'email',         label: 'Email' },
-  { key: 'instagram',     label: 'Instagram' },
-  { key: 'facebook',      label: 'Facebook' },
-  { key: 'twitter',       label: 'Twitter / X' },
-  { key: 'blog',          label: 'Blog SEO' },
-  { key: 'video-script',  label: 'Script vidéo' },
+const TAB_KEYS: Array<{ key: ContentTab; labelKey: TranslationKey }> = [
+  { key: 'linkedin',      labelKey: 'content.linkedin' },
+  { key: 'newsletter',    labelKey: 'content.newsletter' },
+  { key: 'email',         labelKey: 'content.email' },
+  { key: 'instagram',     labelKey: 'content.instagram' },
+  { key: 'facebook',      labelKey: 'content.facebook' },
+  { key: 'twitter',       labelKey: 'content.twitter' },
+  { key: 'blog',          labelKey: 'content.blog' },
+  { key: 'video-script',  labelKey: 'content.videoscript' },
 ]
 
-const toneOptions = [
-  { value: 'professional',  label: 'Professionnel' },
-  { value: 'casual',        label: 'Décontracté' },
-  { value: 'inspirational', label: 'Inspirant' },
+const TONE_KEYS: Array<{ value: string; labelKey: TranslationKey }> = [
+  { value: 'professional',  labelKey: 'content.tone.professional' },
+  { value: 'casual',        labelKey: 'content.tone.casual' },
+  { value: 'inspirational', labelKey: 'content.tone.inspirational' },
 ]
 
-const lengths = [
-  { value: 'court', label: 'Court' },
-  { value: 'moyen', label: 'Moyen' },
-  { value: 'long',  label: 'Long' },
+const LENGTH_KEYS: Array<{ value: string; labelKey: TranslationKey }> = [
+  { value: 'court', labelKey: 'content.length.short' },
+  { value: 'moyen', labelKey: 'content.length.medium' },
+  { value: 'long',  labelKey: 'content.length.long' },
 ]
 
-// Glassmorphism style constants (ASCII-safe)
+// Glassmorphism style constants
 const GLASS_CARD: React.CSSProperties = {
   background: 'rgba(17,24,39,0.7)',
   backdropFilter: 'blur(16px)',
@@ -89,7 +91,7 @@ function tabToSchedulePlatform(tab: ContentTab): SchedulePlatform {
   return 'linkedin'
 }
 
-// Presets de formulaire par clé de template
+// Préconfigurations depuis les templates
 const TEMPLATE_PRESETS: Record<string, {
   tab: ContentTab
   topic?: string
@@ -106,6 +108,7 @@ const TEMPLATE_PRESETS: Record<string, {
 
 export default function ContentPage() {
   const router = useRouter()
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<ContentTab>('linkedin')
   const [loading, setLoading]     = useState(false)
   const [result, setResult]       = useState('')
@@ -125,7 +128,6 @@ export default function ContentPage() {
     duration: '3 min',
   })
 
-  // Modal de planification
   const [showScheduleModal, setShowScheduleModal] = useState(false)
   const [scheduleLoading, setScheduleLoading]     = useState(false)
   const [scheduleSuccess, setScheduleSuccess]     = useState('')
@@ -138,6 +140,11 @@ export default function ContentPage() {
     date:     new Date().toISOString().slice(0, 10),
     time:     '10:00',
   })
+
+  // Résolution des labels traduits
+  const tabs = TAB_KEYS.map(item => ({ key: item.key, label: t(item.labelKey) }))
+  const toneOptions = TONE_KEYS.map(item => ({ value: item.value, label: t(item.labelKey) }))
+  const lengths = LENGTH_KEYS.map(item => ({ value: item.value, label: t(item.labelKey) }))
 
   // Pré-remplissage depuis le query param ?template=xxx
   useEffect(() => {
@@ -188,7 +195,7 @@ export default function ContentPage() {
 
   const handleGenerate = async () => {
     if (!form.topic.trim() && activeTab !== 'email') {
-      setErrorMessage('Le sujet est requis pour générer le contenu.')
+      setErrorMessage(t('content.error.topic'))
       return
     }
     setLoading(true)
@@ -200,11 +207,11 @@ export default function ContentPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody()),
       })
-      if (!response.ok) throw new Error('Erreur serveur')
+      if (!response.ok) throw new Error(t('reports.serverError'))
       const data = await response.json()
-      setResult(data.content || data.report || 'Aucune réponse obtenue.')
+      setResult(data.content || data.report || t('content.result.empty'))
     } catch (err) {
-      setErrorMessage('Impossible de générer le contenu. Réessayez plus tard.')
+      setErrorMessage(t('content.error.generate'))
       void err
     } finally {
       setLoading(false)
@@ -244,13 +251,13 @@ export default function ContentPage() {
         scheduled_date: scheduleForm.date,
         scheduled_time: scheduleForm.time,
       })
-      setScheduleSuccess('Post planifié avec succès ! Retrouvez-le dans votre calendrier.')
+      setScheduleSuccess(t('content.schedule.success'))
       setTimeout(() => {
         setShowScheduleModal(false)
         setScheduleSuccess('')
       }, 2200)
     } catch {
-      setScheduleSuccess('Erreur lors de la planification. Réessayez.')
+      setScheduleSuccess(t('content.schedule.error'))
     } finally {
       setScheduleLoading(false)
     }
@@ -264,29 +271,30 @@ export default function ContentPage() {
   }
 
   const modalInputCls = 'w-full rounded-xl px-4 py-3 text-[#e2e8f0] text-sm outline-none transition-all'
+  const activeTabLabel = tabs.find(tab => tab.key === activeTab)?.label ?? ''
 
   return (
     <div className="space-y-8 p-6 lg:p-10">
 
-      {/* HEADER */}
+      {/* EN-TÊTE */}
       <div className="rounded-2xl p-6" style={GLASS_CARD}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#0ea5e9]">Studio de contenu IA</p>
-            <h1 className="mt-2 text-2xl font-bold text-white">Générez du contenu adapté à chaque canal</h1>
-            <p className="mt-2 text-[#64748b] text-sm">Sélectionnez une plateforme, définissez votre message et laissez l&apos;IA créer un contenu optimisé.</p>
+            <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#0ea5e9]">{t('content.title')}</p>
+            <h1 className="mt-2 text-2xl font-bold text-white">{t('content.subtitle')}</h1>
+            <p className="mt-2 text-[#64748b] text-sm">{t('content.topic.placeholder')}</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Button variant="secondary" onClick={() => router.push('/templates')}>Voir les templates</Button>
-            <Button variant="secondary" onClick={() => router.push('/schedule')}>Voir le calendrier</Button>
+            <Button variant="secondary" onClick={() => router.push('/templates')}>{t('templates.title')}</Button>
+            <Button variant="secondary" onClick={() => router.push('/schedule')}>{t('schedule.title')}</Button>
           </div>
         </div>
       </div>
 
-      {/* MAIN PANEL */}
+      {/* PANNEAU PRINCIPAL */}
       <div className="space-y-6 rounded-2xl p-6" style={GLASS_CARD}>
 
-        {/* TAB BAR */}
+        {/* ONGLETS */}
         <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2">
           {tabs.map((tab) => (
             <button
@@ -301,22 +309,20 @@ export default function ContentPage() {
           ))}
         </div>
 
-        {/* CONTENT GRID */}
+        {/* GRILLE DE CONTENU */}
         <div className="grid gap-6 lg:grid-cols-[1.4fr,0.8fr]">
           <section className="space-y-6 rounded-2xl p-6" style={GLASS_SECTION}>
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold text-white">
-                {tabs.find((tab) => tab.key === activeTab)?.label}
-              </h2>
+              <h2 className="text-2xl font-semibold text-white">{activeTabLabel}</h2>
               <p className="text-sm text-slate-400">
-                Sélectionnez vos paramètres et générez un contenu sur mesure pour {tabs.find((tab) => tab.key === activeTab)?.label}.
+                {t('content.topic.placeholder')}
               </p>
             </div>
 
-            {/* COMMON FIELDS */}
+            {/* CHAMPS COMMUNS */}
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="space-y-2 text-sm text-slate-300">
-                Sujet / Thème
+                {t('content.topic.label')}
                 <input
                   value={form.topic}
                   onChange={(e) => setForm({ ...form, topic: e.target.value })}
@@ -325,14 +331,14 @@ export default function ContentPage() {
                 />
               </label>
               <label className="space-y-2 text-sm text-slate-300">
-                Langue
+                {t('content.language')}
                 <select
                   value={form.language}
                   onChange={(e) => setForm({ ...form, language: e.target.value })}
                   {...inputProps}
                 >
-                  <option value="fr">Français</option>
-                  <option value="en">English</option>
+                  <option value="fr">{t('content.language.fr')}</option>
+                  <option value="en">{t('content.language.en')}</option>
                 </select>
               </label>
             </div>
@@ -341,7 +347,7 @@ export default function ContentPage() {
             {activeTab === 'linkedin' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Ton
+                  {t('content.tone.label')}
                   <select value={form.tone} onChange={(e) => setForm({ ...form, tone: e.target.value })} {...inputProps}>
                     {toneOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
@@ -353,7 +359,7 @@ export default function ContentPage() {
             {activeTab === 'newsletter' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Nombre de sections
+                  {t('content.sections.label')}
                   <input
                     type="number" min={2} max={6}
                     value={form.sections}
@@ -368,17 +374,17 @@ export default function ContentPage() {
             {activeTab === 'email' && (
               <div className="space-y-4">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Type d&apos;email
+                  {t('content.type.label')}
                   <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} {...inputProps}>
-                    <option value="cold">Cold email</option>
-                    <option value="followup">Suivi</option>
-                    <option value="relance">Relance</option>
+                    <option value="cold">{t('content.type.cold')}</option>
+                    <option value="followup">{t('content.type.followup')}</option>
+                    <option value="relance">{t('content.type.followup')}</option>
                     <option value="remerciement">Remerciement</option>
                   </select>
                 </label>
                 <label className="space-y-2 text-sm text-slate-300">
-                  Contexte
-                  <Textarea value={form.context} onChange={(e) => setForm({ ...form, context: e.target.value })} placeholder="Décrivez le contexte de l'email" className="bg-slate-900" />
+                  {t('content.context.label')}
+                  <Textarea value={form.context} onChange={(e) => setForm({ ...form, context: e.target.value })} placeholder={t('content.context.placeholder')} className="bg-slate-900" />
                 </label>
               </div>
             )}
@@ -387,11 +393,11 @@ export default function ContentPage() {
             {activeTab === 'instagram' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Format
+                  {t('content.style.label')}
                   <select value={form.style} onChange={(e) => setForm({ ...form, style: e.target.value })} {...inputProps}>
-                    <option value="carousel">Carousel</option>
-                    <option value="reel">Reel</option>
-                    <option value="story">Story</option>
+                    <option value="carousel">{t('content.style.carousel')}</option>
+                    <option value="reel">{t('content.style.reel')}</option>
+                    <option value="story">{t('content.style.story')}</option>
                   </select>
                 </label>
               </div>
@@ -401,7 +407,7 @@ export default function ContentPage() {
             {activeTab === 'facebook' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Type
+                  {t('content.type.label')}
                   <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} {...inputProps}>
                     <option value="post">Post</option>
                     <option value="event">Événement</option>
@@ -415,10 +421,10 @@ export default function ContentPage() {
             {activeTab === 'twitter' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Format
+                  {t('content.format.label')}
                   <select value={form.format} onChange={(e) => setForm({ ...form, format: e.target.value })} {...inputProps}>
-                    <option value="tweet unique">Tweet unique</option>
-                    <option value="thread">Thread</option>
+                    <option value="tweet unique">{t('content.format.tweet')}</option>
+                    <option value="thread">{t('content.format.thread')}</option>
                   </select>
                 </label>
               </div>
@@ -428,11 +434,11 @@ export default function ContentPage() {
             {activeTab === 'blog' && (
               <div className="space-y-4">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Mots-clés
-                  <input value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder="ex : SEO, génération de leads" {...inputProps} />
+                  {t('content.keywords.label')}
+                  <input value={form.keywords} onChange={(e) => setForm({ ...form, keywords: e.target.value })} placeholder={t('content.keywords.placeholder')} {...inputProps} />
                 </label>
                 <label className="space-y-2 text-sm text-slate-300">
-                  Longueur
+                  {t('content.length.label')}
                   <select value={form.length} onChange={(e) => setForm({ ...form, length: e.target.value })} {...inputProps}>
                     {lengths.map((l) => <option key={l.value} value={l.value}>{l.label}</option>)}
                   </select>
@@ -440,11 +446,11 @@ export default function ContentPage() {
               </div>
             )}
 
-            {/* VIDEO SCRIPT */}
+            {/* SCRIPT VIDÉO */}
             {activeTab === 'video-script' && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="space-y-2 text-sm text-slate-300">
-                  Plateforme
+                  {t('content.platform.label')}
                   <select value={form.platform} onChange={(e) => setForm({ ...form, platform: e.target.value })} {...inputProps}>
                     <option value="YouTube">YouTube</option>
                     <option value="TikTok">TikTok</option>
@@ -452,19 +458,19 @@ export default function ContentPage() {
                   </select>
                 </label>
                 <label className="space-y-2 text-sm text-slate-300">
-                  Durée
+                  {t('content.duration.label')}
                   <input value={form.duration} onChange={(e) => setForm({ ...form, duration: e.target.value })} placeholder="3 min" {...inputProps} />
                 </label>
               </div>
             )}
 
-            {/* DETAILED DESCRIPTION */}
+            {/* DESCRIPTION DÉTAILLÉE */}
             <div>
-              <label className="text-sm text-slate-300">Description détaillée</label>
+              <label className="text-sm text-slate-300">{t('content.context.label')}</label>
               <Textarea
                 value={form.context}
                 onChange={(e) => setForm({ ...form, context: e.target.value })}
-                placeholder="Ajoutez des détails pour aider l'IA à personnaliser le contenu"
+                placeholder={t('content.context.placeholder')}
                 className="mt-2 bg-slate-900"
               />
             </div>
@@ -473,22 +479,19 @@ export default function ContentPage() {
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <Button onClick={handleGenerate} disabled={loading}>
-                {loading ? 'Génération en cours...' : 'Générer le contenu'}
+                {loading ? t('content.loading') : t('content.generate')}
               </Button>
-              <p className="text-sm text-slate-500">Un contenu prêt à publier, optimisé pour chaque canal.</p>
             </div>
           </section>
 
-          {/* PREVIEW SIDEBAR */}
+          {/* PANNEAU LATÉRAL — APERÇU */}
           <aside className="space-y-4 rounded-2xl p-6" style={GLASS_SECTION}>
             <div>
               <h3 className="text-lg font-semibold text-white">Actions</h3>
-              <p className="mt-2 text-sm text-slate-400">Gérez votre contenu généré.</p>
             </div>
             <div className="grid gap-3">
-              <Button disabled={!result} onClick={handleCopy} variant="secondary">Copier le contenu</Button>
-              <Button disabled={!result} onClick={handleDownload} variant="secondary">Télécharger (.txt)</Button>
-              {/* Bouton Planifier — visible uniquement si un résultat existe */}
+              <Button disabled={!result} onClick={handleCopy} variant="secondary">{t('content.copy')}</Button>
+              <Button disabled={!result} onClick={handleDownload} variant="secondary">{t('content.download')}</Button>
               {result && (
                 <button
                   type="button"
@@ -497,41 +500,39 @@ export default function ContentPage() {
                   style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', boxShadow: '0 4px 16px rgba(251,146,60,0.3)' }}
                 >
                   <CalendarDays size={15} />
-                  Planifier ce post
+                  {t('content.schedule')}
                 </button>
               )}
             </div>
             {result && (
               <div className="mt-2 p-3 rounded-xl text-xs text-[#94a3b8]" style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.12)' }}>
-                Contenu généré pour <span className="font-semibold text-[#38bdf8]">{tabs.find(t => t.key === activeTab)?.label}</span>.
-                Cliquez sur « Planifier » pour l&apos;envoyer dans votre calendrier.
+                {t('content.generate')} — <span className="font-semibold text-[#38bdf8]">{activeTabLabel}</span>
               </div>
             )}
           </aside>
         </div>
 
-        {/* RESULT */}
+        {/* RÉSULTAT */}
         <div className="rounded-2xl p-6" style={GLASS_SECTION}>
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-semibold text-white">Résultat généré</h2>
-              <p className="text-sm text-slate-500">Le contenu final s&apos;affiche ici après validation.</p>
+              <h2 className="text-xl font-semibold text-white">{t('content.regenerate')}</h2>
             </div>
             <Button onClick={handleGenerate} disabled={loading}>
-              {loading ? 'Génération en cours...' : 'Régénérer'}
+              {loading ? t('content.loading') : t('content.regenerate')}
             </Button>
           </div>
           <div className="mt-6 rounded-xl p-6 min-h-[260px] text-slate-300" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)' }}>
             {result
               ? <pre className="whitespace-pre-wrap break-words text-sm">{result}</pre>
-              : <p className="text-slate-500">Aucun contenu généré pour le moment. Remplissez le formulaire et cliquez sur « Générer ».</p>
+              : <p className="text-slate-500">{t('content.result.empty')}</p>
             }
           </div>
         </div>
 
       </div>
 
-      {/* MODAL PLANIFICATION */}
+      {/* MODAL — PLANIFICATION */}
       {showScheduleModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
@@ -540,8 +541,8 @@ export default function ContentPage() {
 
             <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-lg font-bold text-white">Planifier ce post</h3>
-                <p className="text-xs text-[#94a3b8] mt-0.5">Le contenu sera ajouté à votre calendrier de publication.</p>
+                <h3 className="text-lg font-bold text-white">{t('content.schedule.modal.title')}</h3>
+                <p className="text-xs text-[#94a3b8] mt-0.5">{t('schedule.subtitle2')}</p>
               </div>
               <button type="button" onClick={() => setShowScheduleModal(false)} style={{ color: '#94a3b8' }} className="hover:text-white transition-colors">
                 <X size={20} />
@@ -551,23 +552,23 @@ export default function ContentPage() {
             {scheduleSuccess ? (
               <div className="flex flex-col items-center gap-3 py-6">
                 <CheckCircle size={40} style={{ color: '#34d399' }} />
-                <p className="text-sm text-center font-medium" style={{ color: scheduleSuccess.startsWith('Erreur') ? '#ef4444' : '#34d399' }}>
+                <p className="text-sm text-center font-medium" style={{ color: scheduleSuccess === t('content.schedule.error') ? '#ef4444' : '#34d399' }}>
                   {scheduleSuccess}
                 </p>
-                {!scheduleSuccess.startsWith('Erreur') && (
+                {scheduleSuccess !== t('content.schedule.error') && (
                   <button
                     type="button"
                     onClick={() => { setShowScheduleModal(false); window.location.href = '/schedule' }}
                     className="mt-2 text-xs text-[#38bdf8] underline hover:no-underline"
                   >
-                    Voir le calendrier →
+                    {t('schedule.title')} →
                   </button>
                 )}
               </div>
             ) : (
               <div className="space-y-4">
                 <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
-                  Plateforme
+                  {t('schedule.platform')}
                   <select
                     value={scheduleForm.platform}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, platform: e.target.value as SchedulePlatform })}
@@ -583,7 +584,7 @@ export default function ContentPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
-                    Date
+                    {t('schedule.date')}
                     <input
                       type="date"
                       value={scheduleForm.date}
@@ -593,7 +594,7 @@ export default function ContentPage() {
                     />
                   </label>
                   <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
-                    Heure
+                    {t('schedule.time')}
                     <input
                       type="time"
                       value={scheduleForm.time}
@@ -616,7 +617,7 @@ export default function ContentPage() {
                     className="flex-1 py-2.5 rounded-full text-sm font-medium transition-colors"
                     style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}
                   >
-                    Annuler
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="button"
@@ -625,7 +626,7 @@ export default function ContentPage() {
                     className="flex-1 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:brightness-110 disabled:opacity-60"
                     style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}
                   >
-                    {scheduleLoading ? 'Planification...' : 'Planifier'}
+                    {scheduleLoading ? t('common.loading') : t('content.schedule')}
                   </button>
                 </div>
               </div>

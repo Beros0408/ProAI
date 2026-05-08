@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Plus, Users, Mail, Building2, DollarSign, Calendar, Trash2, Zap, MessageSquare } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 import {
   DndContext,
   closestCenter,
@@ -41,11 +42,11 @@ interface LeadCardProps {
 const STAGES = ['nouveau', 'contacte', 'negociation', 'gagne'] as const
 type Stage = (typeof STAGES)[number]
 
-const STAGE_LABELS: Record<Stage, string> = {
-  nouveau: 'Nouveau lead',
-  contacte: 'Contacté',
-  negociation: 'En négociation',
-  gagne: 'Gagné',
+const STAGE_LABELS: Record<Stage, TranslationKey> = {
+  nouveau: 'crm.stage.new.full',
+  contacte: 'crm.stage.contacted',
+  negociation: 'crm.stage.negotiation.full',
+  gagne: 'crm.stage.won',
 }
 
 const STAGE_COLORS: Record<Stage, string> = {
@@ -55,14 +56,21 @@ const STAGE_COLORS: Record<Stage, string> = {
   gagne: 'from-green-500 to-green-600',
 }
 
-const SCORE_COLORS: Record<'hot' | 'warm' | 'cold', { bg: string; text: string; label: string }> = {
-  hot: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'Chaud' },
-  warm: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', label: 'Tiède' },
-  cold: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Froid' },
+const SCORE_COLORS: Record<'hot' | 'warm' | 'cold', { bg: string; text: string }> = {
+  hot: { bg: 'bg-red-500/20', text: 'text-red-400' },
+  warm: { bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
+  cold: { bg: 'bg-blue-500/20', text: 'text-blue-400' },
+}
+
+const SCORE_LABEL_KEYS: Record<'hot' | 'warm' | 'cold', TranslationKey> = {
+  hot: 'crm.score.hot',
+  warm: 'crm.score.warm',
+  cold: 'crm.score.cold',
 }
 
 function LeadCard({ lead, onDelete }: LeadCardProps) {
   const router = useRouter()
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -124,7 +132,7 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
 
       <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
         <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${SCORE_COLORS[lead.score].bg} ${SCORE_COLORS[lead.score].text}`}>
-          {SCORE_COLORS[lead.score].label}
+          {t(SCORE_LABEL_KEYS[lead.score])}
         </span>
         <div className="flex items-center gap-2">
           <span className="text-[#64748b] text-xs">{lead.dateAdded}</span>
@@ -136,10 +144,10 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
             }}
             className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 hover:-translate-y-0.5"
             style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}
-            title={`Contacter ${lead.name} via l'agent Sales`}
+            title={`${t('crm.contact')} ${lead.name}`}
           >
             <MessageSquare className="w-3 h-3" />
-            Contacter
+            {t('crm.contact')}
           </button>
         </div>
       </div>
@@ -148,6 +156,7 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
 }
 
 function Column({ stage, leads, onDelete }: { stage: Stage; leads: Lead[]; onDelete: (id: string) => void }) {
+  const { t } = useTranslation()
   const { setNodeRef } = useSortable({
     id: stage,
     data: { type: 'Column' },
@@ -169,14 +178,14 @@ function Column({ stage, leads, onDelete }: { stage: Stage; leads: Lead[]; onDel
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
           <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${STAGE_COLORS[stage]} shadow-lg`} />
-          <h3 className="font-semibold text-[#e2e8f0] text-sm">{STAGE_LABELS[stage]}</h3>
+          <h3 className="font-semibold text-[#e2e8f0] text-sm">{t(STAGE_LABELS[stage])}</h3>
           <span className="ml-auto text-xs px-2.5 py-1 rounded-full font-semibold"
             style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
             {leads.length}
           </span>
         </div>
         <p className="text-xs text-[#64748b]">
-          Valeur: {totalValue.toLocaleString()} €
+          {t('crm.pipeline.label')} {totalValue.toLocaleString()} €
         </p>
       </div>
 
@@ -345,7 +354,7 @@ export default function CRMPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white gradient-text">CRM Pipeline</h1>
-            <p className="text-[#64748b] text-sm mt-0.5">Gérez vos leads et opportunités commerciales</p>
+            <p className="text-[#64748b] text-sm mt-0.5">{t('crm.subtitle')}</p>
           </div>
         </div>
         <Button onClick={() => setShowModal(true)} className="gap-2">
@@ -357,12 +366,12 @@ export default function CRMPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
           style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)', boxShadow: '0 0 20px rgba(14,165,233,0.04)' }}>
-          <p className="text-[#64748b] text-sm">Leads total</p>
+          <p className="text-[#64748b] text-sm">{t('crm.leads.total')}</p>
           <p className="text-3xl font-bold text-white mt-2">{totalStats.count}</p>
         </div>
         <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
           style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)', boxShadow: '0 0 20px rgba(251,146,60,0.04)' }}>
-          <p className="text-[#64748b] text-sm">Valeur pipeline</p>
+          <p className="text-[#64748b] text-sm">{t('crm.pipeline.value')}</p>
           <p className="text-3xl font-bold text-[#fb923c] mt-2">{(totalStats.value / 1000).toFixed(0)}K €</p>
         </div>
       </div>
@@ -400,13 +409,13 @@ export default function CRMPage() {
             </div>
 
             <div className="space-y-3">
-              {[
-                { label: 'Nom', type: 'text', key: 'name' as const, placeholder: 'Nom complet' },
-                { label: 'Email', type: 'email', key: 'email' as const, placeholder: 'email@example.com' },
-                { label: 'Entreprise', type: 'text', key: 'company' as const, placeholder: "Nom de l'entreprise" },
-              ].map(field => (
+              {([
+                { labelKey: 'crm.form.name' as TranslationKey, type: 'text', key: 'name' as const, placeholderKey: 'crm.form.name.placeholder' as TranslationKey },
+                { labelKey: 'common.email' as TranslationKey, type: 'email', key: 'email' as const, placeholderKey: 'common.email' as TranslationKey },
+                { labelKey: 'crm.form.company' as TranslationKey, type: 'text', key: 'company' as const, placeholderKey: 'crm.form.company.placeholder' as TranslationKey },
+              ] as const).map(field => (
                 <div key={field.key}>
-                  <label className="text-xs font-medium text-[#94a3b8]">{field.label}</label>
+                  <label className="text-xs font-medium text-[#94a3b8]">{t(field.labelKey)}</label>
                   <input
                     type={field.type}
                     value={formData[field.key] as string}
@@ -415,12 +424,12 @@ export default function CRMPage() {
                     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
                     onFocus={(e) => { e.currentTarget.style.border = '1px solid rgba(14,165,233,0.4)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.08)' }}
                     onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
-                    placeholder={field.placeholder}
+                    placeholder={t(field.placeholderKey)}
                   />
                 </div>
               ))}
               <div>
-                <label className="text-xs font-medium text-[#94a3b8]">Valeur estimée (€)</label>
+                <label className="text-xs font-medium text-[#94a3b8]">{t('crm.form.value')}</label>
                 <input
                   type="number"
                   value={formData.estimatedValue}

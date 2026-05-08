@@ -14,6 +14,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css'
 import { Plus, Save, GitBranch, Zap, Filter, Send, ChevronDown, Power } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
 interface Workflow {
   id: string
@@ -26,25 +27,25 @@ interface Workflow {
 
 interface NodeTemplate {
   id: string
-  label: string
+  labelKey: TranslationKey
   type: 'trigger' | 'condition' | 'action'
 }
 
 const TRIGGER_TEMPLATES: NodeTemplate[] = [
-  { id: 'new_lead', label: 'Nouveau lead', type: 'trigger' },
-  { id: 'email_received', label: 'Email reçu', type: 'trigger' },
-  { id: 'scheduled', label: 'Heure planifiée', type: 'trigger' },
+  { id: 'new_lead', labelKey: 'workflows.trigger.new_lead', type: 'trigger' },
+  { id: 'email_received', labelKey: 'workflows.trigger.email_received', type: 'trigger' },
+  { id: 'scheduled', labelKey: 'workflows.trigger.scheduled', type: 'trigger' },
 ]
 
 const CONDITION_TEMPLATES: NodeTemplate[] = [
-  { id: 'score_gt_70', label: 'Si score > 70', type: 'condition' },
-  { id: 'no_reply', label: 'Si pas de réponse', type: 'condition' },
+  { id: 'score_gt_70', labelKey: 'workflows.condition.score_gt_70', type: 'condition' },
+  { id: 'no_reply', labelKey: 'workflows.condition.no_reply', type: 'condition' },
 ]
 
 const ACTION_TEMPLATES: NodeTemplate[] = [
-  { id: 'send_email', label: 'Envoyer email', type: 'action' },
-  { id: 'linkedin_post', label: 'Publier LinkedIn', type: 'action' },
-  { id: 'slack_notify', label: 'Notifier Slack', type: 'action' },
+  { id: 'send_email', labelKey: 'workflows.action.send_email', type: 'action' },
+  { id: 'linkedin_post', labelKey: 'workflows.action.linkedin_post', type: 'action' },
+  { id: 'slack_notify', labelKey: 'workflows.action.slack_notify', type: 'action' },
 ]
 
 const NODE_COLORS: Record<string, { border: string; icon: any; iconColor: string }> = {
@@ -59,9 +60,11 @@ interface WorkflowNodeData {
 }
 
 function WorkflowNode({ data }: { data: WorkflowNodeData }) {
+  const { t } = useTranslation()
   const config = NODE_COLORS[data.type]
   const IconComponent = config.icon
-  
+  const typeKey = `workflows.node.${data.type}` as TranslationKey
+
   return (
     <div
       className="rounded-[12px] bg-[#111827] p-4 min-w-[200px] border-l-4"
@@ -69,7 +72,7 @@ function WorkflowNode({ data }: { data: WorkflowNodeData }) {
     >
       <div className="flex items-center gap-2 mb-2">
         <IconComponent className="w-4 h-4" style={{ color: config.iconColor }} />
-        <span className="text-xs font-semibold uppercase text-[#cbd5e1]">{data.type}</span>
+        <span className="text-xs font-semibold uppercase text-[#cbd5e1]">{t(typeKey)}</span>
       </div>
       <p className="text-sm font-medium text-white">{data.label}</p>
     </div>
@@ -93,6 +96,8 @@ function CollapsibleSection({
   isOpen: boolean
   onToggle: () => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="border-t border-[rgba(255,255,255,0.08)] pt-4">
       <button
@@ -114,13 +119,13 @@ function CollapsibleSection({
               draggable
               onDragStart={(event) => {
                 event.dataTransfer.effectAllowed = 'move'
-                event.dataTransfer.setData('application/reactflow', JSON.stringify(item))
+                event.dataTransfer.setData('application/reactflow', JSON.stringify({ ...item, label: t(item.labelKey) }))
                 onItemDrag(item)
               }}
               onClick={() => onItemClick(item)}
               className="w-full rounded-[12px] bg-[#1a2236] p-3 text-left text-sm text-white border border-dashed border-transparent hover:border-[rgba(255,255,255,0.12)] cursor-grab active:cursor-grabbing transition"
             >
-              {item.label}
+              {t(item.labelKey)}
             </button>
           ))}
         </div>
@@ -150,7 +155,7 @@ export default function WorkflowsPage() {
     const newNode: Node = {
       id: `${item.type}-${Date.now()}`,
       type: 'customNode',
-      data: { label: item.label, type: item.type },
+      data: { label: t(item.labelKey), type: item.type },
       position: { x: 250 + Math.random() * 100, y: 150 + Math.random() * 150 },
     }
     setNodes((nds) => [...nds, newNode])
@@ -178,7 +183,7 @@ export default function WorkflowsPage() {
     const newId = Date.now().toString()
     const newWorkflow: Workflow = {
       id: newId,
-      name: `Nouveau workflow ${workflows.length + 1}`,
+      name: `${t('workflows.newName')} ${workflows.length + 1}`,
       active: false,
       createdAt: new Date().toISOString().split('T')[0],
       nodes: [],
@@ -287,38 +292,32 @@ export default function WorkflowsPage() {
 
           <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
             <CollapsibleSection
-              title="Triggers"
+              title={t('workflows.triggers')}
               icon={Zap}
               items={TRIGGER_TEMPLATES}
               isOpen={expandedSections.triggers}
               onToggle={() => setExpandedSections((s) => ({ ...s, triggers: !s.triggers }))}
-              onItemDrag={(item) => {
-                // Drag will be handled by onDragStart
-              }}
+              onItemDrag={() => {}}
               onItemClick={addNode}
             />
 
             <CollapsibleSection
-              title="Conditions"
+              title={t('workflows.conditions')}
               icon={Filter}
               items={CONDITION_TEMPLATES}
               isOpen={expandedSections.conditions}
               onToggle={() => setExpandedSections((s) => ({ ...s, conditions: !s.conditions }))}
-              onItemDrag={(item) => {
-                // Drag will be handled by onDragStart
-              }}
+              onItemDrag={() => {}}
               onItemClick={addNode}
             />
 
             <CollapsibleSection
-              title="Actions"
+              title={t('workflows.actions')}
               icon={Send}
               items={ACTION_TEMPLATES}
               isOpen={expandedSections.actions}
               onToggle={() => setExpandedSections((s) => ({ ...s, actions: !s.actions }))}
-              onItemDrag={(item) => {
-                // Drag will be handled by onDragStart
-              }}
+              onItemDrag={() => {}}
               onItemClick={addNode}
             />
           </div>

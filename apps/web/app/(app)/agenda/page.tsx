@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 import { api } from '@/lib/api'
 import {
   CalendarDays, Plus, Sparkles, ChevronLeft, ChevronRight,
@@ -11,7 +12,7 @@ import {
 } from 'lucide-react'
 
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 8)
-const DAYS_SHORT = ['lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.', 'dim.']
+// DAYS_SHORT is computed inside the component via Intl (locale-aware)
 
 const EVENT_COLORS: Record<string, { bg: string; border: string; text: string }> = {
   meeting: { bg: 'rgba(14,165,233,0.2)', border: '#0ea5e9', text: '#7dd3fc' },
@@ -22,35 +23,35 @@ const EVENT_COLORS: Record<string, { bg: string; border: string; text: string }>
 }
 
 interface CalEvent {
-  id: string; title: string; day: number
+  id: string; title: string; titleKey?: TranslationKey; day: number
   startHour: number; startMin: number; endHour: number; endMin: number
   type: string; icon: string; aiSuggested?: boolean
 }
 
-interface Task { id: string; text: string; done: boolean; priority: 'high' | 'medium' | 'low' }
+interface Task { id: string; text: string; textKey?: TranslationKey; done: boolean; priority: 'high' | 'medium' | 'low' }
 
 const INITIAL_EVENTS: CalEvent[] = [
-  { id: '1', title: 'Sprint planning', day: 0, startHour: 9, startMin: 0, endHour: 10, endMin: 0, type: 'meeting', icon: 'video' },
-  { id: '2', title: 'Deep work - Strategie', day: 0, startHour: 10, startMin: 30, endHour: 12, endMin: 30, type: 'focus', icon: 'brain' },
-  { id: '3', title: 'Call client Nextera', day: 1, startHour: 14, startMin: 0, endHour: 15, endMin: 0, type: 'call', icon: 'phone' },
-  { id: '4', title: 'Revue produit', day: 2, startHour: 10, startMin: 0, endHour: 11, endMin: 0, type: 'meeting', icon: 'video' },
-  { id: '5', title: 'Redaction newsletter', day: 2, startHour: 14, startMin: 0, endHour: 16, endMin: 0, type: 'focus', icon: 'brain' },
-  { id: '6', title: 'Pause dejeuner', day: 3, startHour: 12, startMin: 0, endHour: 13, endMin: 0, type: 'break', icon: 'coffee' },
-  { id: '7', title: 'Analyse KPIs Q2', day: 3, startHour: 9, startMin: 0, endHour: 10, endMin: 30, type: 'focus', icon: 'brain' },
-  { id: '8', title: 'Sync equipe Sales', day: 4, startHour: 11, startMin: 0, endHour: 11, endMin: 45, type: 'meeting', icon: 'video' },
+  { id: '1', title: 'Sprint planning', titleKey: 'agenda.mock.sprint_planning', day: 0, startHour: 9, startMin: 0, endHour: 10, endMin: 0, type: 'meeting', icon: 'video' },
+  { id: '2', title: 'Deep work — Strategy', titleKey: 'agenda.mock.deep_work', day: 0, startHour: 10, startMin: 30, endHour: 12, endMin: 30, type: 'focus', icon: 'brain' },
+  { id: '3', title: 'Client call Nextera', titleKey: 'agenda.mock.client_call', day: 1, startHour: 14, startMin: 0, endHour: 15, endMin: 0, type: 'call', icon: 'phone' },
+  { id: '4', title: 'Product review', titleKey: 'agenda.mock.product_review', day: 2, startHour: 10, startMin: 0, endHour: 11, endMin: 0, type: 'meeting', icon: 'video' },
+  { id: '5', title: 'Newsletter writing', titleKey: 'agenda.mock.newsletter', day: 2, startHour: 14, startMin: 0, endHour: 16, endMin: 0, type: 'focus', icon: 'brain' },
+  { id: '6', title: 'Lunch break', titleKey: 'agenda.mock.lunch_break', day: 3, startHour: 12, startMin: 0, endHour: 13, endMin: 0, type: 'break', icon: 'coffee' },
+  { id: '7', title: 'Q2 KPI analysis', titleKey: 'agenda.mock.kpi_analysis', day: 3, startHour: 9, startMin: 0, endHour: 10, endMin: 30, type: 'focus', icon: 'brain' },
+  { id: '8', title: 'Sales team sync', titleKey: 'agenda.mock.sales_sync', day: 4, startHour: 11, startMin: 0, endHour: 11, endMin: 45, type: 'meeting', icon: 'video' },
 ]
 
 const AI_SUGGESTIONS: CalEvent[] = [
-  { id: 'ai1', title: 'Deep work suggere', day: 1, startHour: 9, startMin: 0, endHour: 11, endMin: 0, type: 'ai', icon: 'brain', aiSuggested: true },
-  { id: 'ai2', title: 'Prepa call client', day: 1, startHour: 13, startMin: 0, endHour: 13, endMin: 45, type: 'ai', icon: 'brain', aiSuggested: true },
+  { id: 'ai1', title: 'Suggested deep work', titleKey: 'agenda.mock.ai_deep_work', day: 1, startHour: 9, startMin: 0, endHour: 11, endMin: 0, type: 'ai', icon: 'brain', aiSuggested: true },
+  { id: 'ai2', title: 'Client call prep', titleKey: 'agenda.mock.ai_prep_call', day: 1, startHour: 13, startMin: 0, endHour: 13, endMin: 45, type: 'ai', icon: 'brain', aiSuggested: true },
 ]
 
 const INITIAL_TASKS: Task[] = [
-  { id: 't1', text: 'Finaliser le briefing marketing', done: false, priority: 'high' },
-  { id: 't2', text: 'Mettre a jour le pipeline CRM', done: false, priority: 'medium' },
-  { id: 't3', text: 'Valider le script video', done: false, priority: 'high' },
-  { id: 't4', text: 'Envoyer rapport hebdo', done: true, priority: 'low' },
-  { id: 't5', text: 'Planifier posts LinkedIn', done: false, priority: 'medium' },
+  { id: 't1', text: 'Finalize marketing brief', textKey: 'agenda.mock.task_briefing', done: false, priority: 'high' },
+  { id: 't2', text: 'Update CRM pipeline', textKey: 'agenda.mock.task_pipeline', done: false, priority: 'medium' },
+  { id: 't3', text: 'Validate video script', textKey: 'agenda.mock.task_script', done: false, priority: 'high' },
+  { id: 't4', text: 'Send weekly report', textKey: 'agenda.mock.task_report', done: true, priority: 'low' },
+  { id: 't5', text: 'Schedule LinkedIn posts', textKey: 'agenda.mock.task_linkedin', done: false, priority: 'medium' },
 ]
 
 function getWeekDates(offset: number): Date[] {
@@ -75,7 +76,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
 
 export default function AgendaPage() {
   const router = useRouter()
-  const { t } = useTranslation()
+  const { t, locale } = useTranslation()
+  // Jan 1 2024 = Monday — generates Mon–Sun abbreviated names
+  const DAYS_SHORT = Array.from({ length: 7 }, (_, i) =>
+    new Intl.DateTimeFormat(locale === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
+  )
   const [weekOffset, setWeekOffset] = useState(0)
   const [view, setView] = useState<'day' | 'week' | 'month'>('week')
   const [events, setEvents] = useState<CalEvent[]>(INITIAL_EVENTS)
@@ -147,7 +152,7 @@ export default function AgendaPage() {
             <span style={{ color: chargeColor }}>{chargeLevel}%</span>
           </div>
           <button onClick={() => router.push('/schedule')} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'rgba(14,165,233,0.12)', border: '1px solid rgba(14,165,233,0.25)', color: '#38bdf8' }}>
-            <CalendarDays size={14} /> Calendrier de publication
+            <CalendarDays size={14} /> {t('agenda.publication')}
           </button>
           <button onClick={handleAiPlan} disabled={aiLoading} className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 4px 20px rgba(139,92,246,0.3)' }}>
             <Sparkles size={14} />{aiLoading ? t('agenda.analyzing') : t('agenda.planwithia')}
@@ -186,7 +191,7 @@ export default function AgendaPage() {
                   <div className={`text-lg font-bold mt-0.5 ${isToday(d) ? 'text-[#0ea5e9]' : 'text-white'}`}>{d.getDate()}</div>
                   <div className="flex items-center justify-center gap-1 mt-1">
                     {isToday(d) && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#0ea5e9', boxShadow: '0 0 6px #0ea5e9' }} />}
-                    {hasPost && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#fb923c', boxShadow: '0 0 6px #fb923c' }} title="Post planifié ce jour" />}
+                    {hasPost && <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#fb923c', boxShadow: '0 0 6px #fb923c' }} title={t('agenda.scheduledPost')} />}
                   </div>
                 </div>
               )
@@ -219,7 +224,7 @@ export default function AgendaPage() {
                         const Icon = ICON_MAP[event.icon] || CalendarDays
                         return (
                           <div key={event.id} className="absolute left-1 right-1 rounded-lg px-2 py-1.5 z-10 transition-all duration-200 hover:scale-[1.02] hover:z-20 group" style={{ top: `${(event.startMin / 60) * 100}%`, height: `${dur * 80 - 4}px`, background: colors.bg, borderLeft: `3px solid ${colors.border}` }}>
-                            <div className="flex items-center gap-1.5"><Icon size={11} style={{ color: colors.text }} /><span className="text-[11px] font-semibold truncate" style={{ color: colors.text }}>{event.title}</span></div>
+                            <div className="flex items-center gap-1.5"><Icon size={11} style={{ color: colors.text }} /><span className="text-[11px] font-semibold truncate" style={{ color: colors.text }}>{event.titleKey ? t(event.titleKey) : event.title}</span></div>
                             <div className="text-[9px] mt-0.5" style={{ color: colors.text, opacity: 0.7 }}>{`${event.startHour.toString().padStart(2, '0')}:${event.startMin.toString().padStart(2, '0')} - ${event.endHour.toString().padStart(2, '0')}:${event.endMin.toString().padStart(2, '0')}`}</div>
                             {event.aiSuggested && (
                               <div className="flex items-center gap-1 mt-1">
@@ -256,8 +261,10 @@ export default function AgendaPage() {
                 <div key={task.id} className="flex items-start gap-2 px-3 py-2.5 rounded-lg transition-all hover:-translate-y-0.5 cursor-pointer group" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}>
                   <button onClick={() => toggleTask(task.id)} className="mt-0.5 flex-shrink-0">{task.done ? <CheckSquare size={16} style={{ color: '#34d399' }} /> : <Square size={16} style={{ color: '#64748b' }} />}</button>
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm ${task.done ? 'line-through text-[#64748b]' : 'text-[#e2e8f0]'}`}>{task.text}</p>
-                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style={{ background: `${prioColor}20`, color: prioColor }}>{task.priority}</span>
+                    <p className={`text-sm ${task.done ? 'line-through text-[#64748b]' : 'text-[#e2e8f0]'}`}>{task.textKey ? t(task.textKey) : task.text}</p>
+                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style={{ background: `${prioColor}20`, color: prioColor }}>
+                      {task.priority === 'high' ? t('agenda.priority.high') : task.priority === 'medium' ? t('agenda.priority.medium') : t('agenda.priority.low')}
+                    </span>
                   </div>
                   <GripVertical size={12} className="hidden group-hover:block mt-1 cursor-grab" style={{ color: '#64748b' }} />
                 </div>

@@ -53,7 +53,7 @@ export default function AutomationsPage() {
               <h3 className="text-base font-semibold text-white">{t(card.titleKey)}</h3>
               <p className="text-[#64748b] text-sm mt-1 leading-relaxed">{t(card.descKey)}</p>
               <div className="flex items-center gap-1 mt-4 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-all duration-200" style={{ color: card.color }}>
-                Configurer <ChevronRight size={12} />
+                {t('common.configure')} <ChevronRight size={12} />
               </div>
             </div>
           </div>

@@ -4,37 +4,59 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   TrendingUp, Shield, Sparkles, RefreshCw, ChevronRight,
-  AlertTriangle, Zap, Flame, Target, ArrowRight,
-  BarChart3, Brain, Activity, Eye
+  AlertTriangle, Zap, Target, ArrowRight,
+  Brain, Activity, Eye
 } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n/context'
+import type { TranslationKey } from '@/lib/i18n/translations'
 
 const SALES_DATA = [0, 0, 12, 28, 45, 68, 85, 98, 110, 125]
 const PREDICTION_DATA = [null, null, null, null, null, null, null, 98, 118, 135, 148, 162]
-const MONTHS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
 const MAX_VAL = 170
 
-const CLIENTS = [
-  { name: 'Client A', action: 'Proposition de valeur personnalisée', risk: 82, color: '#ef4444' },
-  { name: 'Client B', action: 'Relance ciblée', risk: 72, color: '#ef4444' },
-  { name: 'Client C', action: 'Réunion de satisfaction', risk: 61, color: '#fb923c' },
-  { name: 'Client D', action: "Offre d'engagement", risk: 48, color: '#0ea5e9' },
-  { name: 'Client E', action: "Newsletter d'actualités", risk: 34, color: '#0ea5e9' },
+interface ClientData {
+  name: string
+  actionKey: TranslationKey
+  risk: number
+  color: string
+}
+
+const CLIENTS: ClientData[] = [
+  { name: 'Client A', actionKey: 'predictions.client.A.action', risk: 82, color: '#ef4444' },
+  { name: 'Client B', actionKey: 'predictions.client.B.action', risk: 72, color: '#ef4444' },
+  { name: 'Client C', actionKey: 'predictions.client.C.action', risk: 61, color: '#fb923c' },
+  { name: 'Client D', actionKey: 'predictions.client.D.action', risk: 48, color: '#0ea5e9' },
+  { name: 'Client E', actionKey: 'predictions.client.E.action', risk: 34, color: '#0ea5e9' },
 ]
 
-const TRENDS = [
-  { text: 'La vidéo courte devient le format préféré B2B', impact: 'Fort', icon: '🔥', color: '#ef4444', glow: 'rgba(239,68,68,0.15)' },
-  { text: 'La personnalisation des emails conduit à +22 % d\'ouverture', impact: 'Fort', icon: '⚡', color: '#fb923c', glow: 'rgba(251,146,60,0.15)' },
-  { text: 'L\'intégration CRM et IA améliore le suivi client', impact: 'Moyen', icon: '🌱', color: '#34d399', glow: 'rgba(52,211,153,0.15)' },
-  { text: 'Les webinaires interactifs renforcent la conversion', impact: 'Moyen', icon: '⚡', color: '#8b5cf6', glow: 'rgba(139,92,246,0.15)' },
-  { text: 'Les micro-capsules sociales augmentent l\'engagement', impact: 'Faible', icon: '🌱', color: '#06b6d4', glow: 'rgba(6,182,212,0.15)' },
+interface TrendData {
+  textKey: TranslationKey
+  impactKey: TranslationKey
+  icon: string
+  color: string
+  glow: string
+}
+
+const TRENDS: TrendData[] = [
+  { textKey: 'predictions.trend.1', impactKey: 'predictions.trend.high',   icon: '🔥', color: '#ef4444', glow: 'rgba(239,68,68,0.15)' },
+  { textKey: 'predictions.trend.2', impactKey: 'predictions.trend.high',   icon: '⚡', color: '#fb923c', glow: 'rgba(251,146,60,0.15)' },
+  { textKey: 'predictions.trend.3', impactKey: 'predictions.trend.medium', icon: '🌱', color: '#34d399', glow: 'rgba(52,211,153,0.15)' },
+  { textKey: 'predictions.trend.4', impactKey: 'predictions.trend.medium', icon: '⚡', color: '#8b5cf6', glow: 'rgba(139,92,246,0.15)' },
+  { textKey: 'predictions.trend.5', impactKey: 'predictions.trend.low',    icon: '🌱', color: '#06b6d4', glow: 'rgba(6,182,212,0.15)' },
 ]
 
 function SalesChart() {
+  const { t, locale } = useTranslation()
+  const intlLocale = locale === 'fr' ? 'fr-FR' : 'en-US'
+  const MONTHS = Array.from({ length: 12 }, (_, i) => {
+    const name = new Intl.DateTimeFormat(intlLocale, { month: 'short' }).format(new Date(2000, i, 1))
+    return name.charAt(0).toUpperCase() + name.slice(1)
+  })
   const [animated, setAnimated] = useState(false)
 
   useEffect(() => {
-    const t = setTimeout(() => setAnimated(true), 300)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setAnimated(true), 300)
+    return () => clearTimeout(timer)
   }, [])
 
   const w = 560
@@ -76,7 +98,7 @@ function SalesChart() {
         </filter>
       </defs>
 
-      {/* Grid */}
+      {/* Grille */}
       {[0, 35, 70, 105, 140].map((v, i) => (
         <g key={i}>
           <line x1={padL} y1={toY(v)} x2={w} y2={toY(v)} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
@@ -91,7 +113,7 @@ function SalesChart() {
 
       {/* Zone de projection */}
       <rect x={toX(7)} y={0} width={toX(11) - toX(7)} height={chartH} fill="url(#predGrad)" rx="4" className={animated ? 'animate-pulse' : ''} style={{ animationDuration: '3s' }} />
-      <text x={toX(9)} y={20} fill="#a78bfa" fontSize="9" textAnchor="middle" fontWeight="600">PROJECTION IA</text>
+      <text x={toX(9)} y={20} fill="#a78bfa" fontSize="9" textAnchor="middle" fontWeight="600">{t('predictions.projection')}</text>
 
       {/* Aire sous la courbe réelle */}
       <polygon points={areaPoints} fill="url(#areaGrad)" className={`transition-opacity duration-1000 ${animated ? 'opacity-100' : 'opacity-0'}`} />
@@ -148,12 +170,13 @@ function SalesChart() {
 
 export default function PredictionsPage() {
   const router = useRouter()
+  const { t } = useTranslation()
   const [refreshing, setRefreshing] = useState(false)
   const [aiScore, setAiScore] = useState(0)
 
   useEffect(() => {
-    const t = setTimeout(() => setAiScore(82), 800)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setAiScore(82), 800)
+    return () => clearTimeout(timer)
   }, [])
 
   const handleRefresh = () => {
@@ -168,18 +191,18 @@ export default function PredictionsPage() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#8b5cf6' }}>
-              Prédictions IA
+              {t('predictions.title')}
             </span>
             <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
               style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>
-              <Activity size={10} /> Temps réel
+              <Activity size={10} /> {t('predictions.realtime')}
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white">
-            Anticipez les ventes, le churn et les tendances
+            {t('predictions.subtitle')}
           </h1>
           <p className="text-sm text-[#94a3b8] mt-1">
-            Des insights concrets pour mieux piloter votre pipeline et vos actions prioritaires.
+            {t('dashboard.prediction.desc')}
           </p>
         </div>
         <button
@@ -189,7 +212,7 @@ export default function PredictionsPage() {
           style={{ background: '#111827', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}
         >
           <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
-          {refreshing ? 'Analyse en cours…' : 'Actualiser les prédictions'}
+          {refreshing ? t('agenda.analyzing') : t('predictions.refresh')}
         </button>
       </div>
 
@@ -203,13 +226,13 @@ export default function PredictionsPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp size={16} style={{ color: '#0ea5e9' }} />
-                <span className="text-sm font-bold text-white">Prévision de ventes</span>
+                <span className="text-sm font-bold text-white">{t('predictions.chart.title')}</span>
               </div>
-              <p className="text-xs text-[#64748b]">Données réelles + projection IA sur 3 mois</p>
+              <p className="text-xs text-[#64748b]">{t('predictions.chart.real')} + {t('predictions.chart.predicted')}</p>
             </div>
             <div className="flex items-center gap-4 text-[10px]">
-              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#0ea5e9' }} /> Réel</span>
-              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#8b5cf6', borderTop: '1px dashed #8b5cf6' }} /> Projection</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#0ea5e9' }} /> {t('predictions.chart.real')}</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded-full" style={{ background: '#8b5cf6' }} /> {t('predictions.chart.predicted')}</span>
             </div>
           </div>
           <SalesChart />
@@ -222,7 +245,7 @@ export default function PredictionsPage() {
 
           <div className="flex items-center gap-2 mb-4">
             <Brain size={16} style={{ color: '#a78bfa' }} />
-            <span className="text-sm font-bold text-white">Score IA global</span>
+            <span className="text-sm font-bold text-white">{t('dashboard.aiPrediction')}</span>
           </div>
 
           {/* Score circulaire */}
@@ -249,17 +272,17 @@ export default function PredictionsPage() {
 
           <div className="flex items-center justify-center gap-1.5 mb-4">
             <TrendingUp size={12} style={{ color: '#34d399' }} />
-            <span className="text-xs font-bold" style={{ color: '#34d399' }}>+12 % vs mois dernier</span>
+            <span className="text-xs font-bold" style={{ color: '#34d399' }}>{t('predictions.vs_last_month')}</span>
           </div>
 
           {/* Insight IA */}
           <div className="p-3 rounded-xl" style={{ background: 'rgba(139,92,246,0.08)', border: '1px solid rgba(139,92,246,0.15)' }}>
             <div className="flex items-center gap-1.5 mb-2">
               <Sparkles size={12} style={{ color: '#a78bfa' }} />
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#a78bfa' }}>Insight IA</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#a78bfa' }}>{t('dashboard.insightsIA')}</span>
             </div>
             <p className="text-xs text-[#e2e8f0] leading-relaxed">
-              Vos ventes devraient augmenter grâce à la hausse des leads inbound et à la baisse du churn sur le segment B.
+              {t('dashboard.prediction.text')}
             </p>
           </div>
 
@@ -269,7 +292,7 @@ export default function PredictionsPage() {
             className="w-full mt-4 py-2.5 rounded-full text-xs font-bold text-white flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5"
             style={{ background: 'linear-gradient(135deg, #8b5cf6, #6d28d9)', boxShadow: '0 4px 20px rgba(139,92,246,0.3)' }}
           >
-            <Target size={12} /> Lancer une campagne de rétention
+            <Target size={12} /> {t('predictions.churn.title')}
           </button>
         </div>
       </div>
@@ -283,10 +306,10 @@ export default function PredictionsPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Shield size={16} style={{ color: '#fb923c' }} />
-              <span className="text-sm font-bold text-white">Risque de churn</span>
+              <span className="text-sm font-bold text-white">{t('predictions.churn.title')}</span>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: 'rgba(251,146,60,0.1)', color: '#fb923c' }}>
-              5 clients à surveiller
+              {t('predictions.churn.subtitle')}
             </span>
           </div>
 
@@ -302,7 +325,7 @@ export default function PredictionsPage() {
                   <div className="flex items-center justify-between mb-2">
                     <div>
                       <span className="text-sm font-semibold text-white">{client.name}</span>
-                      <p className="text-[11px] text-[#94a3b8]">{client.action}</p>
+                      <p className="text-[11px] text-[#94a3b8]">{t(client.actionKey)}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-bold" style={{ color: riskColor }}>{client.risk} %</span>
@@ -324,11 +347,11 @@ export default function PredictionsPage() {
                   <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button className="text-[10px] px-2 py-1 rounded-full font-medium"
                       style={{ background: `${riskColor}15`, color: riskColor }}>
-                      Action recommandée
+                      {t('predictions.client.action')}
                     </button>
                     <button className="text-[10px] px-2 py-1 rounded-full font-medium"
                       style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8' }}>
-                      <Eye size={10} className="inline mr-1" />Voir le profil
+                      <Eye size={10} className="inline mr-1" />{t('common.viewDetails')}
                     </button>
                   </div>
                 </div>
@@ -342,30 +365,32 @@ export default function PredictionsPage() {
           style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}>
           <div className="flex items-center gap-2 mb-4">
             <Sparkles size={16} style={{ color: '#06b6d4' }} />
-            <span className="text-sm font-bold text-white">Tendances marché</span>
+            <span className="text-sm font-bold text-white">{t('predictions.trends.title')}</span>
           </div>
 
           <div className="space-y-3">
             {TRENDS.map((trend, i) => {
-              const impactColor = trend.impact === 'Fort' ? '#ef4444' : trend.impact === 'Moyen' ? '#fb923c' : '#06b6d4'
+              const impactLabel = t(trend.impactKey)
+              const impactColor = trend.impactKey === 'predictions.trend.high' ? '#ef4444'
+                : trend.impactKey === 'predictions.trend.medium' ? '#fb923c'
+                : '#06b6d4'
               return (
                 <div
                   key={i}
                   className="p-3 rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group"
                   style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}
                 >
-                  {/* Lueur au survol */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
                     style={{ background: `radial-gradient(circle at 100% 0%, ${trend.glow}, transparent 70%)` }} />
 
                   <div className="relative z-10 flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <span className="text-lg">{trend.icon}</span>
-                      <p className="text-xs text-[#e2e8f0] leading-relaxed">{trend.text}</p>
+                      <p className="text-xs text-[#e2e8f0] leading-relaxed">{t(trend.textKey)}</p>
                     </div>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full flex-shrink-0"
                       style={{ background: `${impactColor}15`, color: impactColor }}>
-                      {trend.impact}
+                      {impactLabel}
                     </span>
                   </div>
                 </div>
@@ -377,17 +402,17 @@ export default function PredictionsPage() {
           <div className="mt-4 p-3 rounded-xl" style={{ background: 'rgba(6,182,212,0.06)', border: '1px solid rgba(6,182,212,0.15)' }}>
             <div className="flex items-center gap-1.5 mb-2">
               <Brain size={12} style={{ color: '#06b6d4' }} />
-              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#06b6d4' }}>Recommandation IA</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#06b6d4' }}>{t('dashboard.insightsIA')}</span>
             </div>
             <p className="text-xs text-[#e2e8f0] leading-relaxed mb-2">
-              Investissez dans la vidéo courte et la personnalisation email pour maximiser votre ROI ce trimestre.
+              {t('dashboard.insight.tip.desc')}
             </p>
             <button
               onClick={() => router.push('/content')}
               className="flex items-center gap-1.5 text-[10px] font-bold transition-colors"
               style={{ color: '#06b6d4' }}
             >
-              Générer du contenu vidéo <ArrowRight size={10} />
+              {t('dashboard.generatecontent')} <ArrowRight size={10} />
             </button>
           </div>
         </div>

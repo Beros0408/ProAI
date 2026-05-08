@@ -56,13 +56,13 @@ export default function PricingPage() {
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}))
-        throw new Error(err.detail || 'Erreur lors de la création du checkout')
+        throw new Error(err.detail || t('pricing.error.checkout'))
       }
 
       const data = await response.json()
       window.location.href = data.checkout_url
     } catch (err: any) {
-      alert(err.message || 'Une erreur est survenue')
+      alert(err.message || t('pricing.error.generic'))
     } finally {
       setLoading(null)
     }
@@ -74,35 +74,35 @@ export default function PricingPage() {
       {paymentStatus === 'success' && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6 animate-fade-up" style={{ background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.3)' }}>
           <CheckCircle size={18} style={{ color: '#34d399' }} />
-          <span className="text-sm font-medium" style={{ color: '#34d399' }}>Paiement réussi ! Votre abonnement est actif.</span>
+          <span className="text-sm font-medium" style={{ color: '#34d399' }}>{t('pricing.success')}</span>
         </div>
       )}
       {paymentStatus === 'cancelled' && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6 animate-fade-up" style={{ background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.3)' }}>
           <XCircle size={18} style={{ color: '#fb923c' }} />
-          <span className="text-sm font-medium" style={{ color: '#fb923c' }}>Paiement annulé. Vous pouvez réessayer quand vous voulez.</span>
+          <span className="text-sm font-medium" style={{ color: '#fb923c' }}>{t('pricing.cancelled')}</span>
         </div>
       )}
 
       {/* En-tête */}
       <div className="text-center max-w-2xl mx-auto mb-12">
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
-          <Zap size={14} /> Tarifs transparents
+          <Zap size={14} /> {t('pricing.badge')}
         </span>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Un prix qui respecte{' '}
-          <span style={{ color: '#fb923c' }}>votre ambition</span>
+          {t('pricing.title.prefix')}{' '}
+          <span style={{ color: '#fb923c' }}>{t('pricing.title.highlight')}</span>
         </h1>
-        <p className="text-[#94a3b8] text-lg">Commencez gratuitement. Évoluez quand vos résultats parlent.</p>
+        <p className="text-[#94a3b8] text-lg">{t('pricing.subtitle')}</p>
 
         {/* Bascule mensuel / annuel */}
         <div className="flex items-center justify-center gap-4 mt-8">
-          <span className={`text-sm font-medium ${!annual ? 'text-white' : 'text-[#94a3b8]'}`}>Mensuel</span>
+          <span className={`text-sm font-medium ${!annual ? 'text-white' : 'text-[#94a3b8]'}`}>{t('pricing.monthly')}</span>
           <button onClick={() => setAnnual(!annual)} className="relative w-14 h-7 rounded-full transition-colors duration-300" style={{ background: annual ? '#0ea5e9' : 'rgba(255,255,255,0.15)' }}>
             <div className={`absolute top-0.5 w-6 h-6 rounded-full bg-white transition-transform duration-300 ${annual ? 'translate-x-7' : 'translate-x-0.5'}`} />
           </button>
           <span className={`text-sm font-medium ${annual ? 'text-white' : 'text-[#94a3b8]'}`}>
-            Annuel
+            {t('pricing.annual')}
             {annual && <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold" style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399' }}>-20 %</span>}
           </span>
         </div>
@@ -114,7 +114,7 @@ export default function PricingPage() {
         {/* GRATUIT */}
         <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="mb-6">
-            <h3 className="text-xl font-bold text-white mb-1">Gratuit</h3>
+            <h3 className="text-xl font-bold text-white mb-1">{t('pricing.free.name')}</h3>
             <p className="text-sm" style={{ color: '#94a3b8' }}>Idéal pour tester et découvrir ProAI</p>
           </div>
           <div className="mb-6">
@@ -148,7 +148,7 @@ export default function PricingPage() {
             </span>
           </div>
           <div className="mb-6 mt-2">
-            <h3 className="text-xl font-bold mb-1" style={{ color: '#fb923c' }}>Pro</h3>
+            <h3 className="text-xl font-bold mb-1" style={{ color: '#fb923c' }}>{t('pricing.pro.name')}</h3>
             <p className="text-sm" style={{ color: '#94a3b8' }}>Pour automatiser et faire évoluer votre business</p>
           </div>
           <div className="mb-6">
@@ -188,7 +188,7 @@ export default function PricingPage() {
         {/* ENTERPRISE */}
         <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="mb-6">
-            <h3 className="text-xl font-bold text-white mb-1">Enterprise</h3>
+            <h3 className="text-xl font-bold text-white mb-1">{t('pricing.enterprise.name')}</h3>
             <p className="text-sm" style={{ color: '#94a3b8' }}>Pour les équipes à grande échelle</p>
           </div>
           <div className="mb-6">
@@ -244,7 +244,7 @@ export default function PricingPage() {
         <button onClick={() => setShowAgents(!showAgents)} className="w-full flex items-center justify-between px-6 py-4 rounded-xl transition-all duration-300" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
           <span className="flex items-center gap-3">
             <Info size={18} style={{ color: '#0ea5e9' }} />
-            <span className="text-sm font-semibold text-white">Que font les 6 agents IA ? Voir le détail</span>
+            <span className="text-sm font-semibold text-white">{t('pricing.agents.badge')}</span>
           </span>
           <span className="text-[#94a3b8] text-lg">{showAgents ? '−' : '+'}</span>
         </button>
@@ -265,7 +265,7 @@ export default function PricingPage() {
 
       {/* Témoignages */}
       <div className="max-w-3xl mx-auto mb-16">
-        <h3 className="text-center text-lg font-bold text-white mb-6">Ce que disent nos utilisateurs</h3>
+        <h3 className="text-center text-lg font-bold text-white mb-6">{t('pricing.testimonials.title')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {TESTIMONIALS.map((item, i) => (
             <div key={i} className="px-6 py-5 rounded-xl transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>

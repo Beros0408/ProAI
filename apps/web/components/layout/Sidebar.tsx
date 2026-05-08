@@ -1,183 +1,299 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   LayoutDashboard, MessageSquare, PenTool, Search, BookTemplate,
   Brain, Users, Workflow, CalendarCheck, CalendarDays, Zap,
-  BarChart3, FileText, TrendingUp, Settings, ChevronRight,
+  BarChart3, FileText, TrendingUp, Settings,
   ChevronDown, ChevronsLeft, ChevronsRight, Sparkles, Crown,
-  Wrench, Briefcase, Cpu
-} from 'lucide-react'
+  Wrench, Briefcase, Cpu, type LucideIcon,
+} from "lucide-react"
+import { useTranslation } from "@/lib/i18n/context"
+import type { TranslationKey } from "@/lib/i18n/translations"
 
-const TOP_ITEMS = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
-  { href: '/chat', icon: MessageSquare, label: 'Chat IA', badge: 3 },
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface NavItem {
+  href: string
+  icon: LucideIcon
+  labelKey: TranslationKey
+  badge?: number
+}
+
+interface NavSection {
+  key: string
+  labelKey: TranslationKey
+  icon: LucideIcon
+  color: string
+  glow: string
+  items: NavItem[]
+}
+
+// ─── Static data ─────────────────────────────────────────────────────────────
+
+const TOP_ITEMS: NavItem[] = [
+  { href: "/dashboard", icon: LayoutDashboard, labelKey: "nav.dashboard" },
+  { href: "/chat",      icon: MessageSquare,   labelKey: "nav.chat", badge: 3 },
 ]
 
-const SECTIONS = [
+const SECTIONS: NavSection[] = [
   {
-    key: 'tools',
-    label: 'Outils IA',
+    key: "tools",
+    labelKey: "sidebar.tools",
     icon: Wrench,
-    color: '#06b6d4',
-    glow: 'rgba(6,182,212,0.12)',
+    color: "#06b6d4",
+    glow: "rgba(6,182,212,0.12)",
     items: [
-      { href: '/content', icon: PenTool, label: 'Contenu IA' },
-      { href: '/analyze', icon: Search, label: 'Analyseur' },
-      { href: '/templates', icon: BookTemplate, label: 'Templates' },
-      { href: '/mindmap', icon: Brain, label: 'Mind Map' },
+      { href: "/content",   icon: PenTool,      labelKey: "nav.content" },
+      { href: "/analyze",   icon: Search,       labelKey: "nav.analyze" },
+      { href: "/templates", icon: BookTemplate, labelKey: "nav.templates" },
+      { href: "/mindmap",   icon: Brain,        labelKey: "nav.mindmap" },
     ],
   },
   {
-    key: 'business',
-    label: 'Business',
+    key: "business",
+    labelKey: "sidebar.business",
     icon: Briefcase,
-    color: '#34d399',
-    glow: 'rgba(52,211,153,0.12)',
+    color: "#34d399",
+    glow: "rgba(52,211,153,0.12)",
     items: [
-      { href: '/crm', icon: Users, label: 'CRM', badge: 2 },
-      { href: '/workflows', icon: Workflow, label: 'Workflows' },
-      { href: '/schedule', icon: CalendarCheck, label: 'Calendrier' },
-      { href: '/agenda', icon: CalendarDays, label: 'Agenda' },
+      { href: "/crm",       icon: Users,         labelKey: "nav.crm", badge: 2 },
+      { href: "/workflows", icon: Workflow,      labelKey: "nav.workflows" },
+      { href: "/schedule",  icon: CalendarCheck, labelKey: "nav.schedule" },
+      { href: "/agenda",    icon: CalendarDays,  labelKey: "nav.agenda" },
     ],
   },
   {
-    key: 'intelligence',
-    label: 'Intelligence',
+    key: "intelligence",
+    labelKey: "sidebar.intelligence",
     icon: Cpu,
-    color: '#fb923c',
-    glow: 'rgba(251,146,60,0.12)',
+    color: "#fb923c",
+    glow: "rgba(251,146,60,0.12)",
     items: [
-      { href: '/automations', icon: Zap, label: 'Automatisations' },
-      { href: '/analytics', icon: BarChart3, label: 'Analytics' },
-      { href: '/reports', icon: FileText, label: 'Rapports' },
-      { href: '/predictions', icon: TrendingUp, label: 'Prédictions' },
+      { href: "/automations", icon: Zap,        labelKey: "nav.automations" },
+      { href: "/analytics",   icon: BarChart3,  labelKey: "nav.analytics" },
+      { href: "/reports",     icon: FileText,   labelKey: "nav.reports" },
+      { href: "/predictions", icon: TrendingUp, labelKey: "nav.predictions" },
     ],
   },
 ]
+
+function sectionForPath(pathname: string): string | null {
+  for (const s of SECTIONS) {
+    if (s.items.some((i) => pathname === i.href || pathname.startsWith(i.href + "/"))) {
+      return s.key
+    }
+  }
+  return null
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 
 export function Sidebar() {
   const pathname = usePathname()
-  const router = useRouter()
+  const { t } = useTranslation()
 
-  const getInitialOpen = () => {
-    for (const s of SECTIONS) {
-      if (s.items.some(i => pathname === i.href)) return s.key
-    }
-    return null
-  }
-
-  const [openKey, setOpenKey] = useState<string | null>(getInitialOpen)
   const [compact, setCompact] = useState(false)
+  const [openKey, setOpenKey] = useState<string | null>(() => sectionForPath(pathname))
 
-  const handleToggle = (key: string) => {
-    setOpenKey(prev => prev === key ? null : key)
-  }
+  // Auto-open the section that contains the active page on navigation
+  useEffect(() => {
+    const active = sectionForPath(pathname)
+    if (active !== null) setOpenKey(active)
+  }, [pathname])
+
+  const toggle = (key: string) =>
+    setOpenKey((prev) => (prev === key ? null : key))
 
   return (
     <aside
-      className={`flex flex-col h-screen sticky top-0 transition-all duration-300 ${compact ? 'w-[72px]' : 'w-[230px]'}`}
-      style={{ background: '#0c1220', borderRight: '1px solid rgba(255,255,255,0.06)' }}
+      className={`flex flex-col h-screen sticky top-0 transition-all duration-300 ${compact ? "w-[72px]" : "w-[230px]"}`}
+      style={{ background: "#0c1220", borderRight: "1px solid rgba(255,255,255,0.06)" }}
     >
-      {/* LOGO */}
+      {/* ── LOGO ── */}
       <div className="flex items-center justify-between px-4 h-16 flex-shrink-0">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
-            style={{ background: 'linear-gradient(135deg, #0ea5e9, #fb923c)' }}>P</div>
-          {!compact && <span className="text-base font-bold" style={{ color: '#0ea5e9' }}>ProAI</span>}
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
+            style={{ background: "linear-gradient(135deg, #0ea5e9, #fb923c)" }}
+          >
+            P
+          </div>
+          {!compact && (
+            <span className="text-base font-bold" style={{ color: "#0ea5e9" }}>
+              ProAI
+            </span>
+          )}
         </Link>
         {!compact && (
-          <button onClick={() => router.push('/chat')} className="p-1.5 rounded-lg transition-all hover:scale-110" style={{ color: '#a78bfa' }} title="Chat IA">
+          <Link
+            href="/chat"
+            className="p-1.5 rounded-lg transition-all hover:scale-110"
+            style={{ color: "#a78bfa" }}
+            title={t("nav.chat")}
+          >
             <Sparkles size={16} />
-          </button>
+          </Link>
         )}
       </div>
 
+      {/* ── NAV ── */}
       <nav className="flex-1 overflow-y-auto px-2 py-3">
-        {/* PRINCIPAL */}
-        {!compact && <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: '#475569' }}>Principal</p>}
+
+        {/* Principal */}
+        {!compact && (
+          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#475569" }}>
+            {t("sidebar.principal")}
+          </p>
+        )}
 
         <div className="space-y-1 mb-6">
-          {TOP_ITEMS.map(item => {
+          {TOP_ITEMS.map((item) => {
             const active = pathname === item.href
             const Icon = item.icon
             return (
-              <Link key={item.href} href={item.href}
-                className={`group flex items-center gap-3 rounded-xl transition-all duration-200 relative ${compact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}`}
-                style={{ background: active ? 'linear-gradient(135deg, rgba(14,165,233,0.15), rgba(14,165,233,0.05))' : 'transparent' }}>
-                {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full" style={{ background: '#0ea5e9', boxShadow: '0 0 8px rgba(14,165,233,0.5)' }} />}
-                <Icon size={17} style={{ color: active ? '#38bdf8' : '#64748b', filter: active ? 'drop-shadow(0 0 4px rgba(14,165,233,0.4))' : 'none' }} />
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`group relative flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
+                style={{
+                  background: active
+                    ? "linear-gradient(135deg, rgba(14,165,233,0.15), rgba(14,165,233,0.05))"
+                    : "transparent",
+                }}
+              >
+                {active && (
+                  <div
+                    className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full"
+                    style={{ background: "#0ea5e9", boxShadow: "0 0 8px rgba(14,165,233,0.5)" }}
+                  />
+                )}
+                <Icon
+                  size={17}
+                  style={{
+                    color: active ? "#38bdf8" : "#64748b",
+                    filter: active ? "drop-shadow(0 0 4px rgba(14,165,233,0.4))" : "none",
+                  }}
+                />
                 {!compact && (
                   <>
-                    <span className={`text-[13px] flex-1 ${active ? 'font-semibold text-[#e2e8f0]' : 'font-medium text-[#94a3b8]'}`}>{item.label}</span>
-                    {item.badge && <span className="min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold" style={{ background: 'rgba(251,146,60,0.2)', color: '#fb923c' }}>{item.badge}</span>}
-                    {active && <ChevronRight size={12} style={{ color: '#0ea5e9' }} />}
+                    <span className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}>
+                      {t(item.labelKey)}
+                    </span>
+                    {item.badge != null && (
+                      <span
+                        className="min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
+                        style={{ background: "rgba(251,146,60,0.2)", color: "#fb923c" }}
+                      >
+                        {item.badge}
+                      </span>
+                    )}
                   </>
                 )}
-                {compact && item.badge && <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full" style={{ background: '#fb923c', boxShadow: '0 0 4px rgba(251,146,60,0.5)' }} />}
-                {!active && <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ background: 'rgba(255,255,255,0.03)' }} />}
+                {compact && item.badge != null && (
+                  <span
+                    className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full"
+                    style={{ background: "#fb923c", boxShadow: "0 0 4px rgba(251,146,60,0.5)" }}
+                  />
+                )}
+                {!active && (
+                  <div
+                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                    style={{ background: "rgba(255,255,255,0.03)" }}
+                  />
+                )}
               </Link>
             )
           })}
         </div>
 
-        {/* ACCORDEONS */}
+        {/* ── Accordéons ── */}
         <div className="space-y-4">
-          {SECTIONS.map(section => {
-            const isOpen = openKey === section.key
-            const hasActive = section.items.some(i => pathname === i.href)
+          {SECTIONS.map((section) => {
+            const isOpen    = openKey === section.key
+            const hasActive = section.items.some(
+              (i) => pathname === i.href || pathname.startsWith(i.href + "/")
+            )
             const SIcon = section.icon
 
             return (
               <div key={section.key}>
-                {/* TRIGGER */}
+
+                {/* Trigger */}
                 <button
                   type="button"
-                  onClick={() => handleToggle(section.key)}
-                  className={`w-full flex items-center gap-2.5 rounded-xl cursor-pointer transition-all duration-200 ${compact ? 'justify-center px-2 py-3' : 'px-3 py-3'}`}
+                  onClick={() => toggle(section.key)}
+                  className={`w-full flex items-center gap-2.5 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-3" : "px-3 py-3"}`}
                   style={{
-                    background: isOpen || hasActive ? section.glow : 'transparent',
-                    borderLeft: isOpen || hasActive ? '3px solid ' + section.color : '3px solid transparent',
+                    background:  isOpen || hasActive ? section.glow : "transparent",
+                    borderLeft:  `3px solid ${isOpen || hasActive ? section.color : "transparent"}`,
                   }}
                 >
-                  <SIcon size={17} style={{ color: isOpen || hasActive ? section.color : '#64748b' }} />
+                  <SIcon size={17} style={{ color: isOpen || hasActive ? section.color : "#64748b" }} />
                   {!compact && (
                     <>
-                      <span className="text-[12px] font-bold uppercase tracking-wider flex-1 text-left"
-                        style={{ color: isOpen || hasActive ? section.color : '#64748b' }}>{section.label}</span>
-                      <ChevronDown size={14}
-                        style={{
-                          color: isOpen ? section.color : '#475569',
-                          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                          transition: 'transform 0.3s ease-in-out, color 0.2s ease',
-                        }} />
+                      <span
+                        className="text-[12px] font-bold uppercase tracking-wider flex-1 text-left"
+                        style={{ color: isOpen || hasActive ? section.color : "#64748b" }}
+                      >
+                        {t(section.labelKey)}
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        className={`flex-shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}
+                        style={{ color: isOpen ? section.color : "#475569" }}
+                      />
                     </>
                   )}
                 </button>
 
-                {/* SOUS-MENU ANIME */}
+                {/* Sub-menu — expanded mode */}
                 {!compact && (
-                  <div className="overflow-hidden"
+                  <div
+                    className="overflow-hidden"
                     style={{
-                      maxHeight: isOpen ? '250px' : '0px',
-                      opacity: isOpen ? 1 : 0,
-                      transition: 'max-height 0.3s ease-in-out, opacity 0.25s ease-in-out',
-                    }}>
+                      maxHeight:  isOpen ? "400px" : "0px",
+                      opacity:    isOpen ? 1 : 0,
+                      transition: "max-height 0.3s ease-in-out, opacity 0.2s ease-in-out",
+                    }}
+                  >
                     <div className="pl-3 pt-2 space-y-1">
-                      {section.items.map(item => {
-                        const active = pathname === item.href
+                      {section.items.map((item) => {
+                        const active = pathname === item.href || pathname.startsWith(item.href + "/")
                         const Icon = item.icon
                         return (
-                          <Link key={item.href} href={item.href}
-                            className="group flex items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200 relative"
-                            style={{ background: active ? section.glow : 'transparent' }}>
-                            {active && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 rounded-r-full" style={{ background: section.color, boxShadow: '0 0 6px ' + section.color + '80' }} />}
-                            <Icon size={15} style={{ color: active ? section.color : '#64748b' }} />
-                            <span className={`text-[13px] flex-1 ${active ? 'font-semibold text-[#e2e8f0]' : 'font-medium text-[#94a3b8]'}`}>{item.label}</span>
-                            {item.badge && <span className="min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold" style={{ background: 'rgba(251,146,60,0.2)', color: '#fb923c' }}>{item.badge}</span>}
-                            {!active && <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ background: 'rgba(255,255,255,0.04)' }} />}
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="group relative flex items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200"
+                            style={{ background: active ? section.glow : "transparent" }}
+                          >
+                            {active && (
+                              <div
+                                className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 rounded-r-full"
+                                style={{ background: section.color, boxShadow: `0 0 6px ${section.color}80` }}
+                              />
+                            )}
+                            <Icon size={15} style={{ color: active ? section.color : "#64748b" }} />
+                            <span className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}>
+                              {t(item.labelKey)}
+                            </span>
+                            {item.badge != null && (
+                              <span
+                                className="min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold"
+                                style={{ background: "rgba(251,146,60,0.2)", color: "#fb923c" }}
+                              >
+                                {item.badge}
+                              </span>
+                            )}
+                            {!active && (
+                              <div
+                                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                                style={{ background: "rgba(255,255,255,0.04)" }}
+                              />
+                            )}
                           </Link>
                         )
                       })}
@@ -185,59 +301,85 @@ export function Sidebar() {
                   </div>
                 )}
 
-                {/* COMPACT MODE */}
+                {/* Sub-menu — compact mode (icons only) */}
                 {compact && isOpen && (
                   <div className="space-y-0.5 mt-1">
-                    {section.items.map(item => {
-                      const active = pathname === item.href
+                    {section.items.map((item) => {
+                      const active = pathname === item.href || pathname.startsWith(item.href + "/")
                       const Icon = item.icon
                       return (
-                        <Link key={item.href} href={item.href} className="flex justify-center py-2 rounded-xl transition-all duration-200"
-                          style={{ background: active ? section.glow : 'transparent' }} title={item.label}>
-                          <Icon size={15} style={{ color: active ? section.color : '#64748b' }} />
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex justify-center py-2 rounded-xl transition-all duration-200"
+                          style={{ background: active ? section.glow : "transparent" }}
+                          title={t(item.labelKey)}
+                        >
+                          <Icon size={15} style={{ color: active ? section.color : "#64748b" }} />
                         </Link>
                       )
                     })}
                   </div>
                 )}
+
               </div>
             )
           })}
         </div>
       </nav>
 
-      {/* SETTINGS */}
+      {/* ── PARAMÈTRES ── */}
       <div className="px-2 pb-1">
-        <Link href="/settings"
-          className={`flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'}`}
-          style={{ color: pathname === '/settings' ? '#38bdf8' : '#64748b', background: pathname === '/settings' ? 'rgba(14,165,233,0.1)' : 'transparent' }}>
+        <Link
+          href="/settings"
+          className={`flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
+          style={{
+            color:      pathname === "/settings" ? "#38bdf8" : "#64748b",
+            background: pathname === "/settings" ? "rgba(14,165,233,0.1)" : "transparent",
+          }}
+        >
           <Settings size={17} />
-          {!compact && <span className="text-[13px] font-medium" style={{ color: '#94a3b8' }}>Paramètres</span>}
+          {!compact && (
+            <span className="text-[13px] font-medium" style={{ color: pathname === "/settings" ? "#38bdf8" : "#94a3b8" }}>
+              {t("nav.settings")}
+            </span>
+          )}
         </Link>
       </div>
 
-      {/* COMPACT TOGGLE */}
+      {/* ── RÉDUIRE ── */}
       <div className="px-2 pb-1">
-        <button onClick={() => setCompact(!compact)}
-          className={`w-full flex items-center gap-3 rounded-xl py-2.5 transition-all duration-200 hover:bg-[rgba(255,255,255,0.03)] ${compact ? 'justify-center px-2' : 'px-3'}`}
-          style={{ color: '#475569' }}>
+        <button
+          type="button"
+          onClick={() => setCompact((c) => !c)}
+          className={`w-full flex items-center gap-3 rounded-xl py-2.5 transition-all duration-200 hover:bg-[rgba(255,255,255,0.03)] ${compact ? "justify-center px-2" : "px-3"}`}
+          style={{ color: "#475569" }}
+        >
           {compact ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
-          {!compact && <span className="text-[11px] font-medium">Réduire</span>}
+          {!compact && (
+            <span className="text-[11px] font-medium">{t("sidebar.reduce")}</span>
+          )}
         </button>
       </div>
 
-      {/* USER */}
-      <div className={`mx-2 mb-2 rounded-xl p-3 ${compact ? 'px-2' : ''}`}
-        style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className={`flex items-center gap-2.5 ${compact ? 'justify-center' : ''}`}>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-            style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}>U</div>
+      {/* ── UTILISATEUR ── */}
+      <div
+        className={`mx-2 mb-2 rounded-xl p-3 ${compact ? "px-2" : ""}`}
+        style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        <div className={`flex items-center gap-2.5 ${compact ? "justify-center" : ""}`}>
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+            style={{ background: "rgba(14,165,233,0.15)", color: "#38bdf8" }}
+          >
+            U
+          </div>
           {!compact && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-white truncate">Mon espace</p>
+              <p className="text-xs font-semibold text-white truncate">{t("nav.myspace")}</p>
               <div className="flex items-center gap-1">
-                <Crown size={9} style={{ color: '#fb923c' }} />
-                <span className="text-[10px]" style={{ color: '#fb923c' }}>Plan Free</span>
+                <Crown size={9} style={{ color: "#fb923c" }} />
+                <span className="text-[10px]" style={{ color: "#fb923c" }}>{t("nav.freeplan")}</span>
               </div>
             </div>
           )}

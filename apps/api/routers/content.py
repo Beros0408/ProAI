@@ -80,7 +80,7 @@ _prompt = ChatPromptTemplate.from_messages([
 async def _generate_text(message: str) -> str:
     settings = get_settings()
     if not settings.openai_api_key:
-        return "Contenu genere automatiquement. Activez OpenAI pour un resultat personnalise."
+        return "Contenu généré automatiquement. Activez OpenAI pour un résultat personnalisé."
     llm = ChatOpenAI(model="gpt-4o", api_key=settings.openai_api_key, temperature=0.7)
     chain = _prompt | llm
     result = await chain.ainvoke({"message": message})
