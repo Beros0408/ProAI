@@ -619,3 +619,192 @@ a, button, input, select, textarea {
   background: rgba(255, 255, 255, 0.08) !important;
   color: rgba(255, 255, 255, 0.95) !important;
 }
+
+/* ============ LANDING PAGE ============ */
+@keyframes scroll-x {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.logo-marquee-track {
+  width: max-content;
+  animation: scroll-x 30s linear infinite;
+}
+
+.logo-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.logo-card:hover span {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.landing-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+.landing-section-enter {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(.2,.8,.2,1), transform 0.7s cubic-bezier(.2,.8,.2,1);
+}
+
+.landing-section-enter.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ INTEGRATION CARDS — MICRO-INTERACTIONS ============ */
+
+/* Base card */
+.integration-card {
+  transform-style: preserve-3d;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  /* Stagger reveal */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardReveal 0.5s ease-out forwards;
+}
+
+.integration-card:nth-child(1)  { animation-delay: 0.05s; }
+.integration-card:nth-child(2)  { animation-delay: 0.10s; }
+.integration-card:nth-child(3)  { animation-delay: 0.15s; }
+.integration-card:nth-child(4)  { animation-delay: 0.20s; }
+.integration-card:nth-child(5)  { animation-delay: 0.25s; }
+.integration-card:nth-child(6)  { animation-delay: 0.30s; }
+.integration-card:nth-child(7)  { animation-delay: 0.35s; }
+.integration-card:nth-child(8)  { animation-delay: 0.40s; }
+.integration-card:nth-child(9)  { animation-delay: 0.45s; }
+.integration-card:nth-child(10) { animation-delay: 0.50s; }
+
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Levitation hover */
+.integration-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Spotlight cursor radial */
+.integration-card::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  left: var(--mouse-x, 50%);
+  top: var(--mouse-y, 50%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+.integration-card:hover::before {
+  opacity: 1;
+}
+
+/* Shimmer border */
+.integration-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(14, 165, 233, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: borderShimmer 2.5s linear infinite;
+  z-index: 0;
+}
+
+.integration-card:hover::after {
+  opacity: 1;
+}
+
+@keyframes borderShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Icon float */
+.integration-icon {
+  animation: iconFloat 3s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.integration-card:nth-child(even) .integration-icon {
+  animation-delay: -1.5s;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
+
+.integration-card:hover .integration-icon {
+  filter: drop-shadow(0 0 8px rgba(14, 165, 233, 0.3));
+}
+
+/* Label expand */
+.integration-label {
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.integration-card:hover .integration-label {
+  color: rgba(14, 165, 233, 0.8) !important;
+  letter-spacing: 3px;
+}
+
+/* Card name above spotlight */
+.integration-card-name {
+  position: relative;
+  z-index: 1;
+}
+
+/* Disable heavy effects on touch devices */
+@media (hover: none) {
+  .integration-card:hover {
+    transform: none;
+  }
+  .integration-card::before,
+  .integration-card::after {
+    display: none;
+  }
+  .integration-icon {
+    animation: none;
+  }
+}
