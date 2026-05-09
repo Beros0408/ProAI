@@ -96,7 +96,7 @@ function useInView(threshold = 0.15) {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
-  const { t } = useTranslation()
+  const { t, locale, switchLanguage } = useTranslation()
   const [annual, setAnnual] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -138,6 +138,19 @@ export default function LandingPage() {
           </div>
           <div className="hidden items-center gap-3 md:flex">
             <Link href="/login" className="text-sm text-slate-400 transition-colors hover:text-white px-4 py-2">{t('landing.nav.login')}</Link>
+            {/* Language toggle */}
+            <div className="flex items-center rounded-lg overflow-hidden" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.1)' }}>
+              {(['fr', 'en'] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => switchLanguage(lang)}
+                  className="px-3 py-1.5 text-xs font-semibold uppercase transition-colors duration-200"
+                  style={{ color: locale === lang ? '#ffffff' : '#64748b', background: locale === lang ? 'rgba(14,165,233,0.15)' : 'transparent' }}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
             <Link href="/signup" className="btn-premium text-sm px-5 py-2.5">{t('landing.nav.cta')}</Link>
           </div>
           <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setMobileOpen(v => !v)} aria-label="Menu">
@@ -154,6 +167,21 @@ export default function LandingPage() {
             <a href="#agents"   className="block text-sm text-slate-300 py-2" onClick={() => setMobileOpen(false)}>{t('landing.nav.agents')}</a>
             <a href="#pricing"  className="block text-sm text-slate-300 py-2" onClick={() => setMobileOpen(false)}>{t('landing.nav.pricing')}</a>
             <Link href="/login"  className="block text-sm text-slate-300 py-2" onClick={() => setMobileOpen(false)}>{t('landing.nav.login')}</Link>
+            <div className="flex items-center gap-2 py-2">
+              <span className="text-xs text-slate-500 uppercase tracking-widest">{t('common.language')} :</span>
+              <div className="flex items-center rounded-lg overflow-hidden" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.1)' }}>
+                {(['fr', 'en'] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => switchLanguage(lang)}
+                    className="px-3 py-1.5 text-xs font-semibold uppercase transition-colors duration-200"
+                    style={{ color: locale === lang ? '#ffffff' : '#64748b', background: locale === lang ? 'rgba(14,165,233,0.15)' : 'transparent' }}
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+            </div>
             <Link href="/signup" className="btn-premium inline-block text-sm px-5 py-2.5" onClick={() => setMobileOpen(false)}>{t('landing.nav.cta')}</Link>
           </div>
         )}
