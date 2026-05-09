@@ -173,9 +173,15 @@ export default function PredictionsPage() {
   const { t } = useTranslation()
   const [refreshing, setRefreshing] = useState(false)
   const [aiScore, setAiScore] = useState(0)
+  const [barsVisible, setBarsVisible] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => setAiScore(82), 800)
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setBarsVisible(true), 400)
     return () => clearTimeout(timer)
   }, [])
 
@@ -251,11 +257,14 @@ export default function PredictionsPage() {
           {/* Score circulaire */}
           <div className="flex justify-center mb-4">
             <div className="relative w-32 h-32">
+              {/* Glow ring */}
+              <div className="absolute inset-0 rounded-full animate-pulse-glow pointer-events-none" style={{ boxShadow: `0 0 ${aiScore > 0 ? '24px' : '0px'} rgba(139,92,246,0.3), 0 0 ${aiScore > 0 ? '48px' : '0px'} rgba(14,165,233,0.15)`, transition: 'box-shadow 1s ease-out' }} />
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
                 <circle cx="50" cy="50" r="42" fill="none" stroke="url(#scoreGrad)" strokeWidth="8" strokeLinecap="round"
                   strokeDasharray={`${aiScore * 2.64} 264`}
-                  className="transition-all duration-1000 ease-out" />
+                  className="transition-all duration-1000 ease-out"
+                  style={{ filter: 'drop-shadow(0 0 6px rgba(139,92,246,0.6))' }} />
                 <defs>
                   <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#8b5cf6" />
@@ -337,7 +346,8 @@ export default function PredictionsPage() {
                     <div
                       className="h-full rounded-full transition-all duration-1000 ease-out"
                       style={{
-                        width: `${client.risk}%`,
+                        width: barsVisible ? `${client.risk}%` : '0%',
+                        transitionDelay: `${i * 120}ms`,
                         background: `linear-gradient(90deg, ${riskColor}, ${riskColor}80)`,
                         boxShadow: `0 0 8px ${riskColor}40`,
                       }}
@@ -379,6 +389,14 @@ export default function PredictionsPage() {
                   key={i}
                   className="p-3 rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group"
                   style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.border = `1px solid ${trend.color}30`
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 20px ${trend.color}18`
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.04)'
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
+                  }}
                 >
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-xl"
                     style={{ background: `radial-gradient(circle at 100% 0%, ${trend.glow}, transparent 70%)` }} />

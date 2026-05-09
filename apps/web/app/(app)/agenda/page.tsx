@@ -147,7 +147,18 @@ export default function AgendaPage() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs" style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#111827' }}>
             <span style={{ color: '#94a3b8' }}>{t('agenda.charge')}</span>
             <div className="w-16 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
-              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${chargeLevel}%`, background: chargeColor }} />
+              <div
+                className="h-full rounded-full transition-all duration-700 ease-out"
+                style={{
+                  width: `${chargeLevel}%`,
+                  background: chargeLevel > 80
+                    ? 'linear-gradient(90deg, #ef4444, #f97316)'
+                    : chargeLevel > 50
+                    ? 'linear-gradient(90deg, #fb923c, #fbbf24)'
+                    : 'linear-gradient(90deg, #34d399, #0ea5e9)',
+                  boxShadow: `0 0 8px ${chargeColor}50`,
+                }}
+              />
             </div>
             <span style={{ color: chargeColor }}>{chargeLevel}%</span>
           </div>
@@ -223,7 +234,7 @@ export default function AgendaPage() {
                         const dur = (event.endHour - event.startHour) + (event.endMin - event.startMin) / 60
                         const Icon = ICON_MAP[event.icon] || CalendarDays
                         return (
-                          <div key={event.id} className="absolute left-1 right-1 rounded-lg px-2 py-1.5 z-10 transition-all duration-200 hover:scale-[1.02] hover:z-20 group" style={{ top: `${(event.startMin / 60) * 100}%`, height: `${dur * 80 - 4}px`, background: colors.bg, borderLeft: `3px solid ${colors.border}` }}>
+                          <div key={event.id} className="absolute left-1 right-1 rounded-lg px-2 py-1.5 z-10 transition-all duration-200 hover:scale-[1.02] hover:z-20 hover:-translate-y-0.5 group" style={{ top: `${(event.startMin / 60) * 100}%`, height: `${dur * 80 - 4}px`, background: colors.bg, borderLeft: `3px solid ${colors.border}`, boxShadow: 'none' }} onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 16px ${colors.border}30` }} onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = 'none' }}>
                             <div className="flex items-center gap-1.5"><Icon size={11} style={{ color: colors.text }} /><span className="text-[11px] font-semibold truncate" style={{ color: colors.text }}>{event.titleKey ? t(event.titleKey) : event.title}</span></div>
                             <div className="text-[9px] mt-0.5" style={{ color: colors.text, opacity: 0.7 }}>{`${event.startHour.toString().padStart(2, '0')}:${event.startMin.toString().padStart(2, '0')} - ${event.endHour.toString().padStart(2, '0')}:${event.endMin.toString().padStart(2, '0')}`}</div>
                             {event.aiSuggested && (

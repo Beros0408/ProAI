@@ -202,7 +202,7 @@ export default function WorkflowsPage() {
   const nodeTypes = useMemo(() => ({ customNode: WorkflowNode }), [])
 
   return (
-    <div className="min-h-screen bg-[#0c1220] flex flex-col">
+    <div className="min-h-screen bg-[#0c1220] flex flex-col animate-fade-up">
       <div className="border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <div>
@@ -345,15 +345,15 @@ export default function WorkflowsPage() {
           <h3 className="text-[16px] font-[600] text-white">{t('workflows.saved')}</h3>
           <span className="text-xs text-[#94a3b8]">{workflows.length} workflow(s)</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 stagger-children">
           {workflows.map((workflow) => (
             <div
               key={workflow.id}
               onClick={() => handleWorkflowSelect(workflow)}
-              className={`rounded-[16px] p-4 border transition cursor-pointer ${
+              className={`rounded-[16px] p-4 border transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
                 selectedWorkflow?.id === workflow.id
                   ? 'border-[#0ea5e9] bg-[#0ea5e9]/10'
-                  : 'border-[rgba(255,255,255,0.07)] bg-[rgba(17,24,39,0.6)] hover:border-[#0ea5e9] hover:shadow-[0_4px_20px_rgba(14,165,233,0.08)]'
+                  : 'border-[rgba(255,255,255,0.07)] bg-[rgba(17,24,39,0.6)] hover:border-[#0ea5e9] hover:shadow-[0_4px_20px_rgba(14,165,233,0.12)]'
               }`}
             >
               <div className="flex items-start justify-between gap-3 mb-2">

@@ -183,8 +183,16 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => router.push('/chat')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', boxShadow: '0 4px 20px rgba(14,165,233,0.3)' }}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(14,165,233,0.45)]"
+            style={{
+              background: 'linear-gradient(135deg, #0ea5e9, #0284c7, #fb923c)',
+              backgroundSize: '200% 100%',
+              backgroundPosition: '0% 50%',
+              boxShadow: '0 4px 20px rgba(14,165,233,0.3)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundPosition = '100% 50%' }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundPosition = '0% 50%' }}
           >
             <Sparkles size={14} /> {t('dashboard.talkToProAI')}
           </button>
@@ -247,7 +255,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* AI INSIGHTS */}
-        <div className="lg:col-span-2 rounded-xl p-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #111827, #0f172a)', border: '1px solid rgba(14,165,233,0.15)' }}>
+        <div className="lg:col-span-2 rounded-xl p-5 relative overflow-hidden glass-strong" style={{ background: 'linear-gradient(135deg, rgba(17,24,39,0.85), rgba(15,23,42,0.85))', border: '1px solid rgba(14,165,233,0.15)' }}>
           <div className="absolute top-0 right-0 w-40 h-40 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.08), transparent 70%)' }} />
 
           <div className="flex items-center gap-2 mb-4">
@@ -315,9 +323,9 @@ export default function DashboardPage() {
             <Activity size={14} style={{ color: '#0ea5e9' }} />
             {t('dashboard.recentactivity')}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-3 stagger-children">
             {ACTIVITIES.map((a, i) => (
-              <div key={i} className="flex items-start gap-3 p-2 rounded-lg transition-colors hover:bg-[#1a2236] cursor-pointer">
+              <div key={i} className="flex items-start gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-[#1a2236] hover:-translate-y-0.5 cursor-pointer">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${a.color}15` }}>
                   <a.icon size={14} style={{ color: a.color }} />
                 </div>

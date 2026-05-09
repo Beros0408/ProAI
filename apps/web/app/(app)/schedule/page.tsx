@@ -173,7 +173,7 @@ export default function SchedulePage() {
   }, {})
 
   return (
-    <div className="min-h-screen bg-[#0c1220] px-4 py-6 text-white sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#0c1220] px-4 py-6 text-white sm:px-6 lg:px-8 animate-fade-up">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>

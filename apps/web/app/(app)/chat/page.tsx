@@ -12,8 +12,8 @@ interface AgentConfig {
   emoji: string
   color: string
   hex: string
-  capabilities: string[]
-  suggestedQuestions: string[]
+  capabilityKeys: TranslationKey[]
+  questionKeys: TranslationKey[]
 }
 
 const AGENT_TYPES: AgentConfig[] = [
@@ -24,12 +24,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '🤖',
     color: 'from-slate-500 to-slate-600',
     hex: '#64748b',
-    capabilities: ['Stratégie business', 'Finances', 'Croissance', 'Outils SaaS'],
-    suggestedQuestions: [
-      'Comment structurer ma levée de fonds seed ?',
-      'Quels KPIs suivre pour une startup B2B ?',
-      'Comment recruter mes 3 premiers commerciaux ?',
-    ],
+    capabilityKeys: ['agent.general.cap.1', 'agent.general.cap.2', 'agent.general.cap.3', 'agent.general.cap.4'],
+    questionKeys: ['agent.general.q.1', 'agent.general.q.2', 'agent.general.q.3'],
   },
   {
     type: 'marketing',
@@ -38,12 +34,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '📣',
     color: 'from-pink-500 to-rose-600',
     hex: '#f472b6',
-    capabilities: ['Posts LinkedIn viraux', 'Stratégie contenu', 'SEO sémantique', 'Campagnes email'],
-    suggestedQuestions: [
-      'Écris-moi un post LinkedIn sur mon SaaS',
-      'Crée une stratégie contenu pour 30 jours',
-      'Quels mots-clés cibler pour mon secteur ?',
-    ],
+    capabilityKeys: ['agent.marketing.cap.1', 'agent.marketing.cap.2', 'agent.marketing.cap.3', 'agent.marketing.cap.4'],
+    questionKeys: ['agent.marketing.q.1', 'agent.marketing.q.2', 'agent.marketing.q.3'],
   },
   {
     type: 'sales',
@@ -52,12 +44,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '💼',
     color: 'from-green-500 to-emerald-600',
     hex: '#34d399',
-    capabilities: ['Pipeline CRM en temps réel', 'Scripts de vente', 'Emails de prospection', 'Objections'],
-    suggestedQuestions: [
-      'Montre-moi mes leads chauds',
-      'Écris un script pour appel de découverte',
-      'Comment relancer un prospect silencieux ?',
-    ],
+    capabilityKeys: ['agent.sales.cap.1', 'agent.sales.cap.2', 'agent.sales.cap.3', 'agent.sales.cap.4'],
+    questionKeys: ['agent.sales.q.1', 'agent.sales.q.2', 'agent.sales.q.3'],
   },
   {
     type: 'social_media',
@@ -66,12 +54,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '📱',
     color: 'from-violet-500 to-purple-600',
     hex: '#a78bfa',
-    capabilities: ['Hooks LinkedIn et Instagram', 'Stratégie hashtags', 'Calendrier éditorial', 'Reels et TikTok'],
-    suggestedQuestions: [
-      'Crée 5 idées de reels Instagram pour mon activité',
-      'Quel est le meilleur horaire pour publier sur LinkedIn ?',
-      'Génère un calendrier de contenu pour cette semaine',
-    ],
+    capabilityKeys: ['agent.social.cap.1', 'agent.social.cap.2', 'agent.social.cap.3', 'agent.social.cap.4'],
+    questionKeys: ['agent.social.q.1', 'agent.social.q.2', 'agent.social.q.3'],
   },
   {
     type: 'communication',
@@ -80,12 +64,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '✉️',
     color: 'from-sky-500 to-blue-600',
     hex: '#38bdf8',
-    capabilities: ['Cold emails haute délivrabilité', 'Séquences nurturing', 'Objet A/B testable', 'Réponse aux objections'],
-    suggestedQuestions: [
-      'Écris un cold email pour prospecter des PME',
-      'Crée une séquence de 5 emails de nurturing',
-      'Comment améliorer le taux d\'ouverture de mes emails ?',
-    ],
+    capabilityKeys: ['agent.communication.cap.1', 'agent.communication.cap.2', 'agent.communication.cap.3', 'agent.communication.cap.4'],
+    questionKeys: ['agent.communication.q.1', 'agent.communication.q.2', 'agent.communication.q.3'],
   },
   {
     type: 'automation',
@@ -94,12 +74,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '⚡',
     color: 'from-yellow-500 to-orange-600',
     hex: '#fb923c',
-    capabilities: ['Workflows Zapier / Make', 'Automatisation CRM', 'Planning de semaine', 'ROI des automatisations'],
-    suggestedQuestions: [
-      'Crée un workflow pour qualifier mes leads automatiquement',
-      'Comment automatiser mes relances email avec Make ?',
-      'Optimise mon planning pour cette semaine',
-    ],
+    capabilityKeys: ['agent.automation.cap.1', 'agent.automation.cap.2', 'agent.automation.cap.3', 'agent.automation.cap.4'],
+    questionKeys: ['agent.automation.q.1', 'agent.automation.q.2', 'agent.automation.q.3'],
   },
   {
     type: 'analytics',
@@ -108,12 +84,8 @@ const AGENT_TYPES: AgentConfig[] = [
     emoji: '📊',
     color: 'from-blue-500 to-cyan-600',
     hex: '#0ea5e9',
-    capabilities: ['Stats en temps réel', 'KPIs et tableaux de bord', 'Analyse de cohortes', 'Prévisions de croissance'],
-    suggestedQuestions: [
-      'Quel est mon taux de conversion ce mois ?',
-      'Analyse mes performances des 30 derniers jours',
-      'Quels KPIs dois-je absolument suivre ?',
-    ],
+    capabilityKeys: ['agent.analytics.cap.1', 'agent.analytics.cap.2', 'agent.analytics.cap.3', 'agent.analytics.cap.4'],
+    questionKeys: ['agent.analytics.q.1', 'agent.analytics.q.2', 'agent.analytics.q.3'],
   },
 ]
 
@@ -146,17 +118,19 @@ export default function ChatPage() {
             href={`/chat/new?agent=${agent.type}`}
             className="group flex flex-col gap-3 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
             style={{
-              background: 'rgba(17,24,39,0.7)',
+              background: 'rgba(17,24,39,0.85)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
               border: '1px solid rgba(255,255,255,0.07)',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.border = `1px solid ${agent.hex}30`
-              ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 24px ${agent.hex}12, 0 0 0 1px ${agent.hex}15`
+              (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(22,30,50,0.95)'
+              ;(e.currentTarget as HTMLAnchorElement).style.border = `1px solid ${agent.hex}35`
+              ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 24px ${agent.hex}18, 0 0 0 1px ${agent.hex}15`
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.border = '1px solid rgba(255,255,255,0.07)'
+              (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(17,24,39,0.85)'
+              ;(e.currentTarget as HTMLAnchorElement).style.border = '1px solid rgba(255,255,255,0.07)'
               ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = 'none'
             }}
           >
@@ -171,28 +145,28 @@ export default function ChatPage() {
                 {agent.emoji}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-[#e2e8f0] text-sm">{t(agent.labelKey)}</div>
-                <div className="text-[#64748b] text-xs mt-0.5 truncate">{t(agent.descKey)}</div>
+                <div className="font-semibold text-white text-sm">{t(agent.labelKey)}</div>
+                <div className="text-[#94a3b8] text-xs mt-0.5 truncate group-hover:text-[#cbd5e1] transition-colors duration-200">{t(agent.descKey)}</div>
               </div>
               <MessageSquarePlus className="w-4 h-4 text-[#64748b] group-hover:text-[#0ea5e9] ml-auto transition-colors duration-200 opacity-60 group-hover:opacity-100 shrink-0" />
             </div>
 
             {/* Capabilities pills */}
             <div className="flex flex-wrap gap-1.5">
-              {agent.capabilities.map((cap, i) => (
+              {agent.capabilityKeys.map((cap, i) => (
                 <span key={i} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium"
                   style={{ background: `${agent.hex}15`, color: agent.hex, border: `1px solid ${agent.hex}25` }}>
-                  {cap}
+                  {t(cap)}
                 </span>
               ))}
             </div>
 
             {/* Suggested questions */}
-            <div className="space-y-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              {agent.suggestedQuestions.map((q, i) => (
-                <div key={i} className="text-[11px] text-[#475569] flex items-start gap-1.5">
-                  <span style={{ color: agent.hex }} className="mt-0.5 shrink-0">›</span>
-                  <span className="leading-tight">{q}</span>
+            <div className="space-y-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              {agent.questionKeys.map((q, i) => (
+                <div key={i} className="text-[11px] flex items-start gap-1.5">
+                  <span style={{ color: agent.hex }} className="mt-0.5 shrink-0 font-bold">›</span>
+                  <span className="leading-tight text-[#cbd5e1]">{t(q)}</span>
                 </div>
               ))}
             </div>

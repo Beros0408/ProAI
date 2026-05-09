@@ -274,7 +274,7 @@ export default function ContentPage() {
   const activeTabLabel = tabs.find(tab => tab.key === activeTab)?.label ?? ''
 
   return (
-    <div className="space-y-8 p-6 lg:p-10">
+    <div className="space-y-8 p-6 lg:p-10 animate-fade-up">
 
       {/* EN-TÊTE */}
       <div className="rounded-2xl p-6" style={GLASS_CARD}>
@@ -490,8 +490,26 @@ export default function ContentPage() {
               <h3 className="text-lg font-semibold text-white">Actions</h3>
             </div>
             <div className="grid gap-3">
-              <Button disabled={!result} onClick={handleCopy} variant="secondary">{t('content.copy')}</Button>
-              <Button disabled={!result} onClick={handleDownload} variant="secondary">{t('content.download')}</Button>
+              <button
+                disabled={!result}
+                onClick={handleCopy}
+                className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
+              >
+                {t('content.copy')}
+              </button>
+              <button
+                disabled={!result}
+                onClick={handleDownload}
+                className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
+              >
+                {t('content.download')}
+              </button>
               {result && (
                 <button
                   type="button"
@@ -513,7 +531,7 @@ export default function ContentPage() {
         </div>
 
         {/* RÉSULTAT */}
-        <div className="rounded-2xl p-6" style={GLASS_SECTION}>
+        <div className="rounded-2xl p-6 glass-strong" style={{ ...GLASS_SECTION, transition: 'opacity 0.4s ease' }}>
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-white">{t('content.regenerate')}</h2>
@@ -524,7 +542,7 @@ export default function ContentPage() {
           </div>
           <div className="mt-6 rounded-xl p-6 min-h-[260px] text-slate-300" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)' }}>
             {result
-              ? <pre className="whitespace-pre-wrap break-words text-sm">{result}</pre>
+              ? <pre className="whitespace-pre-wrap break-words text-sm animate-fade-in">{result}</pre>
               : <p className="text-slate-500">{t('content.result.empty')}</p>
             }
           </div>

@@ -109,10 +109,10 @@ export default function PricingPage() {
       </div>
 
       {/* Cartes de prix */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8 stagger-children">
 
         {/* GRATUIT */}
-        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)]" style={{ background: 'rgba(17,24,39,0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">{t('pricing.free.name')}</h3>
             <p className="text-sm" style={{ color: '#94a3b8' }}>Idéal pour tester et découvrir ProAI</p>
@@ -141,7 +141,7 @@ export default function PricingPage() {
         </div>
 
         {/* PRO */}
-        <div className="rounded-2xl p-8 relative transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '2px solid #0ea5e9', boxShadow: '0 8px 40px rgba(14,165,233,0.15)', transform: 'scale(1.03)' }}>
+        <div className="rounded-2xl p-8 relative transition-all duration-300 hover:-translate-y-1" style={{ background: 'rgba(17,24,39,0.9)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '2px solid #0ea5e9', boxShadow: '0 8px 40px rgba(14,165,233,0.2)', transform: 'scale(1.03)' }}>
           <div className="absolute -top-4 left-1/2 -translate-x-1/2">
             <span className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold" style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', color: 'white', boxShadow: '0 4px 12px rgba(251,146,60,0.4)' }}>
               <Star size={12} fill="white" /> Le plus choisi par nos utilisateurs
@@ -186,7 +186,7 @@ export default function PricingPage() {
         </div>
 
         {/* ENTERPRISE */}
-        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,92,246,0.4)] hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)]" style={{ background: 'rgba(17,24,39,0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">{t('pricing.enterprise.name')}</h3>
             <p className="text-sm" style={{ color: '#94a3b8' }}>Pour les équipes à grande échelle</p>

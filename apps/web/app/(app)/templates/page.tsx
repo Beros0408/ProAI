@@ -39,7 +39,7 @@ export default function TemplatesPage() {
   const { t } = useTranslation()
 
   return (
-    <div className="space-y-8 p-6 lg:p-10">
+    <div className="space-y-8 p-6 lg:p-10 animate-fade-up">
       <div className="rounded-2xl p-8"
         style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -53,7 +53,7 @@ export default function TemplatesPage() {
         </div>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3 stagger-children">
         {templates.map((template, i) => {
           const colors = ['#0ea5e9', '#fb923c', '#8b5cf6', '#34d399']
           const color = colors[i % colors.length]

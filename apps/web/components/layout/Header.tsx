@@ -24,12 +24,13 @@ export function Header() {
   const title = foundKey ? t(foundKey) : 'ProAI'
 
   return (
-    <header className="h-14 shrink-0 flex items-center px-6 gap-4 animate-fade-down"
+    <header className="h-14 shrink-0 flex items-center px-6 gap-4 animate-fade-down sticky top-0 z-40"
       style={{
-        background: 'rgba(11,18,32,0.8)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        background: 'rgba(11,18,32,0.85)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        boxShadow: '0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.3)',
       }}
     >
       <div className="flex-1 min-w-0">

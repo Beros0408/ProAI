@@ -140,9 +140,9 @@ export default function AnalyticsPage() {
       <div className="relative z-10 p-4 space-y-4">
 
         {/* CANAUX KPI */}
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-4 gap-3 stagger-children">
           {KPI_CHANNELS.map((ch, i) => (
-            <div key={i} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02]" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
+            <div key={i} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover-lift cursor-pointer" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
               <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ boxShadow: `inset 0 0 30px ${ch.color}08` }} />
               <div className="relative z-10">
                 <div className="text-3xl font-bold mb-1" style={{ color: '#e0e0f0' }}>{ch.value}</div>
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-3 gap-3" style={{ gridTemplateColumns: '2fr 1fr' }}>
 
           {/* PORTÉE PRINCIPALE — REVENUS */}
-          <div className="rounded-lg p-4 relative" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
+          <div className="rounded-lg p-4 relative" style={{ background: 'rgba(15,15,26,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid #1a1a2e' }}>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs uppercase tracking-widest" style={{ color: '#606080' }}>{t('analytics.scope.title')}</span>
               {cursorData && (

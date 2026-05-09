@@ -346,6 +346,54 @@
   border-color: rgba(244,114,182,0.2);
 }
 
+/* ============ GLASSMORPHISM ============ */
+.glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(17,24,39,0.7);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.glass-strong {
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  background: rgba(17,24,39,0.85);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ============ COLORED HOVER GLOWS ============ */
+.hover-glow-blue {
+  transition: all 0.2s ease;
+}
+.hover-glow-blue:hover {
+  box-shadow: 0 0 20px rgba(14,165,233,0.2);
+  border-color: rgba(14,165,233,0.35) !important;
+}
+
+.hover-glow-orange {
+  transition: all 0.2s ease;
+}
+.hover-glow-orange:hover {
+  box-shadow: 0 0 20px rgba(251,146,60,0.2);
+  border-color: rgba(251,146,60,0.35) !important;
+}
+
+.hover-glow-green {
+  transition: all 0.2s ease;
+}
+.hover-glow-green:hover {
+  box-shadow: 0 0 20px rgba(52,211,153,0.2);
+  border-color: rgba(52,211,153,0.35) !important;
+}
+
+.hover-glow-purple {
+  transition: all 0.2s ease;
+}
+.hover-glow-purple:hover {
+  box-shadow: 0 0 20px rgba(139,92,246,0.2);
+  border-color: rgba(139,92,246,0.35) !important;
+}
+
 /* ============ CARD STYLES ============ */
 .card-glass {
   background: rgba(17,24,39,0.6);

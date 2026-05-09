@@ -199,7 +199,7 @@ export default function ReportsPage() {
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-3 stagger-children">
               {reports.map((report) => (
                 <div
                   key={report.id}

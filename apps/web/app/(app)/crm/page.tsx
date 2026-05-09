@@ -56,10 +56,10 @@ const STAGE_COLORS: Record<Stage, string> = {
   gagne: 'from-green-500 to-green-600',
 }
 
-const SCORE_COLORS: Record<'hot' | 'warm' | 'cold', { bg: string; text: string }> = {
-  hot: { bg: 'bg-red-500/20', text: 'text-red-400' },
-  warm: { bg: 'bg-yellow-500/20', text: 'text-yellow-400' },
-  cold: { bg: 'bg-blue-500/20', text: 'text-blue-400' },
+const SCORE_COLORS: Record<'hot' | 'warm' | 'cold', { bg: string; text: string; gradient: string }> = {
+  hot:  { bg: 'bg-red-500/20',    text: 'text-red-400',    gradient: 'linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.08))' },
+  warm: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', gradient: 'linear-gradient(135deg, rgba(251,146,60,0.2), rgba(251,146,60,0.08))' },
+  cold: { bg: 'bg-blue-500/20',   text: 'text-blue-400',   gradient: 'linear-gradient(135deg, rgba(14,165,233,0.2), rgba(14,165,233,0.08))' },
 }
 
 const SCORE_LABEL_KEYS: Record<'hot' | 'warm' | 'cold', TranslationKey> = {
@@ -131,7 +131,10 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
-        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${SCORE_COLORS[lead.score].bg} ${SCORE_COLORS[lead.score].text}`}>
+        <span
+          className={`text-xs px-2.5 py-1 rounded-full font-semibold ${SCORE_COLORS[lead.score].text}`}
+          style={{ background: SCORE_COLORS[lead.score].gradient, border: `1px solid ${lead.score === 'hot' ? 'rgba(239,68,68,0.25)' : lead.score === 'warm' ? 'rgba(251,146,60,0.25)' : 'rgba(14,165,233,0.25)'}` }}
+        >
           {t(SCORE_LABEL_KEYS[lead.score])}
         </span>
         <div className="flex items-center gap-2">
@@ -345,7 +348,7 @@ export default function CRMPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-up">
       <div className="flex items-center justify-between animate-fade-up">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center"
@@ -363,8 +366,8 @@ export default function CRMPage() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
+        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover-lift"
           style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)', boxShadow: '0 0 20px rgba(14,165,233,0.04)' }}>
           <p className="text-[#64748b] text-sm">{t('crm.leads.total')}</p>
           <p className="text-3xl font-bold text-white mt-2">{totalStats.count}</p>
