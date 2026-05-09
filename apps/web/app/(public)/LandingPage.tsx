@@ -171,7 +171,7 @@ export default function LandingPage() {
             {t('landing.hero.badge')}
           </div>
 
-          <h1 className="mb-6 text-5xl font-bold leading-[1.1] text-white md:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.03em' }}>
+          <h1 className="mb-6 text-3xl font-bold leading-[1.1] text-white md:text-4xl lg:text-5xl" style={{ letterSpacing: '-0.03em' }}>
             {t('landing.hero.title')}
           </h1>
 
