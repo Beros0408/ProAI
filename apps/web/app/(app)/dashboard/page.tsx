@@ -29,12 +29,12 @@ const AGENTS = [
   { name: 'Analytics', status: 'active', leads: 0, convos: 5, icon: '📊', color: '#06b6d4' },
 ]
 
-const ACTIVITY_KEYS: Array<{ icon: typeof Send; textKey: TranslationKey; timeKey: TranslationKey; color: string }> = [
-  { icon: Send, textKey: 'dashboard.activity.1', timeKey: 'dashboard.time.10min', color: '#fb923c' },
-  { icon: Target, textKey: 'dashboard.activity.2', timeKey: 'dashboard.time.42min', color: '#0ea5e9' },
-  { icon: Zap, textKey: 'dashboard.activity.3', timeKey: 'dashboard.time.1h', color: '#8b5cf6' },
-  { icon: FileText, textKey: 'dashboard.activity.4', timeKey: 'dashboard.time.2h', color: '#34d399' },
-  { icon: MessageSquare, textKey: 'dashboard.activity.5', timeKey: 'dashboard.time.3h', color: '#06b6d4' },
+const ACTIVITY_KEYS: Array<{ icon: typeof Send; textKey: TranslationKey; timeKey: TranslationKey; color: string; link: string }> = [
+  { icon: Send, textKey: 'dashboard.activity.1', timeKey: 'dashboard.time.10min', color: '#fb923c', link: '/content' },
+  { icon: Target, textKey: 'dashboard.activity.2', timeKey: 'dashboard.time.42min', color: '#0ea5e9', link: '/crm' },
+  { icon: Zap, textKey: 'dashboard.activity.3', timeKey: 'dashboard.time.1h', color: '#8b5cf6', link: '/workflows' },
+  { icon: FileText, textKey: 'dashboard.activity.4', timeKey: 'dashboard.time.2h', color: '#34d399', link: '/reports' },
+  { icon: MessageSquare, textKey: 'dashboard.activity.5', timeKey: 'dashboard.time.3h', color: '#06b6d4', link: '/chat' },
 ]
 
 function MiniSparkline({ data, color }: { data: number[]; color: string }) {
@@ -112,7 +112,7 @@ export default function DashboardPage() {
       desc: t('dashboard.kpi.tasks.desc'),
       icon: Zap,
       color: '#34d399',
-      link: '/agenda',
+      link: '/workflows',
       sparkline: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32],
     },
     {
@@ -154,7 +154,7 @@ export default function DashboardPage() {
       {/* HEADER PERSONNALISE */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ letterSpacing: '-0.02em' }}>
             {greeting}{profile?.business_name ? `, ${profile.business_name}` : ''} 👋
           </h1>
           <p className="text-[#94a3b8] text-sm">
@@ -183,16 +183,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => router.push('/chat')}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(14,165,233,0.45)]"
-            style={{
-              background: 'linear-gradient(135deg, #0ea5e9, #0284c7, #fb923c)',
-              backgroundSize: '200% 100%',
-              backgroundPosition: '0% 50%',
-              boxShadow: '0 4px 20px rgba(14,165,233,0.3)',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundPosition = '100% 50%' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundPosition = '0% 50%' }}
+            className="btn-premium flex items-center gap-2"
           >
             <Sparkles size={14} /> {t('dashboard.talkToProAI')}
           </button>
@@ -205,13 +196,7 @@ export default function DashboardPage() {
           <div
             key={i}
             onClick={() => router.push(kpi.link)}
-            className="rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:-translate-y-1.5 group relative overflow-hidden"
-            style={{
-              background: 'rgba(17,24,39,0.7)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.07)',
-            }}
+            className="card-premium p-5 cursor-pointer group relative overflow-hidden"
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLDivElement).style.border = `1px solid ${kpi.color}30`
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 32px ${kpi.color}18, 0 0 0 1px ${kpi.color}15`
@@ -271,25 +256,34 @@ export default function DashboardPage() {
           <div className="space-y-3">
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(52,211,153,0.06)', border: '1px solid rgba(52,211,153,0.1)' }}>
               <TrendingUp size={16} style={{ color: '#34d399' }} className="mt-0.5 flex-shrink-0" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-white font-medium">{t('dashboard.insight.growth.title')}</p>
                 <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.growth.desc')}</p>
+                <button onClick={() => router.push('/analytics')} className="mt-2 text-[10px] font-semibold px-2.5 py-1 rounded-full transition-all hover:-translate-y-0.5" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>
+                  {t('dashboard.viewDetails')} →
+                </button>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.1)' }}>
               <AlertTriangle size={16} style={{ color: '#fb923c' }} className="mt-0.5 flex-shrink-0" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-white font-medium">{t('dashboard.insight.warning.title')}</p>
                 <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.warning.desc')}</p>
+                <button onClick={() => router.push('/content')} className="mt-2 text-[10px] font-semibold px-2.5 py-1 rounded-full transition-all hover:-translate-y-0.5" style={{ background: 'rgba(251,146,60,0.1)', color: '#fb923c', border: '1px solid rgba(251,146,60,0.2)' }}>
+                  {t('dashboard.insight.warning.cta')} →
+                </button>
               </div>
             </div>
 
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.1)' }}>
               <Lightbulb size={16} style={{ color: '#38bdf8' }} className="mt-0.5 flex-shrink-0" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm text-white font-medium">{t('dashboard.insight.tip.title')}</p>
                 <p className="text-xs text-[#94a3b8] mt-0.5">{t('dashboard.insight.tip.desc')}</p>
+                <button onClick={() => router.push('/content?template=email_campaign')} className="mt-2 text-[10px] font-semibold px-2.5 py-1 rounded-full transition-all hover:-translate-y-0.5" style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
+                  {t('dashboard.insight.tip.cta')} →
+                </button>
               </div>
             </div>
           </div>
@@ -325,7 +319,7 @@ export default function DashboardPage() {
           </h3>
           <div className="space-y-3 stagger-children">
             {ACTIVITIES.map((a, i) => (
-              <div key={i} className="flex items-start gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-[#1a2236] hover:-translate-y-0.5 cursor-pointer">
+              <div key={i} onClick={() => router.push(a.link)} className="flex items-start gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-[#1a2236] hover:-translate-y-0.5 cursor-pointer">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${a.color}15` }}>
                   <a.icon size={14} style={{ color: a.color }} />
                 </div>

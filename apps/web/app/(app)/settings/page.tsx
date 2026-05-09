@@ -25,7 +25,7 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="animate-fade-up">
-        <h1 className="text-2xl font-bold text-foreground gradient-text">{t('settings')}</h1>
+        <h1 className="text-2xl font-bold text-foreground gradient-text" style={{ letterSpacing: '-0.02em' }}>{t('settings')}</h1>
         <p className="text-muted text-sm mt-1">{t('choose_category_menu')}</p>
       </div>
 

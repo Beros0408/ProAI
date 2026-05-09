@@ -1,5 +1,7 @@
 'use client'
+import { useEffect } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { MessageSquarePlus, Bot, Sparkles } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
 
@@ -91,6 +93,21 @@ const AGENT_TYPES: AgentConfig[] = [
 
 export default function ChatPage() {
   const { t } = useTranslation()
+  const router = useRouter()
+
+  // Auto-redirect if agent/lead params are present (e.g. from CRM)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const agent = params.get('agent')
+    const lead = params.get('lead')
+    if (agent) {
+      const target = lead
+        ? `/chat/new?agent=${encodeURIComponent(agent)}&lead=${encodeURIComponent(lead)}`
+        : `/chat/new?agent=${encodeURIComponent(agent)}`
+      router.replace(target)
+    }
+  }, [router])
 
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
@@ -107,7 +124,7 @@ export default function ChatPage() {
             <Sparkles className="w-2.5 h-2.5 text-white" />
           </span>
         </div>
-        <h1 className="text-2xl font-bold text-white gradient-text">{t('new_conversation')}</h1>
+        <h1 className="text-2xl font-bold text-white gradient-text" style={{ letterSpacing: '-0.02em' }}>{t('new_conversation')}</h1>
         <p className="text-[#64748b] text-sm mt-2">{t('choose_agent_start')}</p>
       </div>
 

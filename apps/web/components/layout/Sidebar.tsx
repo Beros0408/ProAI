@@ -110,7 +110,7 @@ export function Sidebar() {
   return (
     <aside
       className={`flex flex-col h-screen sticky top-0 transition-all duration-300 ${compact ? "w-[72px]" : "w-[230px]"}`}
-      style={{ background: "#0c1220", borderRight: "1px solid rgba(255,255,255,0.06)" }}
+      style={{ background: "rgba(5,12,24,0.82)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", borderRight: "1px solid rgba(255,255,255,0.05)" }}
     >
       {/* ── LOGO ── */}
       <div className="flex items-center justify-between px-4 h-16 flex-shrink-0">
@@ -162,6 +162,7 @@ export function Sidebar() {
                   background: active
                     ? "linear-gradient(135deg, rgba(14,165,233,0.15), rgba(14,165,233,0.05))"
                     : "transparent",
+                  boxShadow: active ? "0 0 16px rgba(14,165,233,0.08)" : "none",
                 }}
               >
                 {active && (
@@ -179,7 +180,10 @@ export function Sidebar() {
                 />
                 {!compact && (
                   <>
-                    <span className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}>
+                    <span
+                      className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}
+                      style={{ letterSpacing: active ? "-0.02em" : "normal" }}
+                    >
                       {t(item.labelKey)}
                     </span>
                     {item.badge != null && (
@@ -268,7 +272,7 @@ export function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className="group relative flex items-center gap-3 rounded-xl px-3 py-2 transition-all duration-200"
-                            style={{ background: active ? section.glow : "transparent" }}
+                            style={{ background: active ? section.glow : "transparent", boxShadow: active ? `0 0 12px ${section.color}15` : "none" }}
                           >
                             {active && (
                               <div
@@ -277,7 +281,10 @@ export function Sidebar() {
                               />
                             )}
                             <Icon size={15} style={{ color: active ? section.color : "#64748b" }} />
-                            <span className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}>
+                            <span
+                              className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}
+                              style={{ letterSpacing: active ? "-0.02em" : "normal" }}
+                            >
                               {t(item.labelKey)}
                             </span>
                             {item.badge != null && (

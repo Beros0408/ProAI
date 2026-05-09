@@ -141,7 +141,7 @@ export default function AgendaPage() {
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#0ea5e9' }}>{t('agenda.title')}</span>
             <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold" style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}><Sparkles size={10} /> IA</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">{t('agenda.subtitle')}</h1>
+          <h1 className="text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('agenda.subtitle')}</h1>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs" style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#111827' }}>

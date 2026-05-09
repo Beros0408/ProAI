@@ -89,7 +89,7 @@ export default function PricingPage() {
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}>
           <Zap size={14} /> {t('pricing.badge')}
         </span>
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
           {t('pricing.title.prefix')}{' '}
           <span style={{ color: '#fb923c' }}>{t('pricing.title.highlight')}</span>
         </h1>

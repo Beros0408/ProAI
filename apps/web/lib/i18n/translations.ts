@@ -79,6 +79,8 @@ export const translations = {
     // Dashboard — Gamification
     'dashboard.gamification.text': 'Générez 3 contenus pour débloquer le badge « Content Creator »',
     'dashboard.gamification.progress': '1/3 réalisé',
+    'dashboard.insight.warning.cta': 'Corriger maintenant',
+    'dashboard.insight.tip.cta': 'Lancer campagne',
     // Dashboard — Activité récente
     'dashboard.activity.1': 'Agent Marketing a généré 3 posts LinkedIn',
     'dashboard.activity.2': 'Lead qualifié ajouté au pipeline',
@@ -504,6 +506,8 @@ export const translations = {
     // Rapports — données mockées
     'reports.mock.summary_1': "Cette semaine a été marquée par un bon rythme d'exécution avec un focus sur l'acquisition et la qualification des leads.",
     'reports.mock.summary_2': "Le pipeline reste solide, mais il est nécessaire d'augmenter la réactivité sur les opportunités hautement qualifiées.",
+    'reports.cta.analytics': 'Voir dans Analytics',
+    "reports.cta.optimize": "Optimiser avec l'IA",
 
     // Prédictions IA
     'predictions.title': 'Prédictions IA',
@@ -538,6 +542,9 @@ export const translations = {
     'predictions.realtime': 'Temps réel',
     'predictions.projection': 'PROJECTION IA',
     'predictions.vs_last_month': '+12 % vs mois dernier',
+    'predictions.cta.retention': 'Lancer campagne de rétention',
+    'predictions.cta.video': 'Générer contenu vidéo',
+    'predictions.cta.contact': 'Contacter ce client',
 
     // Analytics (Mission Control)
     'analytics.mission_control': 'PROAI MISSION CONTROL',
@@ -577,6 +584,8 @@ export const translations = {
     'analytics.log.workflow': "Workflow « Nurture » exécuté : 12 contacts",
     'analytics.log.linkedin': 'Pic de trafic LinkedIn : +234 visites',
     'analytics.log.report': 'Rapport auto généré et envoyé',
+    'analytics.cta.leads': 'Voir les leads',
+    'analytics.cta.conversations': 'Voir les conversations',
 
     // Tarifs
     'pricing.badge': 'Tarifs transparents',
@@ -729,6 +738,8 @@ export const translations = {
     'dashboard.prediction.desc': 'Based on your current pipeline and market trends.',
     'dashboard.gamification.text': 'Generate 3 contents to unlock the "Content Creator" badge',
     'dashboard.gamification.progress': '1/3 completed',
+    'dashboard.insight.warning.cta': 'Fix now',
+    'dashboard.insight.tip.cta': 'Launch campaign',
     'dashboard.activity.1': 'Marketing Agent generated 3 LinkedIn posts',
     'dashboard.activity.2': 'Qualified lead added to pipeline',
     'dashboard.activity.3': 'Email follow-up workflow executed',
@@ -1152,6 +1163,8 @@ export const translations = {
     // Reports — mock data
     'reports.mock.summary_1': "This week was marked by strong execution with a focus on lead acquisition and qualification.",
     'reports.mock.summary_2': "The pipeline remains solid, but responsiveness to highly qualified opportunities needs to increase.",
+    'reports.cta.analytics': 'View in Analytics',
+    'reports.cta.optimize': 'Optimize with AI',
 
     // Predictions
     'predictions.title': 'AI Predictions',
@@ -1186,6 +1199,9 @@ export const translations = {
     'predictions.realtime': 'Real-time',
     'predictions.projection': 'AI PROJECTION',
     'predictions.vs_last_month': '+12% vs last month',
+    'predictions.cta.retention': 'Launch retention campaign',
+    'predictions.cta.video': 'Generate video content',
+    'predictions.cta.contact': 'Contact this client',
 
     // Analytics (Mission Control)
     'analytics.mission_control': 'PROAI MISSION CONTROL',
@@ -1225,6 +1241,8 @@ export const translations = {
     'analytics.log.workflow': "Workflow 'Nurture' executed: 12 contacts",
     'analytics.log.linkedin': 'LinkedIn traffic spike: +234 visits',
     'analytics.log.report': 'Auto report generated and sent',
+    'analytics.cta.leads': 'View leads',
+    'analytics.cta.conversations': 'View conversations',
 
     // Pricing
     'pricing.badge': 'Transparent pricing',

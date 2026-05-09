@@ -204,7 +204,7 @@ export default function PredictionsPage() {
               <Activity size={10} /> {t('predictions.realtime')}
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>
             {t('predictions.subtitle')}
           </h1>
           <p className="text-sm text-[#94a3b8] mt-1">
@@ -214,8 +214,7 @@ export default function PredictionsPage() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-60"
-          style={{ background: '#111827', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa' }}
+          className="btn-premium flex items-center gap-2 disabled:opacity-60"
         >
           <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
           {refreshing ? t('agenda.analyzing') : t('predictions.refresh')}
@@ -226,8 +225,7 @@ export default function PredictionsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* GRAPHIQUE PRINCIPAL */}
-        <div className="lg:col-span-2 rounded-2xl p-5 relative overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(14,165,233,0.05)' }}>
+        <div className="lg:col-span-2 card-premium p-5 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -245,8 +243,7 @@ export default function PredictionsPage() {
         </div>
 
         {/* SCORE IA GLOBAL */}
-        <div className="rounded-2xl p-5 relative overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(139,92,246,0.15)', boxShadow: '0 0 30px rgba(139,92,246,0.08)' }}>
+        <div className="card-premium p-5 relative overflow-hidden" style={{ border: '1px solid rgba(139,92,246,0.2)' }}>
           <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.1), transparent 70%)' }} />
 
           <div className="flex items-center gap-2 mb-4">
@@ -310,8 +307,7 @@ export default function PredictionsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* CLIENTS À SURVEILLER */}
-        <div className="rounded-2xl p-5"
-          style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}>
+        <div className="card-premium p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Shield size={16} style={{ color: '#fb923c' }} />
@@ -328,8 +324,7 @@ export default function PredictionsPage() {
               return (
                 <div
                   key={i}
-                  className="p-3 rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 group"
-                  style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}
+                  className="card-premium p-3 cursor-pointer group"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div>
@@ -355,11 +350,15 @@ export default function PredictionsPage() {
                   </div>
                   {/* Action au survol */}
                   <div className="flex items-center gap-2 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="text-[10px] px-2 py-1 rounded-full font-medium"
+                    <button
+                      onClick={() => router.push(`/chat?agent=sales&lead=${encodeURIComponent(client.name)}`)}
+                      className="text-[10px] px-2 py-1 rounded-full font-medium transition-all hover:-translate-y-0.5"
                       style={{ background: `${riskColor}15`, color: riskColor }}>
-                      {t('predictions.client.action')}
+                      {t('predictions.cta.contact')}
                     </button>
-                    <button className="text-[10px] px-2 py-1 rounded-full font-medium"
+                    <button
+                      onClick={() => router.push('/analytics')}
+                      className="text-[10px] px-2 py-1 rounded-full font-medium transition-all hover:-translate-y-0.5"
                       style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8' }}>
                       <Eye size={10} className="inline mr-1" />{t('common.viewDetails')}
                     </button>
@@ -371,8 +370,7 @@ export default function PredictionsPage() {
         </div>
 
         {/* TENDANCES MARCHÉ */}
-        <div className="rounded-2xl p-5"
-          style={{ background: 'linear-gradient(145deg, #0f0f1a, #111827)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(0,0,0,0.2)' }}>
+        <div className="card-premium p-5">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles size={16} style={{ color: '#06b6d4' }} />
             <span className="text-sm font-bold text-white">{t('predictions.trends.title')}</span>
@@ -387,8 +385,7 @@ export default function PredictionsPage() {
               return (
                 <div
                   key={i}
-                  className="p-3 rounded-xl cursor-pointer transition-all duration-300 hover:-translate-y-1 relative overflow-hidden group"
-                  style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}
+                  className="card-premium p-3 cursor-pointer relative overflow-hidden group"
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLDivElement).style.border = `1px solid ${trend.color}30`
                     ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 20px ${trend.color}18`
@@ -422,16 +419,25 @@ export default function PredictionsPage() {
               <Brain size={12} style={{ color: '#06b6d4' }} />
               <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#06b6d4' }}>{t('dashboard.insightsIA')}</span>
             </div>
-            <p className="text-xs text-[#e2e8f0] leading-relaxed mb-2">
+            <p className="text-xs text-[#e2e8f0] leading-relaxed mb-3">
               {t('dashboard.insight.tip.desc')}
             </p>
-            <button
-              onClick={() => router.push('/content')}
-              className="flex items-center gap-1.5 text-[10px] font-bold transition-colors"
-              style={{ color: '#06b6d4' }}
-            >
-              {t('dashboard.generatecontent')} <ArrowRight size={10} />
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => router.push('/content?template=retention')}
+                className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-full transition-all hover:-translate-y-0.5"
+                style={{ background: 'rgba(6,182,212,0.12)', color: '#06b6d4', border: '1px solid rgba(6,182,212,0.2)' }}
+              >
+                <Zap size={10} /> {t('predictions.cta.retention')}
+              </button>
+              <button
+                onClick={() => router.push('/content?platform=video')}
+                className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1.5 rounded-full transition-all hover:-translate-y-0.5"
+                style={{ background: 'rgba(139,92,246,0.12)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.2)' }}
+              >
+                <ArrowRight size={10} /> {t('predictions.cta.video')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

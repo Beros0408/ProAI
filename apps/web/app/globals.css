@@ -498,3 +498,124 @@
 a, button, input, select, textarea {
   transition: all 0.2s ease;
 }
+
+/* ============ PREMIUM AI SAAS CLASSES ============ */
+.bg-premium {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0,150,255,0.08), transparent 30%),
+    radial-gradient(circle at 80% 30%, rgba(0,255,180,0.05), transparent 30%),
+    #0c1220;
+}
+
+.card-premium {
+  background: linear-gradient(180deg, rgba(18,28,48,0.95), rgba(10,16,30,0.95));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.03);
+  border-radius: 16px;
+  transition: all 220ms cubic-bezier(.2,.8,.2,1);
+}
+.card-premium:hover {
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06);
+  transform: translateY(-2px);
+}
+
+.card-selected {
+  background: linear-gradient(180deg, rgba(14,165,233,0.12), rgba(10,16,30,0.95));
+  border: 1px solid rgba(14,165,233,0.35);
+  box-shadow: 0 0 0 1px rgba(14,165,233,0.2), 0 10px 30px rgba(14,165,233,0.12);
+  border-radius: 16px;
+  transition: all 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, rgba(14,165,233,0.2), rgba(14,165,233,0.08));
+  border: 1px solid rgba(14,165,233,0.35);
+  color: #38bdf8;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: all 220ms cubic-bezier(.2,.8,.2,1);
+}
+.btn-premium:hover {
+  background: linear-gradient(135deg, rgba(14,165,233,0.3), rgba(14,165,233,0.15));
+  border-color: rgba(14,165,233,0.55);
+  box-shadow: 0 0 20px rgba(14,165,233,0.25);
+  transform: translateY(-1px);
+}
+
+.btn-danger-premium {
+  background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.06));
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #f87171;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  transition: all 220ms cubic-bezier(.2,.8,.2,1);
+}
+.btn-danger-premium:hover {
+  background: linear-gradient(135deg, rgba(239,68,68,0.25), rgba(239,68,68,0.12));
+  border-color: rgba(239,68,68,0.5);
+  box-shadow: 0 0 20px rgba(239,68,68,0.2);
+  transform: translateY(-1px);
+}
+
+.glow-subtle {
+  box-shadow: 0 0 24px rgba(14,165,233,0.15), 0 0 8px rgba(14,165,233,0.08);
+}
+
+.connector-glow {
+  filter: drop-shadow(0 0 4px rgba(14,165,233,0.6)) drop-shadow(0 0 12px rgba(14,165,233,0.3));
+}
+
+/* ============ REACT FLOW THEME ============ */
+.react-flow__attribution {
+  background: rgba(15, 25, 45, 0.88) !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px 0 0 0 !important;
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.react-flow__attribution:hover {
+  color: rgba(255,255,255,0.9) !important;
+  background: rgba(20, 35, 60, 0.95) !important;
+}
+
+.react-flow__attribution a {
+  color: inherit !important;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+.react-flow__attribution a:hover {
+  opacity: 1;
+}
+
+.react-flow__controls {
+  background: rgba(15, 25, 45, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+  backdrop-filter: blur(12px);
+}
+
+.react-flow__controls-button {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  transition: all 0.2s ease !important;
+}
+
+.react-flow__controls-button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}

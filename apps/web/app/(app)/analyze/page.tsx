@@ -44,10 +44,10 @@ export default function AnalyzePage() {
 
   return (
     <div className="space-y-8 p-6 lg:p-10 animate-fade-up">
-      <div className="rounded-2xl p-8" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+      <div className="card-premium p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-white">{t('website_audit_title')}</h1>
+            <h1 className="text-3xl font-semibold text-white" style={{ letterSpacing: '-0.02em' }}>{t('website_audit_title')}</h1>
             <p className="mt-2 text-slate-400">{t('website_audit_description')}</p>
           </div>
           <Button onClick={() => router.push('/dashboard')} variant="secondary">

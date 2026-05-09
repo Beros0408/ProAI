@@ -104,6 +104,8 @@ const TEMPLATE_PRESETS: Record<string, {
   article_summary:        { tab: 'newsletter',  topic: 'Résumé hebdomadaire', sections: '4' },
   linkedin_post_template: { tab: 'linkedin',    tone: 'professional' },
   follow_up_email:        { tab: 'email',       type: 'followup', context: 'Suite à notre échange précédent, je souhaitais faire un point.' },
+  email_campaign:         { tab: 'email',       type: 'cold', context: 'Campagne email pour générer de nouveaux leads qualifiés.' },
+  retention:              { tab: 'email',       type: 'followup', context: 'Campagne de rétention client pour les clients à risque de désabonnement.' },
 }
 
 export default function ContentPage() {
@@ -146,23 +148,29 @@ export default function ContentPage() {
   const toneOptions = TONE_KEYS.map(item => ({ value: item.value, label: t(item.labelKey) }))
   const lengths = LENGTH_KEYS.map(item => ({ value: item.value, label: t(item.labelKey) }))
 
-  // Pré-remplissage depuis le query param ?template=xxx
+  // Pré-remplissage depuis ?template=xxx ou ?platform=xxx
   useEffect(() => {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
     const templateKey = params.get('template')
-    if (!templateKey) return
-    const preset = TEMPLATE_PRESETS[templateKey]
-    if (!preset) return
-    setActiveTab(preset.tab)
-    setForm(prev => ({
-      ...prev,
-      ...(preset.topic    !== undefined && { topic:    preset.topic    }),
-      ...(preset.tone     !== undefined && { tone:     preset.tone     }),
-      ...(preset.sections !== undefined && { sections: preset.sections }),
-      ...(preset.type     !== undefined && { type:     preset.type     }),
-      ...(preset.context  !== undefined && { context:  preset.context  }),
-    }))
+    const platformParam = params.get('platform')
+    if (templateKey) {
+      const preset = TEMPLATE_PRESETS[templateKey]
+      if (preset) {
+        setActiveTab(preset.tab)
+        setForm(prev => ({
+          ...prev,
+          ...(preset.topic    !== undefined && { topic:    preset.topic    }),
+          ...(preset.tone     !== undefined && { tone:     preset.tone     }),
+          ...(preset.sections !== undefined && { sections: preset.sections }),
+          ...(preset.type     !== undefined && { type:     preset.type     }),
+          ...(preset.context  !== undefined && { context:  preset.context  }),
+        }))
+      }
+    }
+    if (platformParam === 'video') {
+      setActiveTab('video-script')
+    }
   }, [])
 
   const endpoint = useMemo(() => {
@@ -281,7 +289,7 @@ export default function ContentPage() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#0ea5e9]">{t('content.title')}</p>
-            <h1 className="mt-2 text-2xl font-bold text-white">{t('content.subtitle')}</h1>
+            <h1 className="mt-2 text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('content.subtitle')}</h1>
             <p className="mt-2 text-[#64748b] text-sm">{t('content.topic.placeholder')}</p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -513,7 +521,7 @@ export default function ContentPage() {
               {result && (
                 <button
                   type="button"
-                  onClick={openScheduleModal}
+                  onClick={() => router.push(`/schedule?content=${encodeURIComponent(result)}&platform=${tabToSchedulePlatform(activeTab)}`)}
                   className="flex items-center justify-center gap-2 w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
                   style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', boxShadow: '0 4px 16px rgba(251,146,60,0.3)' }}
                 >

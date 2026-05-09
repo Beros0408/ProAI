@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BarChart, Bar, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { FileText, Download, Eye } from "lucide-react"
+import { FileText, Download, Eye, BarChart2, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/Button"
+import { useRouter } from "next/navigation"
 import { useTranslation } from "@/lib/i18n/context"
 
 type ReportItem = {
@@ -15,6 +16,7 @@ type ReportItem = {
 
 export default function ReportsPage() {
   const { t } = useTranslation()
+  const router = useRouter()
 
   // Rebuild mock reports whenever t changes (i.e. on locale switch)
   const mockReports = useMemo<ReportItem[]>(() => [
@@ -127,12 +129,28 @@ export default function ReportsPage() {
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-[#fb923c]">{t("reports.badge")}</p>
-              <h1 className="mt-2 text-3xl font-semibold text-white">{t("reports.heading")}</h1>
+              <h1 className="mt-2 text-3xl font-semibold text-white" style={{ letterSpacing: '-0.02em' }}>{t("reports.heading")}</h1>
               <p className="mt-2 max-w-2xl text-sm text-slate-400">{t("reports.headingDesc")}</p>
             </div>
-            <Button onClick={handleGenerateReport} disabled={loading}>
-              {loading ? t("reports.generating") : t("reports.generate")}
-            </Button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => router.push('/analytics')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
+                style={{ background: 'rgba(14,165,233,0.1)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}
+              >
+                <BarChart2 size={14} /> {t('reports.cta.analytics')}
+              </button>
+              <button
+                onClick={() => router.push('/chat?agent=marketing')}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all hover:-translate-y-0.5"
+                style={{ background: 'rgba(139,92,246,0.1)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.2)' }}
+              >
+                <MessageSquare size={14} /> {t('reports.cta.optimize')}
+              </button>
+              <Button onClick={handleGenerateReport} disabled={loading}>
+                {loading ? t("reports.generating") : t("reports.generate")}
+              </Button>
+            </div>
           </div>
           {message ? <p className="mt-4 text-sm text-slate-300">{message}</p> : null}
         </div>

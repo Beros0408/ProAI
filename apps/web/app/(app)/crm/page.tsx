@@ -91,20 +91,8 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="rounded-xl p-4 cursor-grab active:cursor-grabbing space-y-3 group transition-all duration-200 hover:-translate-y-0.5"
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08)'
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
-      }}
-      style={{
-        ...style,
-        background: 'rgba(26,34,54,0.8)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="card-premium p-4 cursor-grab active:cursor-grabbing space-y-3 group"
+      style={style}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
@@ -143,7 +131,7 @@ function LeadCard({ lead, onDelete }: LeadCardProps) {
             type="button"
             onClick={(e) => {
               e.stopPropagation()
-              router.push(`/chat/new?agent=sales&lead=${encodeURIComponent(lead.name)}`)
+              router.push(`/chat?agent=sales&lead=${encodeURIComponent(lead.name)}`)
             }}
             className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-medium transition-all duration-200 hover:-translate-y-0.5"
             style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.2)' }}
@@ -170,13 +158,7 @@ function Column({ stage, leads, onDelete }: { stage: Stage; leads: Lead[]; onDel
   return (
     <div
       ref={setNodeRef}
-      className="flex-1 min-w-80 rounded-2xl p-4"
-      style={{
-        background: 'rgba(11,18,32,0.6)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
+      className="card-premium flex-1 min-w-80 p-4"
     >
       <div className="mb-4">
         <div className="flex items-center gap-2 mb-2">
@@ -356,7 +338,7 @@ export default function CRMPage() {
             <Users className="w-5 h-5 text-[#0ea5e9]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white gradient-text">CRM Pipeline</h1>
+            <h1 className="text-2xl font-bold text-white gradient-text" style={{ letterSpacing: '-0.02em' }}>CRM Pipeline</h1>
             <p className="text-[#64748b] text-sm mt-0.5">{t('crm.subtitle')}</p>
           </div>
         </div>
@@ -367,14 +349,12 @@ export default function CRMPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
-        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 hover-lift"
-          style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)', boxShadow: '0 0 20px rgba(14,165,233,0.04)' }}>
-          <p className="text-[#64748b] text-sm">{t('crm.leads.total')}</p>
+        <div className="card-premium p-4">
+          <p className="text-[#94a3b8] text-sm">{t('crm.leads.total')}</p>
           <p className="text-3xl font-bold text-white mt-2">{totalStats.count}</p>
         </div>
-        <div className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5"
-          style={{ background: 'rgba(251,146,60,0.06)', border: '1px solid rgba(251,146,60,0.15)', boxShadow: '0 0 20px rgba(251,146,60,0.04)' }}>
-          <p className="text-[#64748b] text-sm">{t('crm.pipeline.value')}</p>
+        <div className="card-premium p-4" style={{ border: '1px solid rgba(251,146,60,0.2)' }}>
+          <p className="text-[#94a3b8] text-sm">{t('crm.pipeline.value')}</p>
           <p className="text-3xl font-bold text-[#fb923c] mt-2">{(totalStats.value / 1000).toFixed(0)}K €</p>
         </div>
       </div>

@@ -111,6 +111,20 @@ export default function SchedulePage() {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 3))
   const [events, setEvents] = useState<ScheduledEvent[]>(INITIAL_EVENTS)
 
+  // Pre-fill modal if redirected from content page with ?content=...&platform=...
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const contentParam = params.get('content')
+    const platformParam = params.get('platform')
+    if (contentParam) {
+      const platform = (platformParam as ScheduledEvent['platform']) || 'linkedin'
+      setSelectedDay(today.toISOString().slice(0, 10))
+      setFormData({ platform, content: decodeURIComponent(contentParam), time: '10:00' })
+      setShowModal(true)
+    }
+  }, [])
+
   useEffect(() => {
     api.get<{ id: string; platform: string; content: string; scheduled_date: string; scheduled_time: string }[]>('/api/v1/schedule/posts')
       .then((posts) => {
@@ -177,7 +191,7 @@ export default function SchedulePage() {
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h1 className="text-[28px] font-[700] text-white">{t('schedule.title')}</h1>
+            <h1 className="text-[28px] font-[700] text-white" style={{ letterSpacing: '-0.02em' }}>{t('schedule.title')}</h1>
             <p className="mt-2 max-w-2xl text-sm text-[#94a3b8]">{t('schedule.subtitle2')}</p>
           </div>
 

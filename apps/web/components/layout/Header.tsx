@@ -26,15 +26,15 @@ export function Header() {
   return (
     <header className="h-14 shrink-0 flex items-center px-6 gap-4 animate-fade-down sticky top-0 z-40"
       style={{
-        background: 'rgba(11,18,32,0.85)',
+        background: 'rgba(5,12,24,0.82)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-        boxShadow: '0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.3)',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        boxShadow: '0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.3)',
       }}
     >
       <div className="flex-1 min-w-0">
-        <h2 className="font-semibold text-[#e2e8f0] text-sm tracking-tight">{title}</h2>
+        <h2 className="font-semibold text-[#e2e8f0] text-sm" style={{ letterSpacing: '-0.02em' }}>{title}</h2>
       </div>
 
       <div className="flex items-center gap-2">
@@ -42,16 +42,16 @@ export function Header() {
         <button
           className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[#64748b] text-xs transition-all duration-200 hover:text-[#94a3b8]"
           style={{
-            background: 'rgba(255,255,255,0.04)',
+            background: '#1a2236',
             border: '1px solid rgba(255,255,255,0.07)',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(14,165,233,0.06)'
+            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(14,165,233,0.08)'
             ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(14,165,233,0.2)'
             ;(e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 16px rgba(14,165,233,0.08)'
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'
+            (e.currentTarget as HTMLButtonElement).style.background = '#1a2236'
             ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(255,255,255,0.07)'
             ;(e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'
           }}

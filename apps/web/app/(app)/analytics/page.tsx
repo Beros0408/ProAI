@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 
@@ -17,17 +18,19 @@ const MAX_SOCIAL = 20000
 
 interface KpiChannel {
   labelKey: TranslationKey
+  ctaKey: TranslationKey
   value: string
   delta: string
   color: string
   data: number[]
+  link: string
 }
 
 const KPI_CHANNELS: KpiChannel[] = [
-  { labelKey: 'analytics.ch.conversations', value: '142', delta: '+12 %', color: '#00f0ff', data: [30, 35, 28, 42, 38, 45, 50, 48, 55, 52, 60, 58] },
-  { labelKey: 'analytics.ch.automations',   value: '38',  delta: '+8 %',  color: '#39ff14', data: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32] },
-  { labelKey: 'analytics.ch.leads',         value: '24',  delta: '+5 %',  color: '#ff00ff', data: [5, 8, 6, 10, 12, 9, 15, 14, 18, 16, 20, 22] },
-  { labelKey: 'analytics.ch.timesaved',     value: '6 h', delta: '+2 h',  color: '#ffff00', data: [1, 1.5, 2, 2.5, 2, 3, 3.5, 4, 4.5, 5, 5.5, 6] },
+  { labelKey: 'analytics.ch.conversations', ctaKey: 'analytics.cta.conversations', value: '142', delta: '+12 %', color: '#00f0ff', data: [30, 35, 28, 42, 38, 45, 50, 48, 55, 52, 60, 58], link: '/chat' },
+  { labelKey: 'analytics.ch.automations',   ctaKey: 'workflows.title',              value: '38',  delta: '+8 %',  color: '#39ff14', data: [10, 12, 15, 14, 18, 20, 22, 25, 24, 28, 30, 32], link: '/workflows' },
+  { labelKey: 'analytics.ch.leads',         ctaKey: 'analytics.cta.leads',          value: '24',  delta: '+5 %',  color: '#ff00ff', data: [5, 8, 6, 10, 12, 9, 15, 14, 18, 16, 20, 22],    link: '/crm' },
+  { labelKey: 'analytics.ch.timesaved',     ctaKey: 'reports.title',                value: '6 h', delta: '+2 h',  color: '#ffff00', data: [1, 1.5, 2, 2.5, 2, 3, 3.5, 4, 4.5, 5, 5.5, 6], link: '/reports' },
 ]
 
 interface TriggerLog {
@@ -90,6 +93,7 @@ function GridBackground() {
 
 export default function AnalyticsPage() {
   const { t } = useTranslation()
+  const router = useRouter()
   const [activeLog, setActiveLog] = useState(0)
   const [cursorX, setCursorX] = useState<number | null>(null)
   const [aiTyping, setAiTyping] = useState(true)
@@ -142,7 +146,7 @@ export default function AnalyticsPage() {
         {/* CANAUX KPI */}
         <div className="grid grid-cols-4 gap-3 stagger-children">
           {KPI_CHANNELS.map((ch, i) => (
-            <div key={i} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover-lift cursor-pointer" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
+            <div key={i} onClick={() => router.push(ch.link)} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover-lift cursor-pointer group" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
               <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ boxShadow: `inset 0 0 30px ${ch.color}08` }} />
               <div className="relative z-10">
                 <div className="text-3xl font-bold mb-1" style={{ color: '#e0e0f0' }}>{ch.value}</div>
@@ -151,6 +155,9 @@ export default function AnalyticsPage() {
                   <span className="text-xs font-bold" style={{ color: ch.color }}>{ch.delta}</span>
                 </div>
                 <MiniWaveform data={ch.data} color={ch.color} />
+                <div className="mt-2 text-[9px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: ch.color }}>
+                  {t(ch.ctaKey)} →
+                </div>
               </div>
             </div>
           ))}

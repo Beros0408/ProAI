@@ -16,7 +16,7 @@ export default function AutomationsPage() {
   return (
     <div className="p-6 space-y-6 animate-fade-in stagger-children">
       <div className="animate-fade-up">
-        <h1 className="text-2xl font-bold text-white gradient-text">{t('automations')}</h1>
+        <h1 className="text-2xl font-bold text-white gradient-text" style={{ letterSpacing: '-0.02em' }}>{t('automations')}</h1>
         <p className="text-[#64748b] mt-1">{t('configure_your_workflows')}</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 stagger-children">
@@ -24,19 +24,13 @@ export default function AutomationsPage() {
           <div
             key={i}
             onClick={() => router.push('/chat?agent=automation')}
-            className="rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden animate-fade-up"
-            style={{
-              background: 'rgba(17,24,39,0.7)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.07)',
-            }}
+            className="card-premium p-6 cursor-pointer group relative overflow-hidden animate-fade-up"
             onMouseEnter={(e) => {
               (e.currentTarget as HTMLDivElement).style.border = `1px solid ${card.color}30`
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 32px ${card.color}15`
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.07)'
+              (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.06)'
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
             }}
           >

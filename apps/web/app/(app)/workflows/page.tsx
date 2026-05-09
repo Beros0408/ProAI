@@ -67,14 +67,18 @@ function WorkflowNode({ data }: { data: WorkflowNodeData }) {
 
   return (
     <div
-      className="rounded-[12px] bg-[#111827] p-4 min-w-[200px] border-l-4"
-      style={{ borderLeftColor: config.border }}
+      className="card-premium p-4 min-w-[200px] border-l-4"
+      style={{
+        borderLeftColor: config.border,
+        borderRadius: '12px',
+        boxShadow: `0 0 16px ${config.border}20, 0 8px 24px rgba(0,0,0,0.4)`,
+      }}
     >
       <div className="flex items-center gap-2 mb-2">
-        <IconComponent className="w-4 h-4" style={{ color: config.iconColor }} />
-        <span className="text-xs font-semibold uppercase text-[#cbd5e1]">{t(typeKey)}</span>
+        <IconComponent className="w-4 h-4" style={{ color: config.iconColor, filter: `drop-shadow(0 0 4px ${config.iconColor}80)` }} />
+        <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: config.iconColor, letterSpacing: '0.12em' }}>{t(typeKey)}</span>
       </div>
-      <p className="text-sm font-medium text-white">{data.label}</p>
+      <p className="text-sm font-semibold text-white" style={{ letterSpacing: '-0.01em' }}>{data.label}</p>
     </div>
   )
 }
@@ -123,7 +127,25 @@ function CollapsibleSection({
                 onItemDrag(item)
               }}
               onClick={() => onItemClick(item)}
-              className="w-full rounded-[12px] bg-[#1a2236] p-3 text-left text-sm text-white border border-dashed border-transparent hover:border-[rgba(255,255,255,0.12)] cursor-grab active:cursor-grabbing transition"
+              className="w-full p-3 text-left text-sm text-white cursor-grab active:cursor-grabbing"
+              style={{
+                background: 'linear-gradient(180deg, rgba(18,28,48,0.9), rgba(10,16,30,0.9))',
+                border: '1px solid rgba(255,255,255,0.07)',
+                borderRadius: '10px',
+                transition: 'all 220ms cubic-bezier(.2,.8,.2,1)',
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLButtonElement
+                el.style.border = '1px solid rgba(14,165,233,0.25)'
+                el.style.boxShadow = '0 4px 16px rgba(14,165,233,0.1)'
+                el.style.transform = 'translateY(-1px)'
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLButtonElement
+                el.style.border = '1px solid rgba(255,255,255,0.07)'
+                el.style.boxShadow = 'none'
+                el.style.transform = 'none'
+              }}
             >
               {t(item.labelKey)}
             </button>
@@ -206,7 +228,7 @@ export default function WorkflowsPage() {
       <div className="border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-[28px] font-[700] text-white">Workflow Builder</h1>
+            <h1 className="text-[28px] font-[700] text-white" style={{ letterSpacing: '-0.02em' }}>Workflow Builder</h1>
             <p className="mt-1 text-sm text-[#94a3b8]">{t('workflows.subtitle2')}</p>
           </div>
           <button
@@ -264,6 +286,7 @@ export default function WorkflowsPage() {
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
+              defaultEdgeOptions={{ style: { stroke: '#0ea5e9', strokeWidth: 2, filter: 'drop-shadow(0 0 4px rgba(14,165,233,0.6)) drop-shadow(0 0 10px rgba(14,165,233,0.3))' } }}
               onDrop={(event) => {
                 event.preventDefault()
                 const data = event.dataTransfer.getData('application/reactflow')
@@ -325,15 +348,24 @@ export default function WorkflowsPage() {
           <div className="border-t border-[rgba(255,255,255,0.08)] bg-[#0b1220] p-4 space-y-3">
             <button
               onClick={saveWorkflow}
-              className="w-full rounded-full border border-white/20 bg-transparent px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="btn-premium w-full flex items-center justify-center gap-2"
             >
-              <Save className="mr-2 h-4 w-4 inline" /> {t('workflows.save')}
+              <Save className="h-4 w-4" /> {t('workflows.save')}
             </button>
             <button
               onClick={() => selectedWorkflow && toggleWorkflowActive(selectedWorkflow.id)}
-              className="w-full rounded-full bg-[#0ea5e9] px-4 py-3 text-sm font-semibold text-black transition hover:brightness-110"
+              className="w-full flex items-center justify-center gap-2 rounded-[10px] px-4 py-2.5 text-sm font-semibold transition-all duration-220"
+              style={{
+                background: selectedWorkflow?.active
+                  ? 'linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.06))'
+                  : 'linear-gradient(135deg, rgba(52,211,153,0.18), rgba(52,211,153,0.06))',
+                border: selectedWorkflow?.active
+                  ? '1px solid rgba(239,68,68,0.3)'
+                  : '1px solid rgba(52,211,153,0.35)',
+                color: selectedWorkflow?.active ? '#f87171' : '#34d399',
+              }}
             >
-              <Power className="mr-2 h-4 w-4 inline" />
+              <Power className="h-4 w-4" />
               {selectedWorkflow?.active ? t('workflows.deactivate') : t('workflows.activate')}
             </button>
           </div>
@@ -350,11 +382,7 @@ export default function WorkflowsPage() {
             <div
               key={workflow.id}
               onClick={() => handleWorkflowSelect(workflow)}
-              className={`rounded-[16px] p-4 border transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
-                selectedWorkflow?.id === workflow.id
-                  ? 'border-[#0ea5e9] bg-[#0ea5e9]/10'
-                  : 'border-[rgba(255,255,255,0.07)] bg-[rgba(17,24,39,0.6)] hover:border-[#0ea5e9] hover:shadow-[0_4px_20px_rgba(14,165,233,0.12)]'
-              }`}
+              className={`p-4 cursor-pointer ${selectedWorkflow?.id === workflow.id ? 'card-selected' : 'card-premium'}`}
             >
               <div className="flex items-start justify-between gap-3 mb-2">
                 <h4 className="text-sm font-semibold text-white truncate flex-1">{workflow.name}</h4>
