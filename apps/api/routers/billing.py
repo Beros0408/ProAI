@@ -77,8 +77,8 @@ async def create_checkout(
                 'plan': body.plan,
                 'annual': str(body.annual),
             },
-            success_url='http://localhost:3000/dashboard?payment=success',
-            cancel_url='http://localhost:3000/pricing?payment=cancelled',
+            success_url=f'{settings.frontend_url}/dashboard?payment=success',
+            cancel_url=f'{settings.frontend_url}/pricing?payment=cancelled',
         )
 
         return CheckoutResponse(

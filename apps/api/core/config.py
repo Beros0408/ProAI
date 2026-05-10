@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     # App
     app_name: str = "ProAI API"
     debug: bool = False
-    secret_key: str = "changeme-in-production"
+    secret_key: str
 
     # Supabase
     supabase_url: str
@@ -32,13 +32,19 @@ class Settings(BaseSettings):
     rate_limit_requests: int = 60
     rate_limit_window_seconds: int = 60
 
+    # Stripe
+    stripe_secret_key: str = ""
+    stripe_publishable_key: str = ""
+    stripe_webhook_secret: str = ""
+
+    # URLs
+    frontend_url: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3000,http://localhost:3001"
+
     # Sentry
     sentry_dsn: str = ""
 
 
 @lru_cache
 def get_settings() -> Settings:
-    stripe_secret_key: str = ""
-    stripe_publishable_key: str = ""
-    stripe_webhook_secret: str = ""
     return Settings()

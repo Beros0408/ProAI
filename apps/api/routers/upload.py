@@ -85,7 +85,7 @@ async def analyze_upload(
     # ── PDF ─────────────────────────────────────────────────────────────────────
     if mime == "application/pdf" or fname.lower().endswith(".pdf"):
         try:
-            from PyPDF2 import PdfReader
+            from pypdf import PdfReader
             reader = PdfReader(io.BytesIO(content_bytes))
             text = "\n".join(page.extract_text() or "" for page in reader.pages)
         except Exception as exc:
