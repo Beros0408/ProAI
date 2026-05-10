@@ -7,14 +7,14 @@ interface Props {
   onChange: (key: string, value: string) => void
 }
 
-const FIELD = { background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }
+const FIELD = { background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }
 
 function onFocus(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
   e.currentTarget.style.borderColor = '#0ea5e9'
   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.1)'
 }
 function onBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
-  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+  e.currentTarget.style.borderColor = 'var(--border-color)'
   e.currentTarget.style.boxShadow = 'none'
 }
 
@@ -45,7 +45,7 @@ export function Step1Welcome({ data, onChange }: Props) {
           >
             {t('ob.step1.title')}
           </h2>
-          <p className="text-sm" style={{ color: '#64748b' }}>{t('ob.step1.subtitle')}</p>
+          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('ob.step1.subtitle')}</p>
         </div>
       </div>
 
@@ -53,11 +53,11 @@ export function Step1Welcome({ data, onChange }: Props) {
       <div className="space-y-4 animate-fade-up" style={{ animationDelay: '0.2s' }}>
         {/* First name */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
             {t('ob.step1.name.label')}
           </label>
           <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: '#475569' }}>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
               </svg>
@@ -77,11 +77,11 @@ export function Step1Welcome({ data, onChange }: Props) {
 
         {/* Role */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
             {t('ob.step1.role.label')}
           </label>
           <div className="relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#475569' }}>
+            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
               </svg>
@@ -90,17 +90,17 @@ export function Step1Welcome({ data, onChange }: Props) {
               value={data.role ?? ''}
               onChange={e => onChange('role', e.target.value)}
               className="h-12 w-full appearance-none rounded-xl pl-10 pr-10 text-sm outline-none transition-all duration-200"
-              style={{ ...FIELD, color: data.role ? '#ffffff' : '#475569' }}
+              style={{ ...FIELD, color: data.role ? 'var(--text-primary)' : 'var(--text-muted)' }}
               onFocus={onFocus}
               onBlur={onBlur}
             >
-              <option value="" style={{ background: '#1a2236' }}>{t('ob.step1.role.select')}</option>
-              <option value="freelance" style={{ background: '#1a2236' }}>{t('ob.step1.role.freelance')}</option>
-              <option value="entrepreneur" style={{ background: '#1a2236' }}>{t('ob.step1.role.entrepreneur')}</option>
-              <option value="manager" style={{ background: '#1a2236' }}>{t('ob.step1.role.manager')}</option>
-              <option value="other" style={{ background: '#1a2236' }}>{t('ob.step1.role.other')}</option>
+              <option value="" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step1.role.select')}</option>
+              <option value="freelance" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step1.role.freelance')}</option>
+              <option value="entrepreneur" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step1.role.entrepreneur')}</option>
+              <option value="manager" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step1.role.manager')}</option>
+              <option value="other" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step1.role.other')}</option>
             </select>
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#475569' }}>
+            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <polyline points="6 9 12 15 18 9" />
               </svg>

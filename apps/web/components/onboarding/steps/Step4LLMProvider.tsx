@@ -83,7 +83,7 @@ export function Step4LLMProvider({ data, onChange }: Props) {
           </svg>
         </div>
         <h2 className="mb-1 text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('ob.step4.title')}</h2>
-        <p className="text-sm" style={{ color: '#64748b' }}>{t('ob.step4.subtitle')}</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('ob.step4.subtitle')}</p>
       </div>
 
       <div className="space-y-3 animate-fade-up" style={{ animationDelay: '0.1s' }}>
@@ -96,7 +96,7 @@ export function Step4LLMProvider({ data, onChange }: Props) {
               onClick={() => onChange('llmProvider', p.value)}
               className="w-full rounded-xl px-5 py-5 text-left transition-all duration-200"
               style={{
-                background: selected ? 'rgba(14,165,233,0.08)' : '#111827',
+                background: selected ? 'rgba(14,165,233,0.08)' : 'var(--bg-surface)',
                 border: selected ? '1px solid rgba(14,165,233,0.4)' : '1px solid rgba(255,255,255,0.06)',
                 boxShadow: selected ? '0 0 0 1px rgba(14,165,233,0.2), 0 4px 20px rgba(14,165,233,0.08)' : 'none',
               }}
@@ -105,7 +105,7 @@ export function Step4LLMProvider({ data, onChange }: Props) {
                 {/* Logo */}
                 <div
                   className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: selected ? `${p.color}22` : 'rgba(255,255,255,0.04)', color: selected ? p.color : '#64748b', border: `1px solid ${selected ? p.color + '44' : 'rgba(255,255,255,0.06)'}` }}
+                  style={{ background: selected ? `${p.color}22` : 'rgba(255,255,255,0.04)', color: selected ? p.color : 'var(--text-muted)', border: `1px solid ${selected ? p.color + '44' : 'rgba(255,255,255,0.06)'}` }}
                 >
                   {p.logo}
                 </div>
@@ -113,7 +113,7 @@ export function Step4LLMProvider({ data, onChange }: Props) {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="mb-1 flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-semibold" style={{ color: selected ? '#e2e8f0' : '#94a3b8' }}>
+                    <span className="text-sm font-semibold" style={{ color: selected ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
                       {t(p.nameKey)}
                     </span>
                     {p.recommended && (
@@ -125,7 +125,7 @@ export function Step4LLMProvider({ data, onChange }: Props) {
                       </span>
                     )}
                   </div>
-                  <p className="mb-3 text-xs leading-relaxed" style={{ color: '#64748b' }}>{t(p.descKey)}</p>
+                  <p className="mb-3 text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>{t(p.descKey)}</p>
 
                   {/* Metrics */}
                   <div className="flex flex-wrap gap-4">
@@ -135,11 +135,11 @@ export function Step4LLMProvider({ data, onChange }: Props) {
                       { labelKey: 'ob.step4.cost' as const, valueKey: p.costKey, level: p.costLevel },
                     ].map(metric => (
                       <div key={metric.labelKey} className="flex flex-col gap-1">
-                        <span className="text-[10px] font-medium uppercase tracking-wide" style={{ color: '#475569' }}>
+                        <span className="text-[10px] font-medium uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
                           {t(metric.labelKey)}
                         </span>
                         <MetricBar level={metric.level} />
-                        <span className="text-[10px]" style={{ color: '#64748b' }}>{t(metric.valueKey)}</span>
+                        <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{t(metric.valueKey)}</span>
                       </div>
                     ))}
                   </div>

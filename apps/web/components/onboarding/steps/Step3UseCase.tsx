@@ -80,7 +80,7 @@ export function Step3UseCase({ data, onChange }: Props) {
           </svg>
         </div>
         <h2 className="mb-1 text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('ob.step3.title')}</h2>
-        <p className="text-sm" style={{ color: '#64748b' }}>{t('ob.step3.subtitle')}</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('ob.step3.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 animate-fade-up" style={{ animationDelay: '0.1s' }}>
@@ -93,7 +93,7 @@ export function Step3UseCase({ data, onChange }: Props) {
               onClick={() => onChange('useCase', uc.value)}
               className="flex items-center gap-4 rounded-xl px-4 py-4 text-left transition-all duration-200"
               style={{
-                background: selected ? `rgba(14,165,233,0.08)` : '#111827',
+                background: selected ? `rgba(14,165,233,0.08)` : 'var(--bg-surface)',
                 border: selected ? '1px solid rgba(14,165,233,0.4)' : '1px solid rgba(255,255,255,0.06)',
                 boxShadow: selected ? '0 0 0 1px rgba(14,165,233,0.2), 0 4px 20px rgba(14,165,233,0.08)' : 'none',
               }}
@@ -104,7 +104,7 @@ export function Step3UseCase({ data, onChange }: Props) {
                 style={{
                   background: selected ? uc.bg : 'rgba(255,255,255,0.04)',
                   border: `1px solid ${selected ? uc.border : 'rgba(255,255,255,0.06)'}`,
-                  color: selected ? uc.color : '#64748b',
+                  color: selected ? uc.color : 'var(--text-muted)',
                 }}
               >
                 {uc.icon}
@@ -112,10 +112,10 @@ export function Step3UseCase({ data, onChange }: Props) {
 
               {/* Text */}
               <div className="flex-1">
-                <p className="text-sm font-semibold transition-colors duration-200" style={{ color: selected ? '#e2e8f0' : '#94a3b8' }}>
+                <p className="text-sm font-semibold transition-colors duration-200" style={{ color: selected ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
                   {t(uc.labelKey)}
                 </p>
-                <p className="mt-0.5 text-xs" style={{ color: '#475569' }}>
+                <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
                   {t(uc.descKey)}
                 </p>
               </div>

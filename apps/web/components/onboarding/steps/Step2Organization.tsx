@@ -7,20 +7,20 @@ interface Props {
   onChange: (key: string, value: string) => void
 }
 
-const FIELD = { background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }
+const FIELD = { background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }
 
 function onFocus(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
   e.currentTarget.style.borderColor = '#0ea5e9'
   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.1)'
 }
 function onBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
-  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+  e.currentTarget.style.borderColor = 'var(--border-color)'
   e.currentTarget.style.boxShadow = 'none'
 }
 
 function FieldIcon({ children }: { children: React.ReactNode }) {
   return (
-    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#475569' }}>
+    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-muted)' }}>
       {children}
     </span>
   )
@@ -41,13 +41,13 @@ export function Step2Organization({ data, onChange }: Props) {
           </svg>
         </div>
         <h2 className="mb-1 text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('ob.step2.title')}</h2>
-        <p className="text-sm" style={{ color: '#64748b' }}>{t('ob.step2.subtitle')}</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{t('ob.step2.subtitle')}</p>
       </div>
 
       <div className="space-y-4 animate-fade-up" style={{ animationDelay: '0.1s' }}>
         {/* Org name */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('ob.step2.org.label')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t('ob.step2.org.label')}</label>
           <div className="relative">
             <FieldIcon>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -69,7 +69,7 @@ export function Step2Organization({ data, onChange }: Props) {
 
         {/* Industry */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('ob.step2.industry.label')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t('ob.step2.industry.label')}</label>
           <div className="relative">
             <FieldIcon>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -81,19 +81,19 @@ export function Step2Organization({ data, onChange }: Props) {
               value={data.industry ?? ''}
               onChange={e => onChange('industry', e.target.value)}
               className="h-12 w-full appearance-none rounded-xl pl-10 pr-10 text-sm outline-none transition-all duration-200"
-              style={{ ...FIELD, color: data.industry ? '#ffffff' : '#475569' }}
+              style={{ ...FIELD, color: data.industry ? 'var(--text-primary)' : 'var(--text-muted)' }}
               onFocus={onFocus}
               onBlur={onBlur}
             >
-              <option value="" style={{ background: '#1a2236' }}>{t('ob.step2.industry.select')}</option>
-              <option value="tech" style={{ background: '#1a2236' }}>{t('ob.step2.industry.tech')}</option>
-              <option value="ecommerce" style={{ background: '#1a2236' }}>{t('ob.step2.industry.ecommerce')}</option>
-              <option value="consulting" style={{ background: '#1a2236' }}>{t('ob.step2.industry.consulting')}</option>
-              <option value="agency" style={{ background: '#1a2236' }}>{t('ob.step2.industry.agency')}</option>
-              <option value="retail" style={{ background: '#1a2236' }}>{t('ob.step2.industry.retail')}</option>
-              <option value="other" style={{ background: '#1a2236' }}>{t('ob.step2.industry.other')}</option>
+              <option value="" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.select')}</option>
+              <option value="tech" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.tech')}</option>
+              <option value="ecommerce" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.ecommerce')}</option>
+              <option value="consulting" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.consulting')}</option>
+              <option value="agency" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.agency')}</option>
+              <option value="retail" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.retail')}</option>
+              <option value="other" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.industry.other')}</option>
             </select>
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#475569' }}>
+            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <polyline points="6 9 12 15 18 9" />
               </svg>
@@ -103,7 +103,7 @@ export function Step2Organization({ data, onChange }: Props) {
 
         {/* Target audience */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('ob.step2.audience.label')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t('ob.step2.audience.label')}</label>
           <div className="relative">
             <FieldIcon>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -126,7 +126,7 @@ export function Step2Organization({ data, onChange }: Props) {
 
         {/* Team size */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('ob.step2.size.label')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t('ob.step2.size.label')}</label>
           <div className="relative">
             <FieldIcon>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -137,17 +137,17 @@ export function Step2Organization({ data, onChange }: Props) {
               value={data.teamSize ?? ''}
               onChange={e => onChange('teamSize', e.target.value)}
               className="h-12 w-full appearance-none rounded-xl pl-10 pr-10 text-sm outline-none transition-all duration-200"
-              style={{ ...FIELD, color: data.teamSize ? '#ffffff' : '#475569' }}
+              style={{ ...FIELD, color: data.teamSize ? 'var(--text-primary)' : 'var(--text-muted)' }}
               onFocus={onFocus}
               onBlur={onBlur}
             >
-              <option value="" style={{ background: '#1a2236' }}>{t('ob.step2.size.select')}</option>
-              <option value="solo" style={{ background: '#1a2236' }}>{t('ob.step2.size.solo')}</option>
-              <option value="2-5" style={{ background: '#1a2236' }}>{t('ob.step2.size.small')}</option>
-              <option value="6-20" style={{ background: '#1a2236' }}>{t('ob.step2.size.medium')}</option>
-              <option value="21+" style={{ background: '#1a2236' }}>{t('ob.step2.size.large')}</option>
+              <option value="" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.size.select')}</option>
+              <option value="solo" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.size.solo')}</option>
+              <option value="2-5" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.size.small')}</option>
+              <option value="6-20" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.size.medium')}</option>
+              <option value="21+" style={{ background: 'var(--bg-elevated)' }}>{t('ob.step2.size.large')}</option>
             </select>
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#475569' }}>
+            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'var(--text-muted)' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                 <polyline points="6 9 12 15 18 9" />
               </svg>
@@ -157,7 +157,7 @@ export function Step2Organization({ data, onChange }: Props) {
 
         {/* Website (optional) */}
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('ob.step2.website.label')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t('ob.step2.website.label')}</label>
           <div className="relative">
             <FieldIcon>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
