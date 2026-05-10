@@ -109,7 +109,7 @@ export default function MindMapPage() {
           onNodeClick={onNodeClick}
           fitView
           className="bg-base"
-          style={{ backgroundColor: '#0c1220' }}
+          style={{ backgroundColor: 'var(--bg-base)' }}
         >
           <Controls className="bg-surface border-[#1E1E2E]" />
           <Background color="#374151" gap={20} />

@@ -121,14 +121,14 @@ export default function AnalyticsPage() {
   const cursorData = getCursorData()
 
   return (
-    <div className="min-h-screen relative" style={{ background: '#0a0a0f', fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
+    <div className="min-h-screen relative" style={{ background: 'var(--bg-base)', fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
       <GridBackground />
       <div className="relative z-10 px-6 pt-2">
         <BackButton />
       </div>
 
       {/* BARRE DE STATUT */}
-      <div className="relative z-10 flex items-center justify-between px-6 py-2 border-b" style={{ borderColor: '#1a1a2e', background: 'rgba(10,10,15,0.9)' }}>
+      <div className="relative z-10 flex items-center justify-between px-6 py-2 border-b" style={{ borderColor: 'var(--border-color)', background: 'var(--glass-bg-full)' }}>
         <div className="flex items-center gap-6">
           <span className="text-sm font-bold tracking-wider" style={{ color: '#00f0ff' }}>{t('analytics.mission_control')}</span>
           <span className="flex items-center gap-1.5 text-xs">
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
         {/* CANAUX KPI */}
         <div className="grid grid-cols-4 gap-3 stagger-children">
           {KPI_CHANNELS.map((ch, i) => (
-            <div key={i} onClick={() => router.push(ch.link)} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover-lift cursor-pointer group" style={{ background: '#0f0f1a', border: `1px solid ${ch.color}30` }}>
+            <div key={i} onClick={() => router.push(ch.link)} className="relative rounded-lg p-4 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover-lift cursor-pointer group" style={{ background: 'var(--bg-elevated)', border: `1px solid ${ch.color}30` }}>
               <div className="absolute inset-0 rounded-lg pointer-events-none" style={{ boxShadow: `inset 0 0 30px ${ch.color}08` }} />
               <div className="relative z-10">
                 <div className="text-3xl font-bold mb-1" style={{ color: '#e0e0f0' }}>{ch.value}</div>
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-3 gap-3" style={{ gridTemplateColumns: '2fr 1fr' }}>
 
           {/* PORTÉE PRINCIPALE — REVENUS */}
-          <div className="rounded-lg p-4 relative" style={{ background: 'rgba(15,15,26,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid #1a1a2e' }}>
+          <div className="rounded-lg p-4 relative" style={{ background: 'var(--glass-bg-strong)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs uppercase tracking-widest" style={{ color: '#606080' }}>{t('analytics.scope.title')}</span>
               {cursorData && (
@@ -253,7 +253,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* ANALYSEUR DE SPECTRE */}
-          <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
+          <div className="rounded-lg p-4" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
             <span className="text-xs uppercase tracking-widest block mb-4" style={{ color: '#606080' }}>{t('analytics.spectrum.title')}</span>
             <div className="flex items-end justify-around gap-4" style={{ height: '240px' }}>
               {SOCIAL_DATA.map((s, i) => {
@@ -289,7 +289,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-3 gap-3">
 
           {/* GRAPHE XY */}
-          <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
+          <div className="rounded-lg p-4" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
             <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>{t('analytics.xyplot.title')}</span>
             <div className="relative" style={{ height: '180px' }}>
               <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -321,7 +321,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* JOURNAL DES DÉCLENCHEURS */}
-          <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #1a1a2e' }}>
+          <div className="rounded-lg p-4" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
             <span className="text-xs uppercase tracking-widest block mb-3" style={{ color: '#606080' }}>{t('analytics.triggerlog.title')}</span>
             <div className="space-y-2">
               {TRIGGER_LOGS.map((log, i) => (
@@ -343,7 +343,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* PANNEAU AGENT IA */}
-          <div className="rounded-lg p-4" style={{ background: '#0f0f1a', border: '1px solid #ff00ff30' }}>
+          <div className="rounded-lg p-4" style={{ background: 'var(--bg-elevated)', border: '1px solid #ff00ff30' }}>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#ff00ff', boxShadow: '0 0 8px #ff00ff' }} />
               <span className="text-xs uppercase tracking-widest font-bold" style={{ color: '#ff00ff' }}>{t('analytics.agent.title')}</span>
