@@ -12,6 +12,7 @@ import {
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import { api } from '@/lib/api'
+import { DashboardSkeleton } from '@/components/ui/Skeleton'
 
 interface BusinessProfile {
   business_name:   string | null
@@ -61,6 +62,7 @@ export default function DashboardPage() {
   const { t } = useTranslation()
   const [profile, setProfile] = useState<BusinessProfile | null>(null)
   const [realKpis, setRealKpis] = useState({ conversations: 142, tasks: 38, leads: 24 })
+  const [isLoading, setIsLoading] = useState(true)
 
   const hour = new Date().getHours()
   const greeting = hour < 12 ? t('dashboard.greeting.morning') : hour < 18 ? t('dashboard.greeting.afternoon') : t('dashboard.greeting.evening')
@@ -70,6 +72,7 @@ export default function DashboardPage() {
     api.get<BusinessProfile>('/api/v1/onboarding/profile')
       .then(setProfile)
       .catch(() => {})
+      .finally(() => setIsLoading(false))
   }, [])
 
   useEffect(() => {
@@ -147,6 +150,8 @@ export default function DashboardPage() {
     { label: t('dashboard.viewpredictions'), icon: TrendingUp, href: '/predictions', color: '#34d399' },
     { label: t('dashboard.weeklyreport'), icon: FileText, href: '/reports', color: '#06b6d4' },
   ]
+
+  if (isLoading) return <DashboardSkeleton />
 
   return (
     <div className="space-y-6 animate-fade-up">

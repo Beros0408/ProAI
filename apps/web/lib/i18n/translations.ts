@@ -840,6 +840,20 @@ export const translations = {
     'ob.step5.feat2': 'Dashboard personnalisé activé',
     'ob.step5.feat3': 'Prêt à automatiser votre business',
 
+    // ── Errors ────────────────────────────────────────────────────────
+    'error.404.title': 'Page introuvable',
+    'error.404.subtitle': 'Cette page n\'existe pas ou a été déplacée.',
+    'error.404.home': 'Retour à l\'accueil',
+    'error.404.search': 'Rechercher',
+    'error.404.back': 'Page précédente',
+
+    // ── Notifications ─────────────────────────────────────────────────
+    'notifications.title': 'Notifications',
+    'notifications.mark_all_read': 'Tout marquer comme lu',
+    'notifications.empty': 'Aucune notification',
+    'notifications.time.minutes_ago': 'il y a {n} min',
+    'notifications.time.hours_ago': 'il y a {n} h',
+
     // ── Landing page ──────────────────────────────────────────────────
     'landing.integrations.badge': 'Intégrations',
     'landing.integrations.title': 'Connectez vos outils préférés',
@@ -1825,6 +1839,20 @@ export const translations = {
     'ob.step5.feat1': 'First agent automatically configured',
     'ob.step5.feat2': 'Personalized dashboard activated',
     'ob.step5.feat3': 'Ready to automate your business',
+
+    // ── Errors ────────────────────────────────────────────────────────
+    'error.404.title': 'Page not found',
+    'error.404.subtitle': 'This page does not exist or has been moved.',
+    'error.404.home': 'Back to home',
+    'error.404.search': 'Search',
+    'error.404.back': 'Previous page',
+
+    // ── Notifications ─────────────────────────────────────────────────
+    'notifications.title': 'Notifications',
+    'notifications.mark_all_read': 'Mark all as read',
+    'notifications.empty': 'No notifications',
+    'notifications.time.minutes_ago': '{n} min ago',
+    'notifications.time.hours_ago': '{n} h ago',
 
     // ── Landing page ──────────────────────────────────────────────────
     'landing.integrations.badge': 'Integrations',
