@@ -50,28 +50,28 @@ export default function IntegrationsPage() {
             key={item.name}
             className="group flex cursor-pointer flex-col rounded-2xl p-6 transition-all duration-300 animate-fade-up"
             style={{
-              background: '#111827',
-              border: '1px solid rgba(255,255,255,0.06)',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-color)',
               animationDelay: `${i * 60}ms`,
             }}
             onMouseEnter={(e) => {
               const el = e.currentTarget as HTMLDivElement
               el.style.transform = 'translateY(-4px)'
-              el.style.boxShadow = `0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px ${item.glowColor}25`
-              el.style.borderColor = 'rgba(255,255,255,0.12)'
+              el.style.boxShadow = `0 12px 40px rgba(0,0,0,0.2), 0 0 0 1px ${item.glowColor}25`
+              el.style.borderColor = `${item.glowColor}40`
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLDivElement
               el.style.transform = ''
               el.style.boxShadow = ''
-              el.style.borderColor = 'rgba(255,255,255,0.06)'
+              el.style.borderColor = 'var(--border-color)'
             }}
           >
             {/* Header row */}
             <div className="mb-4 flex items-center justify-between">
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-300"
-                style={{ background: '#1a2236' }}
+                style={{ background: 'var(--bg-elevated)' }}
               >
                 {item.icon}
               </div>
@@ -95,7 +95,7 @@ export default function IntegrationsPage() {
               onClick={() => handleConnect(item.name)}
               className="w-full rounded-xl py-2.5 text-sm font-semibold transition-all duration-200"
               style={item.connected
-                ? { background: 'rgba(255,255,255,0.06)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }
+                ? { background: 'var(--bg-elevated)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }
                 : { background: `${item.glowColor}18`, color: item.glowColor, border: `1px solid ${item.glowColor}30` }
               }
               onMouseEnter={(e) => {

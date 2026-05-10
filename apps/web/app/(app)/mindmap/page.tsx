@@ -64,7 +64,7 @@ export default function MindMapPage() {
     <div className="h-screen flex flex-col bg-base">
       {/* Header */}
       <div className="p-5 shrink-0"
-        style={{ background: 'rgba(11,18,32,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        style={{ background: 'var(--header-bg)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid var(--border-color)' }}>
         <BackButton />
         <motion.div
           initial={{ opacity: 0, y: -20 }}

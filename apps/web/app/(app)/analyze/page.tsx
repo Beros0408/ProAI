@@ -99,16 +99,16 @@ export default function AnalyzePage() {
         <section className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <h3 className="text-lg font-semibold text-white">{t('seo_summary')}</h3>
-            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>{result.seo?.summary}</p>
+            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>{result.seo?.summary}</p>
             <h3 className="mt-6 text-lg font-semibold text-white">{t('performance')}</h3>
-            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>{result.performance?.summary}</p>
+            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>{result.performance?.summary}</p>
           </div>
 
           <div className="rounded-2xl p-6" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
             <h3 className="text-lg font-semibold text-white">{t('accessibility')}</h3>
-            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>{result.accessibility?.summary}</p>
+            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>{result.accessibility?.summary}</p>
             <h3 className="mt-6 text-lg font-semibold text-white">{t('best_practices')}</h3>
-            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>{result.best_practices?.summary}</p>
+            <p className="mt-4 rounded-xl p-4 text-[#cbd5e1] text-sm leading-relaxed" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>{result.best_practices?.summary}</p>
           </div>
         </section>
       )}
@@ -118,7 +118,7 @@ export default function AnalyzePage() {
           <h3 className="text-lg font-semibold text-white">{t('recommendations_title')}</h3>
           <ul className="mt-4 space-y-3 text-slate-300">
             {result.recommendations.map((item: string, index: number) => (
-              <li key={index} className="rounded-xl p-4 text-sm" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <li key={index} className="rounded-xl p-4 text-sm" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
                 {item}
               </li>
             ))}

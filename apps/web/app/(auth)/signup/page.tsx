@@ -82,13 +82,14 @@ function GoogleIcon() {
 
 // ── Input helper ─────────────────────────────────────────────────────────────
 
-const INPUT_STYLE = { background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }
+const INPUT_STYLE = { background: 'var(--input-bg, #1a2236)', border: '1px solid var(--border-color, rgba(255,255,255,0.08))' }
 const INPUT_FOCUS = (e: React.FocusEvent<HTMLInputElement>) => {
-  e.currentTarget.style.borderColor = '#0ea5e9'
-  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.1)'
+  const isWarm = document.documentElement.getAttribute('data-theme') === 'warm'
+  e.currentTarget.style.borderColor = isWarm ? '#fb923c' : '#0ea5e9'
+  e.currentTarget.style.boxShadow = isWarm ? '0 0 0 3px rgba(251,146,60,0.1)' : '0 0 0 3px rgba(14,165,233,0.1)'
 }
 const INPUT_BLUR = (e: React.FocusEvent<HTMLInputElement>) => {
-  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+  e.currentTarget.style.borderColor = 'var(--border-color, rgba(255,255,255,0.08))'
   e.currentTarget.style.boxShadow = 'none'
 }
 
@@ -199,7 +200,7 @@ export default function SignupPage() {
       </div>
 
       {/* ── Right: form ── */}
-      <div className="flex w-full items-center justify-center p-6 lg:w-1/2 lg:p-12" style={{ background: '#0c1220' }}>
+      <div className="flex w-full items-center justify-center p-6 lg:w-1/2 lg:p-12" style={{ background: 'var(--bg-base, #0c1220)' }}>
         <div className="w-full max-w-md animate-fade-in">
           <div className="mb-4">
             <BackButton href="/" />
@@ -208,20 +209,20 @@ export default function SignupPage() {
           {/* Mobile logo */}
           <div className="mb-8 text-center lg:hidden">
             <span className="text-2xl font-bold" style={{ letterSpacing: '-0.03em' }}>
-              <span style={{ color: '#0ea5e9' }}>Pro</span><span className="text-white">AI</span>
+              <span style={{ color: '#0ea5e9' }}>Pro</span><span style={{ color: 'var(--text-primary)' }}>AI</span>
             </span>
           </div>
 
-          <div className="rounded-2xl p-8" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="rounded-2xl p-8" style={{ background: 'var(--bg-surface, #111827)', border: '1px solid var(--border-color, rgba(255,255,255,0.06))' }}>
             <div className="mb-8">
-              <h2 className="mb-1 text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('auth.signup')}</h2>
-              <p className="text-sm text-slate-400">{t('auth.signup.subtitle')}</p>
+              <h2 className="mb-1 text-2xl font-bold" style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>{t('auth.signup')}</h2>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('auth.signup.subtitle')}</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Full name */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">{t('auth.fullname')}</label>
+                <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('auth.fullname')}</label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"><IconUser /></span>
                   <input
@@ -230,7 +231,7 @@ export default function SignupPage() {
                     onChange={e => setFullName(e.target.value)}
                     required
                     placeholder={t('auth.fullname.placeholder')}
-                    className="h-12 w-full rounded-xl pl-10 pr-4 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+                    className="h-12 w-full rounded-xl pl-10 pr-4 text-sm placeholder-slate-400 outline-none transition-all duration-200"
                     style={INPUT_STYLE}
                     onFocus={INPUT_FOCUS}
                     onBlur={INPUT_BLUR}
@@ -240,7 +241,7 @@ export default function SignupPage() {
 
               {/* Email */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">{t('auth.email')}</label>
+                <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('auth.email')}</label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"><IconMail /></span>
                   <input
@@ -249,7 +250,7 @@ export default function SignupPage() {
                     onChange={e => setEmail(e.target.value)}
                     required
                     placeholder={t('auth.email.placeholder')}
-                    className="h-12 w-full rounded-xl pl-10 pr-4 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+                    className="h-12 w-full rounded-xl pl-10 pr-4 text-sm placeholder-slate-400 outline-none transition-all duration-200"
                     style={INPUT_STYLE}
                     onFocus={INPUT_FOCUS}
                     onBlur={INPUT_BLUR}
@@ -259,7 +260,7 @@ export default function SignupPage() {
 
               {/* Password */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">{t('auth.password')}</label>
+                <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('auth.password')}</label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"><IconLock /></span>
                   <input
@@ -269,7 +270,7 @@ export default function SignupPage() {
                     required
                     minLength={8}
                     placeholder={t('auth.password.placeholder')}
-                    className="h-12 w-full rounded-xl pl-10 pr-12 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+                    className="h-12 w-full rounded-xl pl-10 pr-12 text-sm placeholder-slate-400 outline-none transition-all duration-200"
                     style={INPUT_STYLE}
                     onFocus={INPUT_FOCUS}
                     onBlur={INPUT_BLUR}
@@ -282,7 +283,7 @@ export default function SignupPage() {
 
               {/* Confirm password */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-300">{t('auth.confirm.password')}</label>
+                <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('auth.confirm.password')}</label>
                 <div className="relative">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"><IconLock /></span>
                   <input
@@ -291,7 +292,7 @@ export default function SignupPage() {
                     onChange={e => setConfirmPassword(e.target.value)}
                     required
                     placeholder={t('auth.confirm.password.placeholder')}
-                    className="h-12 w-full rounded-xl pl-10 pr-12 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+                    className="h-12 w-full rounded-xl pl-10 pr-12 text-sm placeholder-slate-400 outline-none transition-all duration-200"
                     style={INPUT_STYLE}
                     onFocus={INPUT_FOCUS}
                     onBlur={INPUT_BLUR}
@@ -311,7 +312,7 @@ export default function SignupPage() {
                   onChange={e => setTerms(e.target.checked)}
                   className="mt-0.5 h-4 w-4 flex-shrink-0 rounded accent-sky-500"
                 />
-                <span className="text-sm text-slate-400">{t('auth.terms')}</span>
+                <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('auth.terms')}</span>
               </label>
 
               {/* Error */}
@@ -333,28 +334,28 @@ export default function SignupPage() {
 
             {/* Separator */}
             <div className="my-6 flex items-center gap-3">
-              <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
-              <span className="text-xs uppercase tracking-widest text-slate-600">{t('auth.or')}</span>
-              <div className="h-px flex-1" style={{ background: 'rgba(255,255,255,0.06)' }} />
+              <div className="h-px flex-1" style={{ background: 'var(--border-color)' }} />
+              <span className="text-xs uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{t('auth.or')}</span>
+              <div className="h-px flex-1" style={{ background: 'var(--border-color)' }} />
             </div>
 
             {/* Google */}
             <button
               type="button"
               onClick={handleGoogleSignIn}
-              className="flex h-12 w-full items-center justify-center gap-3 rounded-xl text-sm font-medium text-white transition-all duration-200"
-              style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.08)' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)' }}
+              className="flex h-12 w-full items-center justify-center gap-3 rounded-xl text-sm font-medium transition-all duration-200"
+              style={{ border: '1px solid var(--border-color)', background: 'var(--bg-elevated)', color: 'var(--text-primary)' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-surface)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.3)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-elevated)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border-color)' }}
             >
               <GoogleIcon />
               {t('auth.signin.google')}
             </button>
 
             {/* Login link */}
-            <p className="mt-6 text-center text-sm text-slate-500">
+            <p className="mt-6 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
               {t('auth.have.account')}{' '}
-              <Link href="/login" className="font-medium text-sky-400 transition-colors hover:text-sky-300">
+              <Link href="/login" className="font-medium text-sky-500 transition-colors hover:text-sky-400">
                 {t('auth.login')}
               </Link>
             </p>

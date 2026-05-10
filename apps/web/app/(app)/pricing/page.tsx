@@ -114,10 +114,10 @@ export default function PricingPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-8 stagger-children">
 
         {/* GRATUIT */}
-        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)]" style={{ background: 'rgba(17,24,39,0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)]" style={{ background: 'var(--bg-surface)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">{t('pricing.free.name')}</h3>
-            <p className="text-sm" style={{ color: '#94a3b8' }}>Idéal pour tester et découvrir ProAI</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Idéal pour tester et découvrir ProAI</p>
           </div>
           <div className="mb-6">
             <span className="text-5xl font-extrabold text-white">0&#8364;</span>
@@ -151,7 +151,7 @@ export default function PricingPage() {
           </div>
           <div className="mb-6 mt-2">
             <h3 className="text-xl font-bold mb-1" style={{ color: '#fb923c' }}>{t('pricing.pro.name')}</h3>
-            <p className="text-sm" style={{ color: '#94a3b8' }}>Pour automatiser et faire évoluer votre business</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Pour automatiser et faire évoluer votre business</p>
           </div>
           <div className="mb-6">
             <span className="text-5xl font-extrabold text-white">{proPrice}&#8364;</span>
@@ -188,10 +188,10 @@ export default function PricingPage() {
         </div>
 
         {/* ENTERPRISE */}
-        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,92,246,0.4)] hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)]" style={{ background: 'rgba(17,24,39,0.8)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,92,246,0.4)] hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)]" style={{ background: 'var(--bg-surface)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <div className="mb-6">
             <h3 className="text-xl font-bold text-white mb-1">{t('pricing.enterprise.name')}</h3>
-            <p className="text-sm" style={{ color: '#94a3b8' }}>Pour les équipes à grande échelle</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Pour les équipes à grande échelle</p>
           </div>
           <div className="mb-6">
             <span className="text-5xl font-extrabold text-white">{enterprisePrice}&#8364;</span>
@@ -235,7 +235,7 @@ export default function PricingPage() {
           { icon: Shield, text: 'Données sécurisées RGPD' },
           { icon: Check, text: 'Support réactif' },
         ].map((item, i) => (
-          <span key={i} className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full" style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <span key={i} className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-full" style={{ color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}>
             <item.icon size={12} style={{ color: '#34d399' }} /> {item.text}
           </span>
         ))}
@@ -243,7 +243,7 @@ export default function PricingPage() {
 
       {/* Détail des agents */}
       <div className="max-w-3xl mx-auto mb-16">
-        <button onClick={() => setShowAgents(!showAgents)} className="w-full flex items-center justify-between px-6 py-4 rounded-xl transition-all duration-300" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <button onClick={() => setShowAgents(!showAgents)} className="w-full flex items-center justify-between px-6 py-4 rounded-xl transition-all duration-300" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
           <span className="flex items-center gap-3">
             <Info size={18} style={{ color: '#0ea5e9' }} />
             <span className="text-sm font-semibold text-white">{t('pricing.agents.badge')}</span>
@@ -253,11 +253,11 @@ export default function PricingPage() {
         {showAgents && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 animate-fade-up">
             {AGENTS_INFO.map((agent, i) => (
-              <div key={i} className="flex items-start gap-3 px-4 py-3 rounded-xl" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div key={i} className="flex items-start gap-3 px-4 py-3 rounded-xl" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-sm" style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8' }}>{i + 1}</div>
                 <div>
                   <p className="text-sm font-semibold text-white">{agent.name}</p>
-                  <p className="text-xs" style={{ color: '#94a3b8' }}>{agent.desc}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{agent.desc}</p>
                 </div>
               </div>
             ))}
@@ -270,13 +270,13 @@ export default function PricingPage() {
         <h3 className="text-center text-lg font-bold text-white mb-6">{t('pricing.testimonials.title')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {TESTIMONIALS.map((item, i) => (
-            <div key={i} className="px-6 py-5 rounded-xl transition-all duration-300 hover:-translate-y-1" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <p className="text-sm mb-4" style={{ color: '#e2e8f0', fontStyle: 'italic', lineHeight: '1.7' }}>&laquo; {item.text} &raquo;</p>
+            <div key={i} className="px-6 py-5 rounded-xl transition-all duration-300 hover:-translate-y-1" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
+              <p className="text-sm mb-4" style={{ color: 'var(--text-primary)', fontStyle: 'italic', lineHeight: '1.7' }}>&laquo; {item.text} &raquo;</p>
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: `${item.color}20`, color: item.color }}>{item.initials}</div>
                 <div>
                   <p className="text-sm font-semibold text-white">{item.name}</p>
-                  <p className="text-xs" style={{ color: '#94a3b8' }}>{item.role}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{item.role}</p>
                 </div>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function PricingPage() {
           { q: 'Comment fonctionne le scoring de leads ?', a: 'Notre IA analyse le comportement de vos prospects et attribue un score chaud / tiède / froid pour prioriser vos actions.' },
           { q: 'Le paiement est-il sécurisé ?', a: 'Oui. Nous utilisons Stripe, le leader mondial du paiement en ligne. Vos informations bancaires ne transitent jamais par nos serveurs.' },
         ].map((faq, i) => (
-          <details key={i} className="mb-3 rounded-xl overflow-hidden group" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <details key={i} className="mb-3 rounded-xl overflow-hidden group" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
             <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-white flex items-center justify-between hover:bg-[#1a2236] transition-colors">
               {faq.q}
               <span className="text-[#94a3b8] group-open:rotate-45 transition-transform">+</span>
@@ -306,7 +306,7 @@ export default function PricingPage() {
 
       {/* Badge Stripe */}
       <div className="text-center mt-12">
-        <p className="text-xs" style={{ color: '#64748b' }}>Paiements sécurisés par Stripe | Conforme PCI DSS</p>
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Paiements sécurisés par Stripe | Conforme PCI DSS</p>
       </div>
     </div>
   )

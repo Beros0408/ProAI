@@ -124,10 +124,10 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0c1220] text-white animate-fade-up">
+    <div className="min-h-screen animate-fade-up" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <div className="max-w-7xl mx-auto space-y-6 px-4 pb-10 lg:px-6">
         <BackButton />
-        <div className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+        <div className="card-premium rounded-3xl p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-[#fb923c]">{t("reports.badge")}</p>
@@ -158,12 +158,12 @@ export default function ReportsPage() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-[1.3fr,0.9fr]">
-          <section className="space-y-6 rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+          <section className="space-y-6 rounded-3xl card-premium p-6">
             <div className="flex items-center gap-3 text-sm text-slate-400">
               <FileText className="h-5 w-5 text-[#0ea5e9]" />
               <span>{t("reports.weekly")}</span>
             </div>
-            <div className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-6">
+            <div className="rounded-3xl p-6" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
               <h2 className="text-xl font-semibold text-white">{t("reports.summary")}</h2>
               <p className="mt-3 text-slate-300 leading-7">
                 {selectedReport ? selectedReport.report : t("reports.empty")}
@@ -193,7 +193,7 @@ export default function ReportsPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-[#1e2937] bg-[#0f172a]/80 p-6">
+            <div className="rounded-3xl p-6" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
               <h3 className="text-lg font-semibold text-white">{t("reports.metrics")}</h3>
               <div className="mt-4 h-72">
                 <ResponsiveContainer width="100%" height="100%">
@@ -211,7 +211,7 @@ export default function ReportsPage() {
             </div>
           </section>
 
-          <aside className="space-y-4 rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
+          <aside className="space-y-4 rounded-3xl card-premium p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-[#0ea5e9]">{t("reports.historyBadge")}</p>
@@ -224,13 +224,13 @@ export default function ReportsPage() {
                 <div
                   key={report.id}
                   className="rounded-2xl p-4 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer group"
-                  style={{ background: "rgba(15,23,42,0.8)", border: "1px solid rgba(255,255,255,0.06)" }}
+                  style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(14,165,233,0.25)"
                     ;(e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(14,165,233,0.08)"
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.border = "1px solid rgba(255,255,255,0.06)"
+                    (e.currentTarget as HTMLDivElement).style.border = "1px solid var(--border-color)"
                     ;(e.currentTarget as HTMLDivElement).style.boxShadow = "none"
                   }}
                 >
@@ -249,8 +249,8 @@ export default function ReportsPage() {
                       </button>
                       <button
                         onClick={() => exportReport(report)}
-                        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium text-[#94a3b8] transition-all duration-200 hover:scale-105"
-                        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
+                        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all duration-200 hover:scale-105"
+                        style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
                       >
                         <Download className="w-3.5 h-3.5" /> PDF
                       </button>

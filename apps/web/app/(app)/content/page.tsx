@@ -506,9 +506,9 @@ export default function ContentPage() {
                 disabled={!result}
                 onClick={handleCopy}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={theme === 'light' ? { background: '#eef6ff', border: '1px solid #bfdbfe', color: '#2563eb' } : { background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
-                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#93c5fd' : 'rgba(14,165,233,0.35)' } }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#bfdbfe' : 'rgba(14,165,233,0.15)' }}
+                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
               >
                 {t('content.copy')}
               </button>
@@ -516,9 +516,9 @@ export default function ContentPage() {
                 disabled={!result}
                 onClick={handleDownload}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={theme === 'light' ? { background: '#eef6ff', border: '1px solid #bfdbfe', color: '#2563eb' } : { background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
-                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#93c5fd' : 'rgba(14,165,233,0.35)' } }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#bfdbfe' : 'rgba(14,165,233,0.15)' }}
+                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
               >
                 {t('content.download')}
               </button>
@@ -574,7 +574,7 @@ export default function ContentPage() {
                 <h3 className="text-lg font-bold text-white">{t('content.schedule.modal.title')}</h3>
                 <p className="text-xs text-[#94a3b8] mt-0.5">{t('schedule.subtitle2')}</p>
               </div>
-              <button type="button" onClick={() => setShowScheduleModal(false)} style={{ color: '#94a3b8' }} className="hover:text-white transition-colors">
+              <button type="button" onClick={() => setShowScheduleModal(false)} style={{ color: 'var(--text-secondary)' }} className="hover:text-[var(--text-primary)] transition-colors">
                 <X size={20} />
               </button>
             </div>

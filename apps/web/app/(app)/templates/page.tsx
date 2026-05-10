@@ -61,7 +61,7 @@ export default function TemplatesPage() {
           return (
             <article key={template.key}
               className="rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden"
-              style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}
+              style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLElement).style.border = `1px solid ${color}30`
                 ;(e.currentTarget as HTMLElement).style.boxShadow = `0 8px 32px ${color}12`

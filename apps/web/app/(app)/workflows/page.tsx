@@ -243,7 +243,7 @@ export default function WorkflowsPage() {
       </div>
 
       <div className="flex flex-1 gap-6 p-6 min-h-0">
-        <div className="flex-1 rounded-[24px] overflow-hidden flex flex-col" style={{ width: '75%', background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="flex-1 rounded-[24px] overflow-hidden flex flex-col" style={{ width: '75%', background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
             <div>
               <input
@@ -310,7 +310,7 @@ export default function WorkflowsPage() {
           )}
         </div>
 
-        <div className="rounded-[24px] flex flex-col overflow-hidden" style={{ width: '25%', background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+        <div className="rounded-[24px] flex flex-col overflow-hidden" style={{ width: '25%', background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <div className="border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
             <h2 className="text-[16px] font-[600] text-white">{t('workflows.elements')}</h2>
           </div>

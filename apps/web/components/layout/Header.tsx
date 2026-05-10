@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Bell, Search } from 'lucide-react'
+import { Bell, Moon, Search, Sun } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
@@ -21,18 +21,18 @@ const PAGE_TITLES: Record<string, TranslationKey> = {
 export function Header() {
   const pathname = usePathname()
   const { t } = useTranslation()
-  const { theme } = useTheme()
+  const { theme, toggleTheme } = useTheme()
   const foundKey = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1]
   const title = foundKey ? t(foundKey) : 'ProAI'
 
   return (
     <header className="h-14 shrink-0 flex items-center px-6 gap-4 animate-fade-down sticky top-0 z-40"
       style={{
-        background: theme === 'light' ? 'rgba(255,255,255,0.75)' : 'var(--header-bg, rgba(5,12,24,0.82))',
+        background: theme === 'warm' ? 'rgba(31,24,20,0.85)' : 'var(--header-bg, rgba(5,12,24,0.82))',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-subtle, rgba(255,255,255,0.05))',
-        boxShadow: theme === 'light' ? '0 1px 0 rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.04)' : '0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.3)',
+        borderBottom: theme === 'warm' ? '1px solid rgba(251,146,60,0.08)' : '1px solid var(--border-subtle, rgba(255,255,255,0.05))',
+        boxShadow: theme === 'warm' ? '0 1px 0 rgba(251,146,60,0.04), 0 4px 20px rgba(0,0,0,0.3)' : '0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.3)',
       }}
     >
       <div className="flex-1 min-w-0">
@@ -42,43 +42,61 @@ export function Header() {
       <div className="flex items-center gap-2">
         {/* Search */}
         <button
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[#64748b] text-xs transition-all duration-200 hover:text-[#94a3b8]"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs transition-all duration-200"
           style={{
-            background: theme === 'light' ? '#f1f5f9' : 'var(--input-bg, #1a2236)',
-            border: theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-color, rgba(255,255,255,0.07))',
+            color: 'var(--text-muted)',
+            background: theme === 'warm' ? '#2a2018' : 'var(--input-bg, #1a2236)',
+            border: theme === 'warm' ? '1px solid rgba(251,146,60,0.1)' : '1px solid var(--border-color, rgba(255,255,255,0.07))',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = theme === 'light' ? '#eef6ff' : 'rgba(14,165,233,0.08)'
-            ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(14,165,233,0.2)'
-            ;(e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 16px rgba(14,165,233,0.08)'
+            (e.currentTarget as HTMLButtonElement).style.background = theme === 'warm' ? 'rgba(251,146,60,0.08)' : 'rgba(14,165,233,0.08)'
+            ;(e.currentTarget as HTMLButtonElement).style.border = theme === 'warm' ? '1px solid rgba(251,146,60,0.2)' : '1px solid rgba(14,165,233,0.2)'
+            ;(e.currentTarget as HTMLButtonElement).style.boxShadow = theme === 'warm' ? '0 0 16px rgba(251,146,60,0.08)' : '0 0 16px rgba(14,165,233,0.08)'
+            ;(e.currentTarget as HTMLButtonElement).style.color = theme === 'warm' ? '#fb923c' : '#94a3b8'
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = theme === 'light' ? '#f1f5f9' : 'var(--input-bg, #1a2236)'
-            ;(e.currentTarget as HTMLButtonElement).style.border = theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-color, rgba(255,255,255,0.07))'
+            (e.currentTarget as HTMLButtonElement).style.background = theme === 'warm' ? '#2a2018' : 'var(--input-bg, #1a2236)'
+            ;(e.currentTarget as HTMLButtonElement).style.border = theme === 'warm' ? '1px solid rgba(251,146,60,0.1)' : '1px solid var(--border-color, rgba(255,255,255,0.07))'
             ;(e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'
+            ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)'
           }}
         >
           <Search className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">{t('common.search')}</span>
-          <kbd className="hidden sm:inline ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono text-[#64748b]"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <kbd className="hidden sm:inline ml-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono"
+            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
             ⌘K
           </kbd>
+        </button>
+
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg transition-all duration-200"
+          style={{
+            background: theme === 'dark' ? 'rgba(14,165,233,0.1)' : 'rgba(251,146,60,0.1)',
+            color: theme === 'dark' ? '#0ea5e9' : '#fb923c',
+          }}
+          title={theme === 'dark' ? 'Mode chaleureux' : 'Mode sombre'}
+        >
+          {theme === 'dark' ? <Moon size={16} /> : <Sun size={16} />}
         </button>
 
         <LanguageSwitcher />
 
         {/* Notification Bell */}
         <button
-          className="relative p-2 rounded-xl text-[#64748b] transition-all duration-200 hover:text-[#e2e8f0]"
-          style={{ border: '1px solid transparent' }}
+          className="relative p-2 rounded-xl transition-all duration-200"
+          style={{ color: 'var(--text-muted)', border: '1px solid transparent' }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'
-            ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(255,255,255,0.08)'
+            (e.currentTarget as HTMLButtonElement).style.background = theme === 'warm' ? 'rgba(251,146,60,0.06)' : 'rgba(255,255,255,0.05)'
+            ;(e.currentTarget as HTMLButtonElement).style.border = theme === 'warm' ? '1px solid rgba(251,146,60,0.12)' : '1px solid rgba(255,255,255,0.08)'
+            ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-primary)'
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.background = ''
             ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid transparent'
+            ;(e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)'
           }}
         >
           <Bell className="w-4 h-4" />

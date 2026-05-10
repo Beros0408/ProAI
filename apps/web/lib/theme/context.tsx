@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
-type Theme = 'dark' | 'light'
+type Theme = 'dark' | 'warm'
 
 const ThemeContext = createContext<{
   theme: Theme
@@ -15,17 +15,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('proai-theme') as Theme
-    if (saved) setTheme(saved)
+    if (saved === 'dark' || saved === 'warm') setTheme(saved)
   }, [])
 
   useEffect(() => {
     localStorage.setItem('proai-theme', theme)
-    document.documentElement.classList.remove('dark', 'light')
+    document.documentElement.classList.remove('dark', 'warm')
     document.documentElement.classList.add(theme)
     document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
 
-  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'warm' : 'dark')
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>

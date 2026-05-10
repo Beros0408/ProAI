@@ -15,14 +15,15 @@ type Tab = 'profile' | 'preferences' | 'subscription' | 'security'
 
 // ── Shared style helpers ───────────────────────────────────────────────────────
 
-const FIELD = { background: 'var(--input-bg, #1a2236)', border: '1px solid var(--border-color, rgba(255,255,255,0.08))' }
+const FIELD = { background: 'var(--input-bg, #1a2236)', border: '1px solid var(--border-color, rgba(255,255,255,0.08))', color: 'var(--text-primary)' }
 
 function onInputFocus(e: React.FocusEvent<HTMLInputElement>) {
-  e.currentTarget.style.borderColor = '#0ea5e9'
-  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.1)'
+  const isWarm = document.documentElement.getAttribute('data-theme') === 'warm'
+  e.currentTarget.style.borderColor = isWarm ? '#fb923c' : '#0ea5e9'
+  e.currentTarget.style.boxShadow = isWarm ? '0 0 0 3px rgba(251,146,60,0.1)' : '0 0 0 3px rgba(14,165,233,0.1)'
 }
 function onInputBlur(e: React.FocusEvent<HTMLInputElement>) {
-  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
+  e.currentTarget.style.borderColor = 'var(--border-color, rgba(255,255,255,0.08))'
   e.currentTarget.style.boxShadow = 'none'
 }
 
@@ -44,7 +45,7 @@ function Toggle({ checked, onChange }: { checked: boolean; onChange: (v: boolean
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className="relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 focus:outline-none"
-      style={{ background: checked ? '#0ea5e9' : 'rgba(255,255,255,0.1)' }}
+      style={{ background: checked ? '#0ea5e9' : 'var(--bg-elevated, rgba(255,255,255,0.1))' }}
     >
       <span
         className="inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform duration-200"
@@ -58,11 +59,11 @@ function ToggleRow({ label, desc, checked, onChange, noBorder }: { label: string
   return (
     <div
       className="flex items-center justify-between gap-4 py-4"
-      style={!noBorder ? { borderBottom: '1px solid rgba(255,255,255,0.04)' } : undefined}
+      style={!noBorder ? { borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.04))' } : undefined}
     >
       <div>
-        <p className="text-sm font-medium text-white">{label}</p>
-        <p className="mt-0.5 text-xs" style={{ color: '#64748b' }}>{desc}</p>
+        <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{label}</p>
+        <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{desc}</p>
       </div>
       <Toggle checked={checked} onChange={onChange} />
     </div>
@@ -117,18 +118,18 @@ function EyeIcon({ off }: { off?: boolean }) {
 function PwdField({ label, value, onChange, show, onToggle }: { label: string; value: string; onChange: (v: string) => void; show: boolean; onToggle: () => void }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{label}</label>
+      <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</label>
       <div className="relative">
         <input
           type={show ? 'text' : 'password'}
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="h-12 w-full rounded-xl pl-4 pr-11 text-sm text-white outline-none transition-all duration-200"
+          className="h-12 w-full rounded-xl pl-4 pr-11 text-sm outline-none transition-all duration-200"
           style={FIELD}
           onFocus={onInputFocus}
           onBlur={onInputBlur}
         />
-        <button type="button" onClick={onToggle} className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors" style={{ color: '#64748b' }}>
+        <button type="button" onClick={onToggle} className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors" style={{ color: 'var(--text-muted)' }}>
           <EyeIcon off={show} />
         </button>
       </div>
@@ -181,7 +182,7 @@ function ProfileTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-white">{t('settings.profile.title')}</h2>
-        <p className="mt-0.5 text-sm" style={{ color: '#64748b' }}>{t('settings.profile.subtitle')}</p>
+        <p className="mt-0.5 text-sm" style={{ color: 'var(--text-muted)' }}>{t('settings.profile.subtitle')}</p>
       </div>
 
       {/* Avatar */}
@@ -189,11 +190,11 @@ function ProfileTab() {
         <Avatar name={fullName} size={64} />
         <div>
           <p className="text-sm font-medium text-white">{fullName || email}</p>
-          <p className="text-xs" style={{ color: '#64748b' }}>{email}</p>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{email}</p>
           <button
             type="button"
             className="mt-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}
+            style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
           >
             {t('settings.profile.avatar.change')}
           </button>
@@ -203,13 +204,13 @@ function ProfileTab() {
       {/* Fields */}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('settings.profile.fullname')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('settings.profile.fullname')}</label>
           <input
             type="text"
             value={fullName}
             onChange={e => setFullName(e.target.value)}
             placeholder={t('settings.profile.fullname.placeholder')}
-            className="h-12 w-full rounded-xl px-4 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+            className="h-12 w-full rounded-xl px-4 text-sm placeholder-slate-400 outline-none transition-all duration-200"
             style={FIELD}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
@@ -217,7 +218,7 @@ function ProfileTab() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
             {t('settings.profile.email')}
             <span className="ml-2 text-[10px] font-normal" style={{ color: '#475569' }}>({t('settings.profile.email.note')})</span>
           </label>
@@ -231,13 +232,13 @@ function ProfileTab() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('settings.profile.company')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('settings.profile.company')}</label>
           <input
             type="text"
             value={company}
             onChange={e => setCompany(e.target.value)}
             placeholder={t('settings.profile.company.placeholder')}
-            className="h-12 w-full rounded-xl px-4 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+            className="h-12 w-full rounded-xl px-4 text-sm placeholder-slate-400 outline-none transition-all duration-200"
             style={FIELD}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
@@ -245,13 +246,13 @@ function ProfileTab() {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium" style={{ color: '#cbd5e1' }}>{t('settings.profile.sector')}</label>
+          <label className="mb-1.5 block text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{t('settings.profile.sector')}</label>
           <input
             type="text"
             value={sector}
             onChange={e => setSector(e.target.value)}
             placeholder={t('settings.profile.sector.placeholder')}
-            className="h-12 w-full rounded-xl px-4 text-sm text-white placeholder-slate-600 outline-none transition-all duration-200"
+            className="h-12 w-full rounded-xl px-4 text-sm placeholder-slate-400 outline-none transition-all duration-200"
             style={FIELD}
             onFocus={onInputFocus}
             onBlur={onInputBlur}
@@ -293,14 +294,14 @@ function PreferencesTab() {
     <div className="space-y-1">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-white">{t('settings.pref.title')}</h2>
-        <p className="mt-0.5 text-sm" style={{ color: '#64748b' }}>{t('settings.pref.subtitle')}</p>
+        <p className="mt-0.5 text-sm" style={{ color: 'var(--text-muted)' }}>{t('settings.pref.subtitle')}</p>
       </div>
 
       {/* Language */}
-      <div className="flex items-center justify-between gap-4 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+      <div className="flex items-center justify-between gap-4 py-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div>
           <p className="text-sm font-medium text-white">{t('settings.pref.lang')}</p>
-          <p className="mt-0.5 text-xs" style={{ color: '#64748b' }}>{t('settings.pref.lang.desc')}</p>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{t('settings.pref.lang.desc')}</p>
         </div>
         <div className="flex overflow-hidden rounded-lg" style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}>
           {(['fr', 'en'] as const).map(lang => (
@@ -309,7 +310,7 @@ function PreferencesTab() {
               type="button"
               onClick={() => switchLanguage(lang)}
               className="px-4 py-2 text-xs font-semibold uppercase transition-colors duration-200"
-              style={{ color: locale === lang ? '#ffffff' : '#64748b', background: locale === lang ? 'rgba(14,165,233,0.2)' : 'transparent' }}
+              style={{ color: locale === lang ? 'var(--nav-active-color)' : 'var(--text-muted)', background: locale === lang ? 'rgba(14,165,233,0.2)' : 'transparent' }}
             >
               {lang}
             </button>
@@ -318,24 +319,24 @@ function PreferencesTab() {
       </div>
 
       {/* Theme */}
-      <div className="flex items-center justify-between gap-4 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+      <div className="flex items-center justify-between gap-4 py-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div>
           <p className="text-sm font-medium text-white">{t('settings.pref.theme')}</p>
-          <p className="mt-0.5 text-xs" style={{ color: '#64748b' }}>{t('settings.pref.theme.desc')}</p>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{t('settings.pref.theme.desc')}</p>
         </div>
         <div className="flex overflow-hidden rounded-lg" style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}>
-          {(['dark', 'light'] as const).map(t_ => (
+          {(['dark', 'warm'] as const).map(t_ => (
             <button
               key={t_}
               type="button"
               onClick={() => setTheme(t_)}
               className="px-4 py-2 text-xs font-semibold uppercase transition-colors duration-200"
               style={{
-                color: theme === t_ ? '#ffffff' : '#64748b',
-                background: theme === t_ ? 'rgba(14,165,233,0.2)' : 'transparent',
+                color: theme === t_ ? (t_ === 'warm' ? '#fb923c' : 'var(--nav-active-color)') : 'var(--text-muted)',
+                background: theme === t_ ? (t_ === 'warm' ? 'rgba(251,146,60,0.15)' : 'rgba(14,165,233,0.2)') : 'transparent',
               }}
             >
-              {t_ === 'dark' ? t('settings.pref.theme.dark') : t('settings.pref.theme.light')}
+              {t_ === 'dark' ? t('settings.pref.theme.dark') : t('settings.pref.theme.warm')}
             </button>
           ))}
         </div>
@@ -346,10 +347,10 @@ function PreferencesTab() {
       <ToggleRow label={t('settings.pref.notif.push')} desc={t('settings.pref.notif.push.desc')} checked={pushNotif} onChange={setPushNotif} noBorder />
 
       {/* Report frequency */}
-      <div className="flex items-center justify-between gap-4 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+      <div className="flex items-center justify-between gap-4 py-4" style={{ borderTop: '1px solid var(--border-subtle)' }}>
         <div>
           <p className="text-sm font-medium text-white">{t('settings.pref.report.freq')}</p>
-          <p className="mt-0.5 text-xs" style={{ color: '#64748b' }}>{t('settings.pref.report.freq.desc')}</p>
+          <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>{t('settings.pref.report.freq.desc')}</p>
         </div>
         <div className="relative">
           <select
@@ -362,7 +363,7 @@ function PreferencesTab() {
             <option value="weekly" style={{ background: 'var(--input-bg)' }}>{t('settings.pref.report.weekly')}</option>
             <option value="monthly" style={{ background: 'var(--input-bg)' }}>{t('settings.pref.report.monthly')}</option>
           </select>
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" style={{ color: '#64748b' }}>
+          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
           </span>
         </div>
@@ -408,18 +409,18 @@ function SubscriptionTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold text-white">{t('settings.sub.title')}</h2>
-        <p className="mt-0.5 text-sm" style={{ color: '#64748b' }}>{t('settings.sub.subtitle')}</p>
+        <p className="mt-0.5 text-sm" style={{ color: 'var(--text-muted)' }}>{t('settings.sub.subtitle')}</p>
       </div>
 
       {/* Current plan card */}
-      <div className="rounded-xl p-5" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="rounded-xl p-5" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="mb-2 text-xs font-medium" style={{ color: '#64748b' }}>{t('settings.sub.current')}</p>
+            <p className="mb-2 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{t('settings.sub.current')}</p>
             <span className="rounded-full px-3 py-1 text-sm font-bold capitalize" style={{ background: planStyle.bg, color: planStyle.color, border: `1px solid ${planStyle.border}` }}>
               {plan}
             </span>
-            <p className="mt-2 text-xs" style={{ color: '#64748b' }}>{t(PLAN_DESC_KEYS[plan])}</p>
+            <p className="mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>{t(PLAN_DESC_KEYS[plan])}</p>
             <p className="mt-1 text-xs" style={{ color: '#475569' }}>{t('settings.sub.renewal')} 01/06/2026</p>
           </div>
           <Link href="/pricing" className="btn-premium flex h-9 items-center rounded-lg px-4 text-xs font-semibold whitespace-nowrap">
@@ -431,7 +432,7 @@ function SubscriptionTab() {
       {/* Invoice history */}
       <div>
         <h3 className="mb-3 text-sm font-semibold text-white">{t('settings.sub.invoices')}</h3>
-        <div className="overflow-hidden rounded-xl" style={{ border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="overflow-hidden rounded-xl" style={{ border: '1px solid var(--border-color)' }}>
           <div className="grid grid-cols-4 gap-4 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-wide" style={{ background: 'rgba(255,255,255,0.03)', color: '#475569' }}>
             <span>{t('settings.sub.invoice.date')}</span>
             <span>{t('settings.sub.invoice.amount')}</span>
@@ -439,8 +440,8 @@ function SubscriptionTab() {
             <span />
           </div>
           {MOCK_INVOICES.map(inv => (
-            <div key={inv.id} className="grid grid-cols-4 items-center gap-4 px-4 py-3 text-sm" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ color: '#94a3b8' }}>{inv.date}</span>
+            <div key={inv.id} className="grid grid-cols-4 items-center gap-4 px-4 py-3 text-sm" style={{ borderTop: '1px solid var(--border-subtle)' }}>
+              <span style={{ color: 'var(--text-secondary)' }}>{inv.date}</span>
               <span className="font-semibold text-white">{inv.amount}</span>
               <span>
                 <span className="rounded-full px-2 py-0.5 text-[11px] font-medium" style={{ background: 'rgba(34,197,94,0.1)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.2)' }}>
@@ -509,7 +510,7 @@ function SecurityTab() {
     <div className="space-y-8">
       <div>
         <h2 className="text-lg font-semibold text-white">{t('settings.sec.title')}</h2>
-        <p className="mt-0.5 text-sm" style={{ color: '#64748b' }}>{t('settings.sec.subtitle')}</p>
+        <p className="mt-0.5 text-sm" style={{ color: 'var(--text-muted)' }}>{t('settings.sec.subtitle')}</p>
       </div>
 
       {/* Change password */}
@@ -537,7 +538,7 @@ function SecurityTab() {
         <h3 className="mb-3 text-sm font-semibold text-white">{t('settings.sec.sessions.title')}</h3>
         <div className="space-y-2">
           {MOCK_SESSIONS.map(session => (
-            <div key={session.id} className="flex items-center justify-between gap-4 rounded-xl px-4 py-3" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div key={session.id} className="flex items-center justify-between gap-4 rounded-xl px-4 py-3" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}>
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg" style={{ background: 'rgba(14,165,233,0.1)' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" aria-hidden="true">
@@ -546,7 +547,7 @@ function SecurityTab() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">{session.device}</p>
-                  <p className="text-xs" style={{ color: '#64748b' }}>{session.location}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{session.location}</p>
                 </div>
               </div>
               {session.current && (
@@ -561,7 +562,7 @@ function SecurityTab() {
           type="button"
           onClick={handleSignOutAll}
           className="mt-3 rounded-xl px-4 h-9 text-xs font-medium transition-all duration-200"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#94a3b8' }}
+          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
         >
           {t('settings.sec.sessions.revoke')}
         </button>
@@ -570,7 +571,7 @@ function SecurityTab() {
       {/* Danger zone */}
       <div className="rounded-xl p-5" style={{ background: 'rgba(239,68,68,0.04)', border: '1px solid rgba(239,68,68,0.2)' }}>
         <h3 className="mb-1 text-sm font-semibold" style={{ color: '#f87171' }}>{t('settings.sec.danger.title')}</h3>
-        <p className="mb-4 text-xs" style={{ color: '#94a3b8' }}>{t('settings.sec.danger.desc')}</p>
+        <p className="mb-4 text-xs" style={{ color: 'var(--text-secondary)' }}>{t('settings.sec.danger.desc')}</p>
         {!deleteConfirm ? (
           <button
             type="button"
@@ -595,7 +596,7 @@ function SecurityTab() {
                 type="button"
                 onClick={() => setDeleteConfirm(false)}
                 className="rounded-xl px-4 h-10 text-sm font-medium"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#94a3b8' }}
+                style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
               >
                 {t('common.cancel')}
               </button>
@@ -634,7 +635,7 @@ export default function SettingsPage() {
     <div className="animate-fade-in max-w-3xl space-y-6">
       <BackButton />
       <div className="animate-fade-up">
-        <h1 className="gradient-text text-2xl font-bold" style={{ letterSpacing: '-0.02em', color: theme === 'light' ? '#0f172a' : undefined }}>{t('settings')}</h1>
+        <h1 className="gradient-text text-2xl font-bold" style={{ letterSpacing: '-0.02em' }}>{t('settings')}</h1>
       </div>
 
       <div
@@ -642,7 +643,7 @@ export default function SettingsPage() {
         style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}
       >
         {/* Desktop tab bar */}
-        <div className="hidden items-stretch sm:flex" style={{ borderBottom: theme === 'light' ? '1px solid #e8eaf0' : '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="hidden items-stretch sm:flex" style={{ borderBottom: theme === 'warm' ? '1px solid rgba(251,146,60,0.1)' : '1px solid rgba(255,255,255,0.06)' }}>
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -650,9 +651,9 @@ export default function SettingsPage() {
               onClick={() => setActiveTab(tab.id)}
               className="whitespace-nowrap px-6 py-4 text-sm font-medium transition-all duration-200"
               style={{
-                color: activeTab === tab.id ? (theme === 'light' ? '#0f172a' : '#ffffff') : '#64748b',
+                color: activeTab === tab.id ? 'var(--text-primary)' : 'var(--text-muted)',
                 borderBottom: activeTab === tab.id ? '2px solid #0ea5e9' : '2px solid transparent',
-                background: activeTab === tab.id ? (theme === 'light' ? '#ffffff' : 'rgba(14,165,233,0.05)') : 'transparent',
+                background: activeTab === tab.id ? (theme === 'warm' ? 'rgba(251,146,60,0.05)' : 'rgba(14,165,233,0.05)') : 'transparent',
               }}
             >
               {t(tab.labelKey)}
@@ -661,9 +662,9 @@ export default function SettingsPage() {
           <Link
             href="/settings/integrations"
             className="ml-auto whitespace-nowrap px-6 py-4 text-sm font-medium transition-colors duration-200"
-            style={{ color: '#64748b', borderBottom: '2px solid transparent' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#94a3b8' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = '#64748b' }}
+            style={{ color: 'var(--text-muted)', borderBottom: '2px solid transparent' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-muted)' }}
           >
             {t('settings.integrations')}
           </Link>
@@ -682,7 +683,7 @@ export default function SettingsPage() {
                 <option key={tab.id} value={tab.id} style={{ background: 'var(--input-bg)' }}>{t(tab.labelKey)}</option>
               ))}
             </select>
-            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2" style={{ color: '#64748b' }}>
+            <span className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2" style={{ color: 'var(--text-muted)' }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
             </span>
           </div>

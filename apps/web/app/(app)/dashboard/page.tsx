@@ -154,10 +154,10 @@ export default function DashboardPage() {
       {/* HEADER PERSONNALISE */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-1" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-2xl md:text-3xl font-bold mb-1" style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
             {greeting}{profile?.business_name ? `, ${profile.business_name}` : ''} 👋
           </h1>
-          <p className="text-[#94a3b8] text-sm">
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
             {profile?.sector
               ? `${t('dashboard.todaySummary')} · ${profile.sector}`
               : t('dashboard.todaySummary')}
@@ -166,7 +166,7 @@ export default function DashboardPage() {
             <div className="flex items-start gap-2 mt-3 px-3 py-2 rounded-xl max-w-md"
               style={{ background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.15)' }}>
               <Building2 size={13} className="mt-0.5 shrink-0" style={{ color: '#38bdf8' }} />
-              <p className="text-xs leading-relaxed" style={{ color: '#94a3b8' }}>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                 {profile.business_summary}
               </p>
             </div>
@@ -225,8 +225,8 @@ export default function DashboardPage() {
                   {kpi.delta}
                 </span>
               </div>
-              <div className="text-3xl font-extrabold text-white mb-1 tracking-tight">{kpi.value}</div>
-              <div className="text-xs text-[#94a3b8] mb-3 leading-relaxed">{kpi.desc}</div>
+              <div className="text-3xl font-extrabold mb-1 tracking-tight" style={{ color: 'var(--text-primary)' }}>{kpi.value}</div>
+              <div className="text-xs mb-3 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{kpi.desc}</div>
               <MiniSparkline data={kpi.sparkline} color={kpi.color} />
               <div className="flex items-center gap-1 mt-3 text-xs font-semibold opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0" style={{ color: kpi.color }}>
                 {t('dashboard.viewDetails')} <ChevronRight size={12} />
@@ -313,7 +313,7 @@ export default function DashboardPage() {
 
         {/* ACTIVITE RECENTE */}
         <div className="rounded-xl p-5" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
-          <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Activity size={14} style={{ color: '#0ea5e9' }} />
             {t('dashboard.recentactivity')}
           </h3>
@@ -339,7 +339,7 @@ export default function DashboardPage() {
         {/* AGENTS */}
         <div className="lg:col-span-2 rounded-2xl p-5"
           style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
-          <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Shield size={14} style={{ color: '#0ea5e9' }} />
             {t('dashboard.agentstatus')}
           </h3>
@@ -391,7 +391,7 @@ export default function DashboardPage() {
         {/* QUICK ACTIONS */}
         <div className="rounded-2xl p-5"
           style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
-          <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+          <h3 className="text-sm font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
             <Zap size={14} style={{ color: '#fb923c' }} />
             {t('dashboard.quickactions')}
           </h3>

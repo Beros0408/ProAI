@@ -32,7 +32,7 @@ export default function AutomationsPage() {
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 32px ${card.color}15`
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.06)'
+              (e.currentTarget as HTMLDivElement).style.border = '1px solid var(--border-color)'
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
             }}
           >

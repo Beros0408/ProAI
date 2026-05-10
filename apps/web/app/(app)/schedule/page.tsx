@@ -215,7 +215,7 @@ export default function SchedulePage() {
           </div>
         </div>
 
-        <div className="rounded-[24px] p-6" style={{ background: 'rgba(11,18,32,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)', boxShadow: '0 15px 40px rgba(0,0,0,0.3)' }}>
+        <div className="rounded-[24px] p-6" style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)', boxShadow: '0 15px 40px rgba(0,0,0,0.15)' }}>
           <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <div className="text-[28px] font-[700] text-white">{MONTHS[currentDate.getMonth()]} {currentDate.getFullYear()}</div>
@@ -305,7 +305,7 @@ export default function SchedulePage() {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
-          <div className="w-full max-w-lg rounded-[24px] p-6 animate-scale-in" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)' }}>
+          <div className="w-full max-w-lg rounded-[24px] p-6 animate-scale-in" style={{ background: 'var(--bg-surface)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid var(--border-color)', boxShadow: '0 24px 80px rgba(0,0,0,0.3), 0 0 0 1px rgba(14,165,233,0.08)' }}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-semibold text-white">{t('schedule.addEvent')}</h2>

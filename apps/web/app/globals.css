@@ -32,24 +32,24 @@
     --nav-indicator: #0ea5e9;
   }
 
-  [data-theme="light"] {
-    --bg-base: #f8f6f3;
-    --bg-surface: #ffffff;
-    --bg-elevated: #f1f0ed;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --border-color: #e7eaf0;
-    --border-subtle: #e7eaf0;
-    --sidebar-bg: rgba(252,252,253,0.97);
-    --header-bg: rgba(255,255,255,0.75);
-    --input-bg: #f1f5f9;
-    --glass-bg: rgba(248,246,243,0.85);
-    --glass-bg-strong: rgba(255,255,255,0.92);
-    --glass-bg-full: #ffffff;
-    --nav-active-bg: #eef6ff;
-    --nav-active-color: #0284c7;
-    --nav-indicator: #0284c7;
+  [data-theme="warm"] {
+    --bg-base: #1a1410;
+    --bg-surface: #1f1814;
+    --bg-elevated: #2a2018;
+    --text-primary: #f5ebe0;
+    --text-secondary: #c4a882;
+    --text-muted: #8a7560;
+    --border-color: rgba(251,146,60,0.1);
+    --border-subtle: rgba(251,146,60,0.06);
+    --sidebar-bg: rgba(20,16,12,0.9);
+    --header-bg: rgba(20,16,12,0.85);
+    --input-bg: #2a2018;
+    --glass-bg: rgba(31,24,20,0.70);
+    --glass-bg-strong: rgba(31,24,20,0.85);
+    --glass-bg-full: rgba(31,24,20,0.98);
+    --nav-active-bg: rgba(251,146,60,0.1);
+    --nav-active-color: #fb923c;
+    --nav-indicator: #fb923c;
   }
 
   * {
@@ -547,8 +547,11 @@ a, button, input, select, textarea {
     var(--bg-base, #0c1220);
 }
 
-[data-theme="light"] .bg-premium {
-  background: #f8f6f3;
+[data-theme="warm"] .bg-premium {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(251,146,60,0.06), transparent 30%),
+    radial-gradient(circle at 80% 30%, rgba(252,216,186,0.04), transparent 30%),
+    #1a1410;
 }
 
 .card-premium {
@@ -564,15 +567,14 @@ a, button, input, select, textarea {
   transform: translateY(-2px);
 }
 
-[data-theme="light"] .card-premium {
-  background: #ffffff !important;
-  border: 1px solid #e7eaf0 !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02) !important;
+[data-theme="warm"] .card-premium {
+  background: linear-gradient(180deg, rgba(42,32,24,0.95), rgba(31,24,20,0.95)) !important;
+  border: 1px solid rgba(251,146,60,0.08) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(251,146,60,0.04) !important;
 }
-[data-theme="light"] .card-premium:hover {
-  background: #f8f6f3 !important;
-  border-color: #d1d5db !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.02) !important;
+[data-theme="warm"] .card-premium:hover {
+  border-color: rgba(251,146,60,0.2) !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35), 0 0 20px rgba(251,146,60,0.05) !important;
   transform: translateY(-2px);
 }
 
@@ -929,60 +931,86 @@ a, button, input, select, textarea {
 }
 
 /* ============================================================
-   LIGHT MODE — Text & Component Overrides
+   WARM MODE — Component Overrides
    ============================================================ */
 
 /* Scrollbar */
-[data-theme="light"] ::-webkit-scrollbar-track { background: #ebedf0; }
-[data-theme="light"] ::-webkit-scrollbar-thumb { background: #c8cad0; }
-[data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+[data-theme="warm"] ::-webkit-scrollbar-track { background: #1a1410; }
+[data-theme="warm"] ::-webkit-scrollbar-thumb { background: rgba(251,146,60,0.15); }
+[data-theme="warm"] ::-webkit-scrollbar-thumb:hover { background: rgba(251,146,60,0.3); }
 
 /* Glass utilities */
-[data-theme="light"] .glass {
+[data-theme="warm"] .glass {
   backdrop-filter: blur(20px);
-  background: rgba(248,246,243,0.85) !important;
-  border-color: #e7eaf0 !important;
+  background: rgba(31,24,20,0.85) !important;
+  border: 1px solid rgba(251,146,60,0.1) !important;
 }
-[data-theme="light"] .glass-strong {
+[data-theme="warm"] .glass-strong {
   backdrop-filter: blur(30px);
-  background: rgba(255,255,255,0.92) !important;
-  border-color: #e7eaf0 !important;
+  background: rgba(31,24,20,0.92) !important;
+  border: 1px solid rgba(251,146,60,0.12) !important;
 }
 
-/* Headings in main content → always dark in light mode */
-[data-theme="light"] main :is(h1, h2, h3, h4),
-[data-theme="light"] header h2 {
-  color: var(--text-primary);
+/* card-glass in warm mode */
+[data-theme="warm"] .card-glass {
+  background: rgba(42,32,24,0.7) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(251,146,60,0.1) !important;
 }
 
-/* text-white override for non-button content elements */
-[data-theme="light"] main :is(p, div, span).text-white {
-  color: var(--text-primary);
-}
-[data-theme="light"] aside :is(p, span).text-white {
-  color: var(--text-primary);
+/* Hover glow adjustments */
+[data-theme="warm"] .hover-glow-blue:hover {
+  box-shadow: 0 0 20px rgba(251,146,60,0.12) !important;
+  border-color: rgba(251,146,60,0.25) !important;
 }
 
-/* Tailwind arbitrary color class overrides */
-[data-theme="light"] :is(main, aside, header) .text-\[\#94a3b8\] {
-  color: var(--text-secondary);
-}
-[data-theme="light"] :is(main, aside, header) .text-\[\#e2e8f0\] {
-  color: var(--text-primary);
-}
-[data-theme="light"] :is(main, aside, header) .text-\[\#64748b\] {
-  color: var(--text-muted);
-}
-[data-theme="light"] :is(main, aside, header) .text-\[\#cbd5e1\] {
-  color: var(--text-secondary);
+/* gradient-text in warm mode */
+[data-theme="warm"] .gradient-text {
+  background: linear-gradient(135deg, #fb923c, #fcd8ba);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: none;
 }
 
-/* Progress / track backgrounds that are invisible on white */
-[data-theme="light"] main .h-1\.5 {
-  background: var(--bg-elevated);
+/* btn-premium in warm mode */
+[data-theme="warm"] .btn-premium {
+  background: linear-gradient(135deg, rgba(251,146,60,0.2), rgba(251,146,60,0.08));
+  border: 1px solid rgba(251,146,60,0.35);
+  color: #fb923c;
+}
+[data-theme="warm"] .btn-premium:hover {
+  background: linear-gradient(135deg, rgba(251,146,60,0.3), rgba(251,146,60,0.15));
+  border-color: rgba(251,146,60,0.55);
+  box-shadow: 0 0 20px rgba(251,146,60,0.25);
 }
 
-/* Sidebar section labels */
-[data-theme="light"] aside p.text-\[\#475569\] {
-  color: var(--text-muted);
+/* Tailwind arbitrary bg class overrides — map dark-blue to warm-brown */
+[data-theme="warm"] .bg-\[\#0c1220\] { background-color: var(--bg-base) !important; }
+[data-theme="warm"] .bg-\[\#0b1220\] { background-color: var(--bg-base) !important; }
+[data-theme="warm"] .bg-\[\#111827\] { background-color: var(--bg-surface) !important; }
+[data-theme="warm"] .bg-\[\#1a2236\] { background-color: var(--bg-elevated) !important; }
+
+/* hover:bg overrides */
+[data-theme="warm"] .hover\:bg-\[\#1a2236\]:hover { background-color: var(--bg-elevated) !important; }
+[data-theme="warm"] .hover\:bg-\[\#111827\]:hover { background-color: var(--bg-surface) !important; }
+[data-theme="warm"] .hover\:bg-\[\#0c1220\]:hover { background-color: var(--bg-base) !important; }
+
+/* React Flow controls in warm mode */
+[data-theme="warm"] .react-flow__attribution {
+  background: rgba(31,24,20,0.92) !important;
+  color: rgba(245,235,224,0.7) !important;
+  border: 1px solid rgba(251,146,60,0.1) !important;
+}
+[data-theme="warm"] .react-flow__controls {
+  background: rgba(31,24,20,0.92) !important;
+  border: 1px solid rgba(251,146,60,0.1) !important;
+}
+[data-theme="warm"] .react-flow__controls-button {
+  color: rgba(245,235,224,0.7) !important;
+}
+[data-theme="warm"] .react-flow__controls-button:hover {
+  background: rgba(251,146,60,0.08) !important;
+  color: rgba(245,235,224,0.95) !important;
 }

@@ -420,9 +420,9 @@ export default function CRMPage() {
                   value={formData.estimatedValue}
                   onChange={(e) => setFormData({ ...formData, estimatedValue: Number(e.target.value) })}
                   className="w-full mt-1 rounded-xl px-3 py-2.5 text-[#e2e8f0] placeholder-[#475569] text-sm outline-none transition-all duration-200"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}
                   onFocus={(e) => { e.currentTarget.style.border = '1px solid rgba(14,165,233,0.4)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14,165,233,0.08)' }}
-                  onBlur={(e) => { e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'none' }}
+                  onBlur={(e) => { e.currentTarget.style.border = '1px solid var(--border-color)'; e.currentTarget.style.boxShadow = 'none' }}
                   placeholder="0"
                 />
               </div>

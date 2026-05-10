@@ -146,8 +146,8 @@ export default function AgendaPage() {
           <h1 className="text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('agenda.subtitle')}</h1>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs" style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#111827' }}>
-            <span style={{ color: '#94a3b8' }}>{t('agenda.charge')}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs" style={{ border: '1px solid var(--border-color)', background: 'var(--bg-surface)' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>{t('agenda.charge')}</span>
             <div className="w-16 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
               <div
                 className="h-full rounded-full transition-all duration-700 ease-out"
@@ -180,9 +180,9 @@ export default function AgendaPage() {
         </div>
       </div>
       <div className="flex items-center gap-3 mb-4">
-        <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: '#94a3b8' }}><ChevronLeft size={18} /></button>
+        <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: 'var(--text-secondary)' }}><ChevronLeft size={18} /></button>
         <button onClick={() => setWeekOffset(0)} className="px-3 py-1 rounded-full text-xs font-medium hover:bg-[#1a2236]" style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>{t('agenda.today')}</button>
-        <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: '#94a3b8' }}><ChevronRight size={18} /></button>
+        <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: 'var(--text-secondary)' }}><ChevronRight size={18} /></button>
         <span className="text-sm font-semibold text-white ml-2">{weekDates[0].toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</span>
       </div>
       {showAiSuggestions && (
@@ -193,8 +193,8 @@ export default function AgendaPage() {
       )}
       <div className="flex gap-4 flex-1 min-h-0">
         <div className="flex-1 rounded-2xl overflow-hidden" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <div className="grid grid-cols-8 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-            <div className="p-3 text-xs font-medium" style={{ color: '#64748b' }}><Clock size={14} /></div>
+          <div className="grid grid-cols-8 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            <div className="p-3 text-xs font-medium" style={{ color: 'var(--text-muted)' }}><Clock size={14} /></div>
             {weekDates.map((d, i) => {
               const isoDate = d.toISOString().slice(0, 10)
               const hasPost = scheduledPostDates.has(isoDate)
@@ -212,8 +212,8 @@ export default function AgendaPage() {
           </div>
           <div ref={gridRef} className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 340px)' }}>
             {HOURS.map(hour => (
-              <div key={hour} className="grid grid-cols-8 relative" style={{ minHeight: '80px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                <div className="p-2 text-right pr-3 text-xs font-medium" style={{ color: '#64748b' }}>{`${hour.toString().padStart(2, '0')}:00`}</div>
+              <div key={hour} className="grid grid-cols-8 relative" style={{ minHeight: '80px', borderBottom: '1px solid var(--border-subtle)' }}>
+                <div className="p-2 text-right pr-3 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{`${hour.toString().padStart(2, '0')}:00`}</div>
                 {weekOffset === 0 && hour === currentHour && (
                   <div className="absolute left-[12.5%] right-0 z-20 pointer-events-none flex items-center" style={{ top: `${(currentMin / 60) * 100}%` }}>
                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#ef4444', boxShadow: '0 0 8px #ef4444' }} />
@@ -225,7 +225,7 @@ export default function AgendaPage() {
                   const cellEvents = events.filter(e => e.day === dayIdx && e.startHour === hour)
                   const isHovered = hoveredCell === cellKey
                   return (
-                    <div key={dayIdx} className="relative border-l transition-colors cursor-pointer" style={{ borderColor: 'rgba(255,255,255,0.04)', background: isToday(d) ? 'rgba(14,165,233,0.03)' : isHovered ? 'rgba(255,255,255,0.02)' : 'transparent' }} onMouseEnter={() => setHoveredCell(cellKey)} onMouseLeave={() => setHoveredCell(null)} onClick={() => cellEvents.length === 0 && openAddModal(dayIdx, hour)}>
+                    <div key={dayIdx} className="relative border-l transition-colors cursor-pointer" style={{ borderColor: 'var(--border-subtle)', background: isToday(d) ? 'rgba(14,165,233,0.03)' : isHovered ? 'var(--bg-elevated)' : 'transparent' }} onMouseEnter={() => setHoveredCell(cellKey)} onMouseLeave={() => setHoveredCell(null)} onClick={() => cellEvents.length === 0 && openAddModal(dayIdx, hour)}>
                       {isHovered && cellEvents.length === 0 && (
                         <div className="absolute inset-0 flex items-center justify-center z-10">
                           <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium" style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8', border: '1px dashed rgba(14,165,233,0.3)' }}><Plus size={10} /> {t('agenda.add')}</div>
@@ -242,11 +242,11 @@ export default function AgendaPage() {
                             {event.aiSuggested && (
                               <div className="flex items-center gap-1 mt-1">
                                 <button onClick={e => { e.stopPropagation(); acceptSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(52,211,153,0.2)', color: '#34d399' }}>{t('agenda.accept')}</button>
-                                <button onClick={e => { e.stopPropagation(); dismissSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px]" style={{ color: '#94a3b8' }}><X size={10} /></button>
+                                <button onClick={e => { e.stopPropagation(); dismissSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px]" style={{ color: 'var(--text-secondary)' }}><X size={10} /></button>
                               </div>
                             )}
                             <div className="hidden group-hover:flex absolute top-1 right-1 gap-0.5">
-                              <button className="p-0.5 rounded" style={{ color: '#94a3b8' }}><Pencil size={10} /></button>
+                              <button className="p-0.5 rounded" style={{ color: 'var(--text-secondary)' }}><Pencil size={10} /></button>
                               <button onClick={e => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)) }} className="p-0.5 rounded" style={{ color: '#ef4444' }}><Trash2 size={10} /></button>
                             </div>
                           </div>
@@ -271,24 +271,24 @@ export default function AgendaPage() {
             {tasks.map(task => {
               const prioColor = task.priority === 'high' ? '#ef4444' : task.priority === 'medium' ? '#fb923c' : '#0ea5e9'
               return (
-                <div key={task.id} className="flex items-start gap-2 px-3 py-2.5 rounded-lg transition-all hover:-translate-y-0.5 cursor-pointer group" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.04)' }}>
-                  <button onClick={() => toggleTask(task.id)} className="mt-0.5 flex-shrink-0">{task.done ? <CheckSquare size={16} style={{ color: '#34d399' }} /> : <Square size={16} style={{ color: '#64748b' }} />}</button>
+                <div key={task.id} className="flex items-start gap-2 px-3 py-2.5 rounded-lg transition-all hover:-translate-y-0.5 cursor-pointer group" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}>
+                  <button onClick={() => toggleTask(task.id)} className="mt-0.5 flex-shrink-0">{task.done ? <CheckSquare size={16} style={{ color: '#34d399' }} /> : <Square size={16} style={{ color: 'var(--text-muted)' }} />}</button>
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm ${task.done ? 'line-through text-[#64748b]' : 'text-[#e2e8f0]'}`}>{task.textKey ? t(task.textKey) : task.text}</p>
                     <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style={{ background: `${prioColor}20`, color: prioColor }}>
                       {task.priority === 'high' ? t('agenda.priority.high') : task.priority === 'medium' ? t('agenda.priority.medium') : t('agenda.priority.low')}
                     </span>
                   </div>
-                  <GripVertical size={12} className="hidden group-hover:block mt-1 cursor-grab" style={{ color: '#64748b' }} />
+                  <GripVertical size={12} className="hidden group-hover:block mt-1 cursor-grab" style={{ color: 'var(--text-muted)' }} />
                 </div>
               )
             })}
           </div>
-          <button onClick={() => setTasks(prev => [...prev, { id: `t${Date.now()}`, text: t('agenda.newTask'), done: false, priority: 'medium' }])} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium" style={{ color: '#94a3b8', border: '1px dashed rgba(255,255,255,0.1)' }}>
+          <button onClick={() => setTasks(prev => [...prev, { id: `t${Date.now()}`, text: t('agenda.newTask'), done: false, priority: 'medium' }])} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium" style={{ color: 'var(--text-secondary)', border: '1px dashed var(--border-color)' }}>
             <Plus size={12} /> {t('agenda.addtask')}
           </button>
-          <div className="pt-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-            <p className="text-[10px] uppercase font-semibold mb-2" style={{ color: '#64748b' }}>{t('agenda.legend')}</p>
+          <div className="pt-3 border-t" style={{ borderColor: 'var(--border-color)' }}>
+            <p className="text-[10px] uppercase font-semibold mb-2" style={{ color: 'var(--text-muted)' }}>{t('agenda.legend')}</p>
             <div className="grid grid-cols-2 gap-1">
               {Object.entries(EVENT_COLORS).map(([key, val]) => (
                 <div key={key} className="flex items-center gap-1.5 text-[10px]" style={{ color: val.text }}>
@@ -305,23 +305,23 @@ export default function AgendaPage() {
           <div className="rounded-2xl p-6 w-full max-w-md animate-scale-in" style={{ background: 'rgba(17,24,39,0.95)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(14,165,233,0.08)' }}>
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-lg font-bold text-white">{t('agenda.newevent')}</h3>
-              <button onClick={() => setShowModal(false)} style={{ color: '#94a3b8' }}><X size={18} /></button>
+              <button onClick={() => setShowModal(false)} style={{ color: 'var(--text-secondary)' }}><X size={18} /></button>
             </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.title2')}</label>
-                <input value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Ex: Sprint planning" className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-[#64748b]" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }} />
+                <input value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Ex: Sprint planning" className="w-full px-3 py-2 rounded-lg text-sm text-white placeholder-[#64748b]" style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }} />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.type')}</label>
-                  <select value={newType} onChange={e => setNewType(e.target.value)} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <select value={newType} onChange={e => setNewType(e.target.value)} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}>
                     <option value="meeting">{t('agenda.meeting')}</option><option value="focus">{t('agenda.focus')}</option><option value="call">{t('agenda.call')}</option><option value="break">{t('agenda.break')}</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-[#94a3b8] mb-1">{t('agenda.duration')}</label>
-                  <select value={newDuration} onChange={e => setNewDuration(Number(e.target.value))} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: '#1a2236', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <select value={newDuration} onChange={e => setNewDuration(Number(e.target.value))} className="w-full px-3 py-2 rounded-lg text-sm text-white" style={{ background: 'var(--input-bg)', border: '1px solid var(--border-color)' }}>
                     <option value={30}>30 min</option><option value={45}>45 min</option><option value={60}>1h</option><option value={90}>1h30</option><option value={120}>2h</option>
                   </select>
                 </div>

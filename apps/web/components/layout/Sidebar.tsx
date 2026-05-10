@@ -113,9 +113,9 @@ export function Sidebar() {
     <aside
       className={`flex flex-col h-screen sticky top-0 transition-all duration-300 ${compact ? "w-[72px]" : "w-[230px]"}`}
       style={{
-        background: theme === 'light' ? '#fcfcfd' : "var(--sidebar-bg, rgba(5,12,24,0.82))",
+        background: theme === 'warm' ? '#1f1814' : "var(--sidebar-bg, rgba(5,12,24,0.82))",
         backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-        borderRight: theme === 'light' ? '1px solid #e8eaf0' : "1px solid var(--border-subtle, rgba(255,255,255,0.05))",
+        borderRight: theme === 'warm' ? '1px solid rgba(251,146,60,0.08)' : "1px solid var(--border-subtle, rgba(255,255,255,0.05))",
       }}
     >
       {/* ── LOGO ── */}
@@ -128,7 +128,7 @@ export function Sidebar() {
             P
           </div>
           {!compact && (
-            <span className="text-base font-bold" style={{ color: "#0ea5e9" }}>
+            <span className="text-base font-bold" style={{ color: theme === 'warm' ? '#fb923c' : "#0ea5e9" }}>
               ProAI
             </span>
           )}
@@ -150,7 +150,7 @@ export function Sidebar() {
 
         {/* Principal */}
         {!compact && (
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: theme === 'light' ? '#94a3b8' : "var(--text-muted, #475569)" }}>
+          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: theme === 'warm' ? '#8a7560' : "var(--text-muted, #475569)" }}>
             {t("sidebar.principal")}
           </p>
         )}
@@ -165,7 +165,7 @@ export function Sidebar() {
                 href={item.href}
                 className={`group relative flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
                 style={{
-                  background: active ? (theme === 'light' ? '#eef6ff' : "var(--nav-active-bg)") : "transparent",
+                  background: active ? (theme === 'warm' ? 'rgba(251,146,60,0.1)' : "var(--nav-active-bg)") : "transparent",
                   boxShadow: active ? "0 0 16px rgba(14,165,233,0.08)" : "none",
                 }}
               >
@@ -178,7 +178,7 @@ export function Sidebar() {
                 <Icon
                   size={17}
                   style={{
-                    color: active ? (theme === 'light' ? '#0284c7' : "var(--nav-active-color)") : "var(--text-muted)",
+                    color: active ? (theme === 'warm' ? '#fb923c' : "var(--nav-active-color)") : "var(--text-muted)",
                     filter: active ? "drop-shadow(0 0 4px rgba(14,165,233,0.4))" : "none",
                   }}
                 />
@@ -377,8 +377,8 @@ export function Sidebar() {
       <div
         className={`mx-2 mb-2 rounded-xl p-3 ${compact ? "px-2" : ""}`}
         style={{
-          background: theme === 'light' ? '#f1f5f9' : "var(--bg-surface, #111827)",
-          border: theme === 'light' ? '1px solid #e8eaf0' : "1px solid var(--border-color, rgba(255,255,255,0.06))",
+          background: theme === 'warm' ? '#2a2018' : "var(--bg-surface, #111827)",
+          border: theme === 'warm' ? '1px solid rgba(251,146,60,0.08)' : "1px solid var(--border-color, rgba(255,255,255,0.06))",
         }}
       >
         <div className={`flex items-center gap-2.5 ${compact ? "justify-center" : ""}`}>
@@ -390,7 +390,7 @@ export function Sidebar() {
           </div>
           {!compact && (
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-white truncate">{t("nav.myspace")}</p>
+              <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{t("nav.myspace")}</p>
               <div className="flex items-center gap-1">
                 <Crown size={9} style={{ color: "#fb923c" }} />
                 <span className="text-[10px]" style={{ color: "#fb923c" }}>{t("nav.freeplan")}</span>
