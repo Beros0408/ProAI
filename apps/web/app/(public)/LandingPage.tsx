@@ -6,7 +6,7 @@ import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import {
   GmailIcon, SlackIcon, HubSpotIcon, GoogleCalendarIcon, NotionIcon,
-  LinkedInIcon, InstagramIcon, FacebookIcon, ZapierIcon, StripeIcon,
+  LinkedInIcon, InstagramIcon, FacebookIcon, ZapierIcon, StripeIcon, N8nIcon,
 } from '@/components/icons/BrandIcons'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -68,6 +68,7 @@ const INTEGRATIONS_LANDING: IntegrationLandingItem[] = [
   { name: 'Facebook',         icon: <FacebookIcon size={32} />,        glowColor: '#1877F2' },
   { name: 'Zapier',           icon: <ZapierIcon size={32} />,          glowColor: '#FF4A00' },
   { name: 'Stripe',           icon: <StripeIcon size={32} />,          glowColor: '#635BFF' },
+  { name: 'n8n',              icon: <N8nIcon size={32} />,             glowColor: '#EA4B71' },
 ]
 
 // ─── Spotlight mouse tracker (defined outside component — no re-render) ──────
@@ -240,7 +241,7 @@ export default function LandingPage() {
             <h2 className="mb-3 text-3xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('landing.integrations.title')}</h2>
             <p className="text-slate-400 text-sm">{t('landing.integrations.subtitle')}</p>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5" style={{ perspective: '1000px' }}>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" style={{ perspective: '1000px' }}>
             {INTEGRATIONS_LANDING.map((item) => (
               <div
                 key={item.name}

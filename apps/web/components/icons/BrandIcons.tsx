@@ -115,12 +115,18 @@ export function GoogleSheetsIcon({ size = 32 }: IconProps) {
 }
 
 export function N8nIcon({ size = 32 }: IconProps) {
+  const h = Math.round(size * 0.6)
   return (
-    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
-      <rect width="24" height="24" rx="6" fill="#FF6933"/>
-      <circle cx="7.5" cy="12" r="3" fill="white"/>
-      <circle cx="16.5" cy="12" r="3" fill="white"/>
-      <rect x="9.5" y="11" width="5" height="2" fill="white"/>
+    <svg viewBox="0 0 40 24" width={size} height={h} aria-hidden="true">
+      {/* zigzag connector — drawn first so circles render on top */}
+      <path d="M4 18 L10 6 L20 18 L30 6 L36 18" stroke="#EA4B71" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      {/* solid circles (bottom row) */}
+      <circle cx="4"  cy="18" r="3.5" fill="#EA4B71"/>
+      <circle cx="20" cy="18" r="3.5" fill="#EA4B71"/>
+      <circle cx="36" cy="18" r="3.5" fill="#EA4B71"/>
+      {/* ring/donut circles (top row) — stroke-only, background-agnostic */}
+      <circle cx="10" cy="6" r="2.5" fill="none" stroke="#EA4B71" strokeWidth="2"/>
+      <circle cx="30" cy="6" r="2.5" fill="none" stroke="#EA4B71" strokeWidth="2"/>
     </svg>
   )
 }
