@@ -294,7 +294,7 @@ export default function AnalyticsPage() {
             <div className="relative" style={{ height: '180px' }}>
               <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
                 {[0, 25, 50, 75, 100].map(v => (
-                  <line key={`g${v}`} x1="0" y1={v} x2="100" y2={v} stroke="#1a1a2e" strokeWidth="0.5" />
+                  <line key={`g${v}`} x1="0" y1={v} x2="100" y2={v} stroke="var(--border-color)" strokeWidth="0.5" />
                 ))}
                 <defs>
                   <filter id="xyGlow">

@@ -1,11 +1,12 @@
 'use client'
 
+import Image from 'next/image'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import { BackButton } from '@/components/ui/BackButton'
 import {
   GmailIcon, LinkedInIcon, SlackIcon, InstagramIcon, FacebookIcon,
-  NotionIcon, GoogleCalendarIcon, GoogleSheetsIcon, N8nIcon, MakeIcon,
+  NotionIcon, GoogleCalendarIcon, GoogleSheetsIcon, MakeIcon,
 } from '@/components/icons/BrandIcons'
 
 type Integration = {
@@ -25,7 +26,7 @@ const INTEGRATIONS: Integration[] = [
   { name: 'Notion',           icon: <NotionIcon size={28} />,          descriptionKey: 'integration_notion_description',            connected: false, glowColor: '#94a3b8' },
   { name: 'Google Calendar',  icon: <GoogleCalendarIcon size={28} />,  descriptionKey: 'integration_google_calendar_description',   connected: false, glowColor: '#4285F4' },
   { name: 'Google Sheets',    icon: <GoogleSheetsIcon size={28} />,    descriptionKey: 'integration_google_sheets_description',     connected: false, glowColor: '#34A853' },
-  { name: 'n8n',              icon: <N8nIcon size={28} />,             descriptionKey: 'integration_n8n_description',               connected: false, glowColor: '#FF6933' },
+  { name: 'n8n',              icon: <Image src="/integrations/n8n-icon.svg" alt="n8n" width={48} height={20} unoptimized className="integration-icon" />, descriptionKey: 'integration_n8n_description',               connected: false, glowColor: '#EA4B71' },
   { name: 'Make',             icon: <MakeIcon size={28} />,            descriptionKey: 'integration_make_description',              connected: false, glowColor: '#6E3FC9' },
 ]
 

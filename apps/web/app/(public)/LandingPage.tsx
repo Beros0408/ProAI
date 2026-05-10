@@ -2,11 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import {
   GmailIcon, SlackIcon, HubSpotIcon, GoogleCalendarIcon, NotionIcon,
-  LinkedInIcon, InstagramIcon, FacebookIcon, ZapierIcon, StripeIcon, N8nIcon,
+  LinkedInIcon, InstagramIcon, FacebookIcon, ZapierIcon, StripeIcon,
 } from '@/components/icons/BrandIcons'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -68,7 +69,7 @@ const INTEGRATIONS_LANDING: IntegrationLandingItem[] = [
   { name: 'Facebook',         icon: <FacebookIcon size={32} />,        glowColor: '#1877F2' },
   { name: 'Zapier',           icon: <ZapierIcon size={32} />,          glowColor: '#FF4A00' },
   { name: 'Stripe',           icon: <StripeIcon size={32} />,          glowColor: '#635BFF' },
-  { name: 'n8n',              icon: <N8nIcon size={32} />,             glowColor: '#EA4B71' },
+  { name: 'n8n',              icon: <Image src="/integrations/n8n-icon.svg" alt="n8n" width={48} height={20} unoptimized className="integration-icon" />, glowColor: '#EA4B71' },
 ]
 
 // ─── Spotlight mouse tracker (defined outside component — no re-render) ──────
@@ -505,6 +506,16 @@ export default function LandingPage() {
           </div>
           <div className="mt-10 pt-6 text-center text-xs text-slate-700" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
             {t('landing.footer.copyright')}
+          </div>
+          <div className="mt-3 text-center text-xs" style={{ color: 'rgba(100,116,139,0.5)' }}>
+            Logo n8n : © n8n GmbH — SVG via{' '}
+            <a href="https://commons.wikimedia.org/wiki/File:N8n-logo-new.svg" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-500 transition-colors">
+              Wikimedia Commons
+            </a>
+            , licence{' '}
+            <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-500 transition-colors">
+              CC BY-SA 4.0
+            </a>
           </div>
         </div>
       </footer>
