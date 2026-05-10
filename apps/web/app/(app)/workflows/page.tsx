@@ -15,6 +15,7 @@ import 'reactflow/dist/style.css'
 import { Plus, Save, GitBranch, Zap, Filter, Send, ChevronDown, Power } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { BackButton } from '@/components/ui/BackButton'
 
 interface Workflow {
   id: string
@@ -226,6 +227,7 @@ export default function WorkflowsPage() {
   return (
     <div className="min-h-screen bg-[#0c1220] flex flex-col animate-fade-up">
       <div className="border-b border-[rgba(255,255,255,0.08)] bg-[#0b1220] px-6 py-4">
+        <BackButton />
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-[28px] font-[700] text-white" style={{ letterSpacing: '-0.02em' }}>Workflow Builder</h1>

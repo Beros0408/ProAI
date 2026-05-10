@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/Textarea'
 import { api } from '@/lib/api'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { BackButton } from '@/components/ui/BackButton'
+import { useTheme } from '@/lib/theme/context'
 
 type ContentTab =
   | 'linkedin'
@@ -44,22 +46,22 @@ const LENGTH_KEYS: Array<{ value: string; labelKey: TranslationKey }> = [
   { value: 'long',  labelKey: 'content.length.long' },
 ]
 
-// Glassmorphism style constants
+// Glassmorphism style constants — use CSS vars so light mode works
 const GLASS_CARD: React.CSSProperties = {
-  background: 'rgba(17,24,39,0.7)',
+  background: 'var(--glass-bg)',
   backdropFilter: 'blur(16px)',
   WebkitBackdropFilter: 'blur(16px)',
-  border: '1px solid rgba(255,255,255,0.07)',
+  border: '1px solid var(--border-color)',
 }
 
 const GLASS_SECTION: React.CSSProperties = {
-  background: 'rgba(15,23,42,0.7)',
-  border: '1px solid rgba(255,255,255,0.07)',
+  background: 'var(--glass-bg)',
+  border: '1px solid var(--border-color)',
 }
 
 const INPUT_BASE: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.04)',
-  border: '1px solid rgba(255,255,255,0.08)',
+  background: 'var(--input-bg)',
+  border: '1px solid var(--border-color)',
 }
 
 const INPUT_FOCUS: React.CSSProperties = {
@@ -68,7 +70,7 @@ const INPUT_FOCUS: React.CSSProperties = {
 }
 
 const INPUT_BLUR: React.CSSProperties = {
-  border: '1px solid rgba(255,255,255,0.08)',
+  border: '1px solid var(--border-color)',
   boxShadow: 'none',
 }
 
@@ -79,9 +81,9 @@ const TAB_ACTIVE: React.CSSProperties = {
 }
 
 const TAB_INACTIVE: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.04)',
-  color: '#94a3b8',
-  border: '1px solid rgba(255,255,255,0.07)',
+  background: 'var(--bg-elevated)',
+  color: 'var(--text-secondary)',
+  border: '1px solid var(--border-color)',
 }
 
 function tabToSchedulePlatform(tab: ContentTab): SchedulePlatform {
@@ -111,6 +113,7 @@ const TEMPLATE_PRESETS: Record<string, {
 export default function ContentPage() {
   const router = useRouter()
   const { t } = useTranslation()
+  const { theme } = useTheme()
   const [activeTab, setActiveTab] = useState<ContentTab>('linkedin')
   const [loading, setLoading]     = useState(false)
   const [result, setResult]       = useState('')
@@ -283,6 +286,7 @@ export default function ContentPage() {
 
   return (
     <div className="space-y-8 p-6 lg:p-10 animate-fade-up">
+      <BackButton />
 
       {/* EN-TÊTE */}
       <div className="rounded-2xl p-6" style={GLASS_CARD}>
@@ -502,9 +506,9 @@ export default function ContentPage() {
                 disabled={!result}
                 onClick={handleCopy}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
-                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
+                style={theme === 'light' ? { background: '#eef6ff', border: '1px solid #bfdbfe', color: '#2563eb' } : { background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#93c5fd' : 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#bfdbfe' : 'rgba(14,165,233,0.15)' }}
               >
                 {t('content.copy')}
               </button>
@@ -512,9 +516,9 @@ export default function ContentPage() {
                 disabled={!result}
                 onClick={handleDownload}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
-                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.35)' } }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(14,165,233,0.15)' }}
+                style={theme === 'light' ? { background: '#eef6ff', border: '1px solid #bfdbfe', color: '#2563eb' } : { background: 'rgba(14,165,233,0.08)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.15)' }}
+                onMouseEnter={(e) => { if (result) { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(14,165,233,0.2)'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#93c5fd' : 'rgba(14,165,233,0.35)' } }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'; (e.currentTarget as HTMLButtonElement).style.borderColor = theme === 'light' ? '#bfdbfe' : 'rgba(14,165,233,0.15)' }}
               >
                 {t('content.download')}
               </button>
@@ -548,7 +552,7 @@ export default function ContentPage() {
               {loading ? t('content.loading') : t('content.regenerate')}
             </Button>
           </div>
-          <div className="mt-6 rounded-xl p-6 min-h-[260px] text-slate-300" style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <div className="mt-6 rounded-xl p-6 min-h-[260px]" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
             {result
               ? <pre className="whitespace-pre-wrap break-words text-sm animate-fade-in">{result}</pre>
               : <p className="text-slate-500">{t('content.result.empty')}</p>
@@ -563,7 +567,7 @@ export default function ContentPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}>
           <div className="w-full max-w-md rounded-2xl p-6 animate-scale-in"
-            style={{ background: 'rgba(17,24,39,0.98)', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}>
+            style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)', boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}>
 
             <div className="flex items-center justify-between mb-5">
               <div>
@@ -599,7 +603,7 @@ export default function ContentPage() {
                     value={scheduleForm.platform}
                     onChange={(e) => setScheduleForm({ ...scheduleForm, platform: e.target.value as SchedulePlatform })}
                     className={modalInputCls}
-                    style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                    style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}
                   >
                     <option value="linkedin">LinkedIn</option>
                     <option value="instagram">Instagram</option>
@@ -616,7 +620,7 @@ export default function ContentPage() {
                       value={scheduleForm.date}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, date: e.target.value })}
                       className={modalInputCls}
-                      style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                      style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}
                     />
                   </label>
                   <label className="block space-y-1.5 text-sm text-[#cbd5e1]">
@@ -626,13 +630,13 @@ export default function ContentPage() {
                       value={scheduleForm.time}
                       onChange={(e) => setScheduleForm({ ...scheduleForm, time: e.target.value })}
                       className={modalInputCls}
-                      style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.1)' }}
+                      style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}
                     />
                   </label>
                 </div>
 
-                <div className="rounded-xl p-3 text-xs text-[#94a3b8] line-clamp-3"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="rounded-xl p-3 text-xs line-clamp-3"
+                  style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
                   {result.slice(0, 180)}{result.length > 180 ? '…' : ''}
                 </div>
 
@@ -641,7 +645,7 @@ export default function ContentPage() {
                     type="button"
                     onClick={() => setShowScheduleModal(false)}
                     className="flex-1 py-2.5 rounded-full text-sm font-medium transition-colors"
-                    style={{ border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8' }}
+                    style={{ border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}
                   >
                     {t('common.cancel')}
                   </button>

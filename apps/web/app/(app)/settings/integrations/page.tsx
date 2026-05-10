@@ -2,6 +2,7 @@
 
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { BackButton } from '@/components/ui/BackButton'
 import {
   GmailIcon, LinkedInIcon, SlackIcon, InstagramIcon, FacebookIcon,
   NotionIcon, GoogleCalendarIcon, GoogleSheetsIcon, N8nIcon, MakeIcon,
@@ -37,6 +38,7 @@ export default function IntegrationsPage() {
 
   return (
     <div className="space-y-6 animate-fade-in p-6 lg:p-10">
+      <BackButton />
       <div className="animate-fade-up">
         <h1 className="text-2xl font-bold text-white" style={{ letterSpacing: '-0.02em' }}>{t('integrations')}</h1>
         <p className="mt-1 text-sm text-slate-400">{t('integrations_description')}</p>

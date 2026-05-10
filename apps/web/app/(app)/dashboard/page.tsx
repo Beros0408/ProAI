@@ -202,7 +202,7 @@ export default function DashboardPage() {
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 32px ${kpi.color}18, 0 0 0 1px ${kpi.color}15`
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.07)'
+              (e.currentTarget as HTMLDivElement).style.border = '1px solid var(--border-color)'
               ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
             }}
           >
@@ -240,7 +240,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
         {/* AI INSIGHTS */}
-        <div className="lg:col-span-2 rounded-xl p-5 relative overflow-hidden glass-strong" style={{ background: 'linear-gradient(135deg, rgba(17,24,39,0.85), rgba(15,23,42,0.85))', border: '1px solid rgba(14,165,233,0.15)' }}>
+        <div className="lg:col-span-2 rounded-xl p-5 relative overflow-hidden glass-strong" style={{ background: 'linear-gradient(135deg, var(--glass-bg-strong, rgba(17,24,39,0.85)), var(--glass-bg-strong, rgba(15,23,42,0.85)))', border: '1px solid rgba(14,165,233,0.15)' }}>
           <div className="absolute top-0 right-0 w-40 h-40 pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.08), transparent 70%)' }} />
 
           <div className="flex items-center gap-2 mb-4">
@@ -312,14 +312,14 @@ export default function DashboardPage() {
         </div>
 
         {/* ACTIVITE RECENTE */}
-        <div className="rounded-xl p-5" style={{ background: '#111827', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="rounded-xl p-5" style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}>
           <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
             <Activity size={14} style={{ color: '#0ea5e9' }} />
             {t('dashboard.recentactivity')}
           </h3>
           <div className="space-y-3 stagger-children">
             {ACTIVITIES.map((a, i) => (
-              <div key={i} onClick={() => router.push(a.link)} className="flex items-start gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-[#1a2236] hover:-translate-y-0.5 cursor-pointer">
+              <div key={i} onClick={() => router.push(a.link)} className="flex items-start gap-3 p-2 rounded-lg transition-all duration-200 hover:bg-[var(--bg-elevated)] hover:-translate-y-0.5 cursor-pointer">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${a.color}15` }}>
                   <a.icon size={14} style={{ color: a.color }} />
                 </div>
@@ -338,7 +338,7 @@ export default function DashboardPage() {
 
         {/* AGENTS */}
         <div className="lg:col-span-2 rounded-2xl p-5"
-          style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
             <Shield size={14} style={{ color: '#0ea5e9' }} />
             {t('dashboard.agentstatus')}
@@ -349,13 +349,13 @@ export default function DashboardPage() {
                 key={i}
                 onClick={() => router.push(`/chat?agent=${agent.name.toLowerCase().replace(' ', '_')}`)}
                 className="rounded-xl p-4 cursor-pointer transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden"
-                style={{ background: 'rgba(26,34,54,0.8)', border: '1px solid rgba(255,255,255,0.05)' }}
+                style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLDivElement).style.border = `1px solid ${agent.color}25`
                   ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 24px ${agent.color}12`
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.05)'
+                  (e.currentTarget as HTMLDivElement).style.border = 'var(--border-color)'
                   ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
                 }}
               >
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="flex items-center gap-2 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-200">
                   <button className="text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{ background: `${agent.color}18`, color: agent.color, border: `1px solid ${agent.color}25` }}>{t('dashboard.viewDetails')}</button>
-                  <button className="text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.04)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>{t('dashboard.optimize')}</button>
+                  <button className="text-[10px] px-2.5 py-1 rounded-full font-semibold" style={{ background: 'var(--bg-base)', color: 'var(--text-muted)', border: '1px solid var(--border-color)' }}>{t('dashboard.optimize')}</button>
                 </div>
               </div>
             ))}
@@ -390,7 +390,7 @@ export default function DashboardPage() {
 
         {/* QUICK ACTIONS */}
         <div className="rounded-2xl p-5"
-          style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
           <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
             <Zap size={14} style={{ color: '#fb923c' }} />
             {t('dashboard.quickactions')}
@@ -401,16 +401,16 @@ export default function DashboardPage() {
                 key={i}
                 onClick={() => router.push(action.href)}
                 className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 hover:-translate-y-0.5 group"
-                style={{ background: 'rgba(26,34,54,0.8)', border: '1px solid rgba(255,255,255,0.04)' }}
+                style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.border = `1px solid ${action.color}20`
                   ;(e.currentTarget as HTMLButtonElement).style.boxShadow = `0 4px 16px ${action.color}10`
-                  ;(e.currentTarget as HTMLButtonElement).style.background = `rgba(26,34,54,1)`
+                  ;(e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-elevated)'
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(255,255,255,0.04)'
+                  (e.currentTarget as HTMLButtonElement).style.border = '1px solid var(--border-color)'
                   ;(e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'
-                  ;(e.currentTarget as HTMLButtonElement).style.background = 'rgba(26,34,54,0.8)'
+                  ;(e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-elevated)'
                 }}
               >
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-200 group-hover:scale-110"
@@ -430,7 +430,7 @@ export default function DashboardPage() {
               <span className="text-xs font-bold" style={{ color: '#fb923c' }}>{t('dashboard.todayGoal')}</span>
             </div>
             <p className="text-xs text-[#94a3b8]">{t('dashboard.gamification.text')}</p>
-            <div className="w-full h-1.5 rounded-full mt-2 overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+            <div className="w-full h-1.5 rounded-full mt-2 overflow-hidden" style={{ background: 'var(--bg-elevated)' }}>
               <div className="h-full rounded-full" style={{ width: '33%', background: 'linear-gradient(90deg, #fb923c, #f97316)' }} />
             </div>
             <p className="text-[10px] text-[#64748b] mt-1">{t('dashboard.gamification.progress')}</p>

@@ -5,6 +5,7 @@ import { Bell, Search } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { useTheme } from '@/lib/theme/context'
 
 const PAGE_TITLES: Record<string, TranslationKey> = {
   '/dashboard': 'nav.dashboard',
@@ -20,21 +21,22 @@ const PAGE_TITLES: Record<string, TranslationKey> = {
 export function Header() {
   const pathname = usePathname()
   const { t } = useTranslation()
+  const { theme } = useTheme()
   const foundKey = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1]
   const title = foundKey ? t(foundKey) : 'ProAI'
 
   return (
     <header className="h-14 shrink-0 flex items-center px-6 gap-4 animate-fade-down sticky top-0 z-40"
       style={{
-        background: 'rgba(5,12,24,0.82)',
+        background: theme === 'light' ? 'rgba(255,255,255,0.75)' : 'var(--header-bg, rgba(5,12,24,0.82))',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
-        boxShadow: '0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.3)',
+        borderBottom: theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-subtle, rgba(255,255,255,0.05))',
+        boxShadow: theme === 'light' ? '0 1px 0 rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.04)' : '0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.3)',
       }}
     >
       <div className="flex-1 min-w-0">
-        <h2 className="font-semibold text-[#e2e8f0] text-sm" style={{ letterSpacing: '-0.02em' }}>{title}</h2>
+        <h2 className="font-semibold text-sm" style={{ letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>{title}</h2>
       </div>
 
       <div className="flex items-center gap-2">
@@ -42,17 +44,17 @@ export function Header() {
         <button
           className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-[#64748b] text-xs transition-all duration-200 hover:text-[#94a3b8]"
           style={{
-            background: '#1a2236',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: theme === 'light' ? '#f1f5f9' : 'var(--input-bg, #1a2236)',
+            border: theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-color, rgba(255,255,255,0.07))',
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(14,165,233,0.08)'
+            (e.currentTarget as HTMLButtonElement).style.background = theme === 'light' ? '#eef6ff' : 'rgba(14,165,233,0.08)'
             ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(14,165,233,0.2)'
             ;(e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 16px rgba(14,165,233,0.08)'
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = '#1a2236'
-            ;(e.currentTarget as HTMLButtonElement).style.border = '1px solid rgba(255,255,255,0.07)'
+            (e.currentTarget as HTMLButtonElement).style.background = theme === 'light' ? '#f1f5f9' : 'var(--input-bg, #1a2236)'
+            ;(e.currentTarget as HTMLButtonElement).style.border = theme === 'light' ? '1px solid #e8eaf0' : '1px solid var(--border-color, rgba(255,255,255,0.07))'
             ;(e.currentTarget as HTMLButtonElement).style.boxShadow = 'none'
           }}
         >

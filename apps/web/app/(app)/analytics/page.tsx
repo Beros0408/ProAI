@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { BackButton } from '@/components/ui/BackButton'
 
 const MONTHS = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc']
 const REVENUE_DATA = [12, 15, 17, 21, 24, 28, 33, 36, 39, 42, 45, 50]
@@ -122,6 +123,9 @@ export default function AnalyticsPage() {
   return (
     <div className="min-h-screen relative" style={{ background: '#0a0a0f', fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
       <GridBackground />
+      <div className="relative z-10 px-6 pt-2">
+        <BackButton />
+      </div>
 
       {/* BARRE DE STATUT */}
       <div className="relative z-10 flex items-center justify-between px-6 py-2 border-b" style={{ borderColor: '#1a1a2e', background: 'rgba(10,10,15,0.9)' }}>

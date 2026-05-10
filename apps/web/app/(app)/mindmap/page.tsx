@@ -6,6 +6,7 @@ import ReactFlow, { Node, Edge, addEdge, useNodesState, useEdgesState, Controls,
 import 'reactflow/dist/style.css'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/lib/i18n/context'
+import { BackButton } from '@/components/ui/BackButton'
 
 const initialNodes: Node[] = []
 const initialEdges: Edge[] = []
@@ -64,6 +65,7 @@ export default function MindMapPage() {
       {/* Header */}
       <div className="p-5 shrink-0"
         style={{ background: 'rgba(11,18,32,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <BackButton />
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

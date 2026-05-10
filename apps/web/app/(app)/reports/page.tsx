@@ -6,6 +6,7 @@ import { FileText, Download, Eye, BarChart2, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/Button"
 import { useRouter } from "next/navigation"
 import { useTranslation } from "@/lib/i18n/context"
+import { BackButton } from "@/components/ui/BackButton"
 
 type ReportItem = {
   id: string
@@ -125,6 +126,7 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-[#0c1220] text-white animate-fade-up">
       <div className="max-w-7xl mx-auto space-y-6 px-4 pb-10 lg:px-6">
+        <BackButton />
         <div className="rounded-3xl border border-[#1f2937] bg-[#111827]/90 p-6 shadow-xl shadow-black/20">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>

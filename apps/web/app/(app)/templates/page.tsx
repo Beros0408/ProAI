@@ -4,6 +4,7 @@ import type { TranslationKey } from '@/lib/i18n/translations'
 import { Button } from '@/components/ui/Button'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
+import { BackButton } from '@/components/ui/BackButton'
 
 type TemplateCard = {
   key: string
@@ -40,6 +41,7 @@ export default function TemplatesPage() {
 
   return (
     <div className="space-y-8 p-6 lg:p-10 animate-fade-up">
+      <BackButton />
       <div className="card-premium p-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>

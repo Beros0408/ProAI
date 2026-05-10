@@ -10,6 +10,7 @@ import {
   Clock, CheckSquare, Square, Trash2, GripVertical,
   Video, Phone, Pencil, Coffee, Brain, Target, X
 } from 'lucide-react'
+import { BackButton } from '@/components/ui/BackButton'
 
 const HOURS = Array.from({ length: 13 }, (_, i) => i + 8)
 // DAYS_SHORT is computed inside the component via Intl (locale-aware)
@@ -135,6 +136,7 @@ export default function AgendaPage() {
 
   return (
     <div className="flex flex-col h-full animate-fade-up">
+      <BackButton />
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">

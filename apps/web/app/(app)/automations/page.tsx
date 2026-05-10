@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
 import { ChevronRight } from 'lucide-react'
+import { BackButton } from '@/components/ui/BackButton'
 
 const AUTOMATION_CARDS = [
   { emoji: '⚡', titleKey: 'prospect_tracking' as const, descKey: 'prospect_tracking_description' as const, color: '#fb923c' },
@@ -15,6 +16,7 @@ export default function AutomationsPage() {
   const router = useRouter()
   return (
     <div className="p-6 space-y-6 animate-fade-in stagger-children">
+      <BackButton />
       <div className="animate-fade-up">
         <h1 className="text-2xl font-bold text-white gradient-text" style={{ letterSpacing: '-0.02em' }}>{t('automations')}</h1>
         <p className="text-[#64748b] mt-1">{t('configure_your_workflows')}</p>

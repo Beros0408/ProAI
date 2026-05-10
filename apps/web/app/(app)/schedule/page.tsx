@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import { api } from '@/lib/api'
+import { BackButton } from '@/components/ui/BackButton'
 
 interface ScheduledEvent {
   id: string
@@ -189,6 +190,7 @@ export default function SchedulePage() {
   return (
     <div className="min-h-screen bg-[#0c1220] px-4 py-6 text-white sm:px-6 lg:px-8 animate-fade-up">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-6">
+        <BackButton />
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <h1 className="text-[28px] font-[700] text-white" style={{ letterSpacing: '-0.02em' }}>{t('schedule.title')}</h1>

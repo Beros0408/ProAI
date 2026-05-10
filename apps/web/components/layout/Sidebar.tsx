@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import { useTranslation } from "@/lib/i18n/context"
 import type { TranslationKey } from "@/lib/i18n/translations"
+import { useTheme } from "@/lib/theme/context"
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -94,6 +95,7 @@ function sectionForPath(pathname: string): string | null {
 export function Sidebar() {
   const pathname = usePathname()
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const [compact, setCompact] = useState(false)
   const [openKey, setOpenKey] = useState<string | null>(() => sectionForPath(pathname))
@@ -110,7 +112,11 @@ export function Sidebar() {
   return (
     <aside
       className={`flex flex-col h-screen sticky top-0 transition-all duration-300 ${compact ? "w-[72px]" : "w-[230px]"}`}
-      style={{ background: "rgba(5,12,24,0.82)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", borderRight: "1px solid rgba(255,255,255,0.05)" }}
+      style={{
+        background: theme === 'light' ? '#fcfcfd' : "var(--sidebar-bg, rgba(5,12,24,0.82))",
+        backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+        borderRight: theme === 'light' ? '1px solid #e8eaf0' : "1px solid var(--border-subtle, rgba(255,255,255,0.05))",
+      }}
     >
       {/* ── LOGO ── */}
       <div className="flex items-center justify-between px-4 h-16 flex-shrink-0">
@@ -144,7 +150,7 @@ export function Sidebar() {
 
         {/* Principal */}
         {!compact && (
-          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: "#475569" }}>
+          <p className="px-3 mb-2 text-[10px] font-semibold uppercase tracking-widest" style={{ color: theme === 'light' ? '#94a3b8' : "var(--text-muted, #475569)" }}>
             {t("sidebar.principal")}
           </p>
         )}
@@ -159,29 +165,27 @@ export function Sidebar() {
                 href={item.href}
                 className={`group relative flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
                 style={{
-                  background: active
-                    ? "linear-gradient(135deg, rgba(14,165,233,0.15), rgba(14,165,233,0.05))"
-                    : "transparent",
+                  background: active ? (theme === 'light' ? '#eef6ff' : "var(--nav-active-bg)") : "transparent",
                   boxShadow: active ? "0 0 16px rgba(14,165,233,0.08)" : "none",
                 }}
               >
                 {active && (
                   <div
                     className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full"
-                    style={{ background: "#0ea5e9", boxShadow: "0 0 8px rgba(14,165,233,0.5)" }}
+                    style={{ background: "var(--nav-indicator)", boxShadow: "0 0 8px rgba(14,165,233,0.5)" }}
                   />
                 )}
                 <Icon
                   size={17}
                   style={{
-                    color: active ? "#38bdf8" : "#64748b",
+                    color: active ? (theme === 'light' ? '#0284c7' : "var(--nav-active-color)") : "var(--text-muted)",
                     filter: active ? "drop-shadow(0 0 4px rgba(14,165,233,0.4))" : "none",
                   }}
                 />
                 {!compact && (
                   <>
                     <span
-                      className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}
+                      className={`text-[13px] flex-1 ${active ? "font-semibold text-[var(--text-primary)]" : "font-medium text-[var(--text-secondary)]"}`}
                       style={{ letterSpacing: active ? "-0.02em" : "normal" }}
                     >
                       {t(item.labelKey)}
@@ -280,9 +284,9 @@ export function Sidebar() {
                                 style={{ background: section.color, boxShadow: `0 0 6px ${section.color}80` }}
                               />
                             )}
-                            <Icon size={15} style={{ color: active ? section.color : "#64748b" }} />
+                            <Icon size={15} style={{ color: active ? section.color : "var(--text-muted)" }} />
                             <span
-                              className={`text-[13px] flex-1 ${active ? "font-semibold text-[#e2e8f0]" : "font-medium text-[#94a3b8]"}`}
+                              className={`text-[13px] flex-1 ${active ? "font-semibold text-[var(--text-primary)]" : "font-medium text-[var(--text-secondary)]"}`}
                               style={{ letterSpacing: active ? "-0.02em" : "normal" }}
                             >
                               {t(item.labelKey)}
@@ -341,13 +345,13 @@ export function Sidebar() {
           href="/settings"
           className={`flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
           style={{
-            color:      pathname === "/settings" ? "#38bdf8" : "#64748b",
-            background: pathname === "/settings" ? "rgba(14,165,233,0.1)" : "transparent",
+            color:      pathname === "/settings" ? "var(--nav-active-color)" : "var(--text-muted)",
+            background: pathname === "/settings" ? "var(--nav-active-bg)" : "transparent",
           }}
         >
           <Settings size={17} />
           {!compact && (
-            <span className="text-[13px] font-medium" style={{ color: pathname === "/settings" ? "#38bdf8" : "#94a3b8" }}>
+            <span className="text-[13px] font-medium" style={{ color: pathname === "/settings" ? "var(--nav-active-color)" : "var(--text-secondary)" }}>
               {t("nav.settings")}
             </span>
           )}
@@ -360,7 +364,7 @@ export function Sidebar() {
           type="button"
           onClick={() => setCompact((c) => !c)}
           className={`w-full flex items-center gap-3 rounded-xl py-2.5 transition-all duration-200 hover:bg-[rgba(255,255,255,0.03)] ${compact ? "justify-center px-2" : "px-3"}`}
-          style={{ color: "#475569" }}
+          style={{ color: "var(--text-muted)" }}
         >
           {compact ? <ChevronsRight size={16} /> : <ChevronsLeft size={16} />}
           {!compact && (
@@ -372,7 +376,10 @@ export function Sidebar() {
       {/* ── UTILISATEUR ── */}
       <div
         className={`mx-2 mb-2 rounded-xl p-3 ${compact ? "px-2" : ""}`}
-        style={{ background: "#111827", border: "1px solid rgba(255,255,255,0.06)" }}
+        style={{
+          background: theme === 'light' ? '#f1f5f9' : "var(--bg-surface, #111827)",
+          border: theme === 'light' ? '1px solid #e8eaf0' : "1px solid var(--border-color, rgba(255,255,255,0.06))",
+        }}
       >
         <div className={`flex items-center gap-2.5 ${compact ? "justify-center" : ""}`}>
           <div

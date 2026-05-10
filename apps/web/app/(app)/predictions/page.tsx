@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
+import { BackButton } from '@/components/ui/BackButton'
 
 const SALES_DATA = [0, 0, 12, 28, 45, 68, 85, 98, 110, 125]
 const PREDICTION_DATA = [null, null, null, null, null, null, null, 98, 118, 135, 148, 162]
@@ -101,14 +102,14 @@ function SalesChart() {
       {/* Grille */}
       {[0, 35, 70, 105, 140].map((v, i) => (
         <g key={i}>
-          <line x1={padL} y1={toY(v)} x2={w} y2={toY(v)} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-          <text x={padL - 8} y={toY(v) + 4} fill="#64748b" fontSize="10" textAnchor="end">{v}</text>
+          <line x1={padL} y1={toY(v)} x2={w} y2={toY(v)} stroke="var(--border-color)" strokeWidth="1" />
+          <text x={padL - 8} y={toY(v) + 4} fill="var(--text-muted)" fontSize="10" textAnchor="end">{v}</text>
         </g>
       ))}
 
       {/* Étiquettes des mois */}
       {MONTHS.map((m, i) => (
-        <text key={m} x={toX(i)} y={h - 5} fill="#64748b" fontSize="9" textAnchor="middle">{m}</text>
+        <text key={m} x={toX(i)} y={h - 5} fill="var(--text-muted)" fontSize="9" textAnchor="middle">{m}</text>
       ))}
 
       {/* Zone de projection */}
@@ -144,7 +145,7 @@ function SalesChart() {
 
       {/* Points réels */}
       {SALES_DATA.map((v, i) => (
-        <circle key={`r${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#0ea5e9" stroke="#0c1220" strokeWidth="2"
+        <circle key={`r${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#0ea5e9" stroke="var(--bg-base, #0c1220)" strokeWidth="2"
           className={`transition-all duration-500 ${animated ? 'opacity-100' : 'opacity-0'}`}
           style={{ transitionDelay: `${i * 80}ms`, filter: 'drop-shadow(0 0 4px #0ea5e9)' }}
         />
@@ -152,7 +153,7 @@ function SalesChart() {
 
       {/* Points de projection */}
       {PREDICTION_DATA.map((v, i) => v !== null && i >= SALES_DATA.length && (
-        <circle key={`p${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#8b5cf6" stroke="#0c1220" strokeWidth="2"
+        <circle key={`p${i}`} cx={toX(i)} cy={toY(v)} r="4" fill="#8b5cf6" stroke="var(--bg-base, #0c1220)" strokeWidth="2"
           className={`transition-all duration-500 ${animated ? 'opacity-100' : 'opacity-0'}`}
           style={{ transitionDelay: `${i * 80 + 400}ms`, filter: 'drop-shadow(0 0 4px #8b5cf6)' }}
         />
@@ -192,6 +193,7 @@ export default function PredictionsPage() {
 
   return (
     <div className="space-y-6 animate-fade-up">
+      <BackButton />
       {/* EN-TÊTE */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -257,7 +259,7 @@ export default function PredictionsPage() {
               {/* Glow ring */}
               <div className="absolute inset-0 rounded-full animate-pulse-glow pointer-events-none" style={{ boxShadow: `0 0 ${aiScore > 0 ? '24px' : '0px'} rgba(139,92,246,0.3), 0 0 ${aiScore > 0 ? '48px' : '0px'} rgba(14,165,233,0.15)`, transition: 'box-shadow 1s ease-out' }} />
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border-color)" strokeWidth="8" />
                 <circle cx="50" cy="50" r="42" fill="none" stroke="url(#scoreGrad)" strokeWidth="8" strokeLinecap="round"
                   strokeDasharray={`${aiScore * 2.64} 264`}
                   className="transition-all duration-1000 ease-out"
@@ -337,7 +339,7 @@ export default function PredictionsPage() {
                     </div>
                   </div>
                   {/* Barre de risque */}
-                  <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                  <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-elevated)' }}>
                     <div
                       className="h-full rounded-full transition-all duration-1000 ease-out"
                       style={{
@@ -359,7 +361,7 @@ export default function PredictionsPage() {
                     <button
                       onClick={() => router.push('/analytics')}
                       className="text-[10px] px-2 py-1 rounded-full font-medium transition-all hover:-translate-y-0.5"
-                      style={{ background: 'rgba(255,255,255,0.05)', color: '#94a3b8' }}>
+                      style={{ background: 'var(--bg-elevated)', color: 'var(--text-muted)' }}>
                       <Eye size={10} className="inline mr-1" />{t('common.viewDetails')}
                     </button>
                   </div>
@@ -391,7 +393,7 @@ export default function PredictionsPage() {
                     ;(e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 20px ${trend.color}18`
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.border = '1px solid rgba(255,255,255,0.04)'
+                    (e.currentTarget as HTMLDivElement).style.border = '1px solid var(--border-color)'
                     ;(e.currentTarget as HTMLDivElement).style.boxShadow = 'none'
                   }}
                 >

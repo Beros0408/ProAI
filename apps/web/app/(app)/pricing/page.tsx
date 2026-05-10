@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslation } from '@/lib/i18n/context'
 import { Check, Zap, Star, Shield, ArrowRight, MessageSquare, Info, Loader2, CheckCircle, XCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { BackButton } from '@/components/ui/BackButton'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
@@ -70,6 +71,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen p-6 animate-fade-up">
+      <BackButton />
       {/* Bannière de statut paiement */}
       {paymentStatus === 'success' && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-6 animate-fade-up" style={{ background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.3)' }}>

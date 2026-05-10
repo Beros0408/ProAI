@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { MessageSquarePlus, Bot, Sparkles } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n/context'
+import { BackButton } from '@/components/ui/BackButton'
 
 import type { TranslationKey } from '@/lib/i18n/translations'
 
@@ -111,6 +112,7 @@ export default function ChatPage() {
 
   return (
     <div className="max-w-3xl mx-auto animate-fade-in">
+      <BackButton />
       <div className="text-center mb-10 animate-fade-up">
         <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-5"
           style={{
@@ -135,19 +137,19 @@ export default function ChatPage() {
             href={`/chat/new?agent=${agent.type}`}
             className="group flex flex-col gap-3 p-4 rounded-2xl transition-all duration-300 hover:-translate-y-1 relative overflow-hidden"
             style={{
-              background: 'rgba(17,24,39,0.85)',
+              background: 'var(--glass-bg-strong)',
               backdropFilter: 'blur(16px)',
               WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              border: '1px solid var(--border-color)',
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(22,30,50,0.95)'
+              (e.currentTarget as HTMLAnchorElement).style.background = 'var(--glass-bg-full)'
               ;(e.currentTarget as HTMLAnchorElement).style.border = `1px solid ${agent.hex}35`
               ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 8px 24px ${agent.hex}18, 0 0 0 1px ${agent.hex}15`
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(17,24,39,0.85)'
-              ;(e.currentTarget as HTMLAnchorElement).style.border = '1px solid rgba(255,255,255,0.07)'
+              (e.currentTarget as HTMLAnchorElement).style.background = 'var(--glass-bg-strong)'
+              ;(e.currentTarget as HTMLAnchorElement).style.border = '1px solid var(--border-color)'
               ;(e.currentTarget as HTMLAnchorElement).style.boxShadow = 'none'
             }}
           >
