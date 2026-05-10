@@ -997,6 +997,18 @@ a, button, input, select, textarea {
 [data-theme="warm"] .hover\:bg-\[\#111827\]:hover { background-color: var(--bg-surface) !important; }
 [data-theme="warm"] .hover\:bg-\[\#0c1220\]:hover { background-color: var(--bg-base) !important; }
 
+/* Phase 2C — text-white / text-slate-* warm overrides (batch) */
+[data-theme="warm"] .text-white { color: var(--text-primary) !important; }
+[data-theme="warm"] .text-slate-100 { color: var(--text-primary) !important; }
+[data-theme="warm"] .text-slate-300 { color: var(--text-secondary) !important; }
+[data-theme="warm"] .text-slate-400 { color: var(--text-muted) !important; }
+[data-theme="warm"] .placeholder-slate-600::placeholder { color: var(--text-muted) !important; }
+
+/* Phase 2B — border-[#1E1E2E] / bg-[#1E1E2E] warm overrides (batch) */
+[data-theme="warm"] .border-\[\#1E1E2E\] { border-color: var(--border-color) !important; }
+[data-theme="warm"] .hover\:bg-\[\#1E1E2E\]:hover { background-color: var(--bg-elevated) !important; }
+[data-theme="warm"] .bg-\[\#1E1E2E\] { background-color: var(--bg-elevated) !important; }
+
 /* React Flow controls in warm mode */
 [data-theme="warm"] .react-flow__attribution {
   background: rgba(31,24,20,0.92) !important;

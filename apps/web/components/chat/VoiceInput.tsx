@@ -25,16 +25,16 @@ export function VoiceInput({ onTranscript }: { onTranscript: (text: string) => v
   }
 
   return (
-    <div className="rounded-3xl border border-slate-800 bg-slate-950/90 p-4">
+    <div className="rounded-3xl border border-default bg-[var(--bg-base)] p-4">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-white">Entrée vocale</h3>
-          <p className="text-xs text-slate-400">Dicte ton message au lieu de taper.</p>
+          <h3 className="text-sm font-semibold text-foreground">Entrée vocale</h3>
+          <p className="text-xs text-muted">Dicte ton message au lieu de taper.</p>
         </div>
         <button
           disabled={!supported}
           onClick={handleStart}
-          className="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white transition hover:bg-slate-800 disabled:opacity-50"
+          className="rounded-2xl border border-default bg-surface px-4 py-2 text-sm text-foreground transition hover:bg-[var(--bg-elevated)] disabled:opacity-50"
         >
           {recording ? 'Écoute...' : supported ? 'Démarrer' : 'Non supporté'}
         </button>

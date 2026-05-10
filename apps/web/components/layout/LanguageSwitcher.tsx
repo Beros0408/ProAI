@@ -19,7 +19,7 @@ export function LanguageSwitcher() {
         id="locale"
         value={locale}
         onChange={(event) => switchLanguage(event.target.value as 'fr' | 'en')}
-        className="rounded-md border border-slate-700 bg-slate-950 px-3 py-1 text-sm text-white transition focus:border-sky-500 focus:outline-none"
+        className="rounded-md border border-default bg-base px-3 py-1 text-sm text-foreground transition focus:border-sky-500 focus:outline-none"
       >
         {locales.map((localeOption) => (
           <option key={localeOption.code} value={localeOption.code}>

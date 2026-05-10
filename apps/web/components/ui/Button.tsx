@@ -13,7 +13,7 @@ export function Button({ className = '', variant = 'primary', ...props }: Button
   const variantClass =
     variant === 'primary'
       ? 'bg-primary text-slate-950 hover:bg-primary/90'
-      : 'border border-slate-700 bg-slate-900 text-slate-100 hover:bg-slate-800'
+      : 'border border-default bg-surface text-foreground hover:bg-[var(--bg-elevated)]'
 
   return <button className={`${baseClass} ${variantClass} ${className}`.trim()} {...props} />
 }

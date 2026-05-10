@@ -44,7 +44,7 @@ export function ChatMessage({ message, agentType }: Props) {
           ) : (
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              className="prose prose-invert prose-sm max-w-none prose-p:my-1 prose-pre:bg-base prose-pre:border prose-pre:border-[#1E1E2E] prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:rounded"
+              className="prose prose-invert prose-sm max-w-none prose-p:my-1 prose-pre:bg-base prose-pre:border prose-pre:border-[var(--border-color)] prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:rounded"
             >
               {message.content}
             </ReactMarkdown>

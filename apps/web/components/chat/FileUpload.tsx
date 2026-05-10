@@ -20,10 +20,10 @@ export function FileUpload({ onFile }: { onFile: (file: File) => void }) {
       }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
-      className={`rounded-3xl border-2 ${dragging ? 'border-primary/80 bg-slate-900/90' : 'border-slate-700 bg-slate-950/90'} p-6 text-center transition`}
+      className={`rounded-3xl border-2 ${dragging ? 'border-primary/80 bg-[var(--bg-surface)]' : 'border-default bg-[var(--bg-base)]'} p-6 text-center transition`}
     >
-      <p className="text-sm font-medium text-white">Glisse un fichier ici</p>
-      <p className="mt-2 text-xs text-slate-400">PDF ou document pour analyse intelligente.</p>
+      <p className="text-sm font-medium text-foreground">Glisse un fichier ici</p>
+      <p className="mt-2 text-xs text-muted">PDF ou document pour analyse intelligente.</p>
       <input
         type="file"
         accept="application/pdf"
@@ -31,7 +31,7 @@ export function FileUpload({ onFile }: { onFile: (file: File) => void }) {
           const file = event.target.files?.[0]
           if (file) onFile(file)
         }}
-        className="mt-4 w-full cursor-pointer rounded-2xl border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-white"
+        className="mt-4 w-full cursor-pointer rounded-2xl border border-default bg-surface px-4 py-2 text-sm text-foreground"
       />
     </div>
   )
