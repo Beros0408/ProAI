@@ -605,6 +605,15 @@ export const translations = {
     'pricing.free.name': 'Free',
     'pricing.pro.name': 'Pro',
     'pricing.enterprise.name': 'Enterprise',
+    'pricing.business.name': 'Business',
+    'pricing.popular': 'Populaire',
+    'pricing.free.cta': 'Commencer gratuitement',
+    'pricing.pro.cta': 'Choisir Pro',
+    'pricing.business.cta': 'Choisir Business',
+    'auth.welcome.toast': 'Bienvenue ! Un email de confirmation a été envoyé.',
+    'pwa.offline.title': 'Vous êtes hors ligne',
+    'pwa.offline.subtitle': 'Vérifiez votre connexion internet et réessayez.',
+    'pwa.offline.retry': 'Réessayer',
 
     // Paramètres (namespace)
     'settings.title': 'Paramètres',
@@ -1605,6 +1614,15 @@ export const translations = {
     'pricing.free.name': 'Free',
     'pricing.pro.name': 'Pro',
     'pricing.enterprise.name': 'Enterprise',
+    'pricing.business.name': 'Business',
+    'pricing.popular': 'Popular',
+    'pricing.free.cta': 'Start for free',
+    'pricing.pro.cta': 'Choose Pro',
+    'pricing.business.cta': 'Choose Business',
+    'auth.welcome.toast': 'Welcome! A confirmation email has been sent.',
+    'pwa.offline.title': 'You are offline',
+    'pwa.offline.subtitle': 'Check your internet connection and try again.',
+    'pwa.offline.retry': 'Try again',
 
     // Settings
     'settings.title': 'Settings',

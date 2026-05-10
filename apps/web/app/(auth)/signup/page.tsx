@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useTranslation } from '@/lib/i18n/context'
 import type { TranslationKey } from '@/lib/i18n/translations'
 import { BackButton } from '@/components/ui/BackButton'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
 const AUTH_FEATURES: TranslationKey[] = ['auth.feat.1', 'auth.feat.2', 'auth.feat.3']
 
@@ -107,7 +109,15 @@ export default function SignupPage() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [terms, setTerms] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (success) {
+      const id = setTimeout(() => router.push('/onboarding'), 2000)
+      return () => clearTimeout(id)
+    }
+  }, [success, router])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -127,7 +137,14 @@ export default function SignupPage() {
       setError(t('auth.error.generic'))
       setLoading(false)
     } else {
-      router.push('/onboarding')
+      // Fire-and-forget welcome email
+      fetch(`${API_URL}/api/v1/welcome/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name: fullName }),
+      }).catch(() => {})
+      setSuccess(true)
+      setLoading(false)
     }
   }
 
@@ -314,6 +331,13 @@ export default function SignupPage() {
                 />
                 <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('auth.terms')}</span>
               </label>
+
+              {/* Success toast */}
+              {success && (
+                <div className="rounded-xl px-4 py-3 text-sm animate-fade-up" style={{ background: 'rgba(52,211,153,0.1)', border: '1px solid rgba(52,211,153,0.25)', color: '#34d399' }}>
+                  {t('auth.welcome.toast')}
+                </div>
+              )}
 
               {/* Error */}
               {error && (

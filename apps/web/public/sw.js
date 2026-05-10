@@ -1,8 +1,9 @@
-const CACHE_NAME = 'proai-v1';
+const CACHE_NAME = 'proai-v2';
 const STATIC_ASSETS = [
   '/',
   '/dashboard',
   '/login',
+  '/offline',
   '/manifest.json',
 ];
 
@@ -28,39 +29,61 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch - network first, fallback to cache
+// Fetch strategy:
+//   - API calls: network only (no caching)
+//   - Static assets (JS/CSS/images): cache first, then network
+//   - Navigation (pages): network first, fallback to cache, then /offline
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests
   if (event.request.method !== 'GET') return;
-
-  // Skip API calls
-  if (event.request.url.includes('/api/')) return;
-
-  // Skip Chrome extensions
   if (event.request.url.startsWith('chrome-extension://')) return;
 
+  const url = new URL(event.request.url);
+
+  // API calls — skip service worker entirely
+  if (url.pathname.startsWith('/api/')) return;
+
+  // Static assets (JS, CSS, fonts, images) — cache first
+  const isAsset = /\.(js|css|woff2?|ttf|png|jpg|jpeg|svg|ico|webp)(\?.*)?$/.test(url.pathname);
+  if (isAsset) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
+          if (response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // Navigation and other requests — network first
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Clone and cache successful responses
         if (response.status === 200) {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
-          });
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }
         return response;
       })
       .catch(() => {
-        // Fallback to cache
         return caches.match(event.request).then((cached) => {
-          return cached || caches.match('/');
+          if (cached) return cached;
+          // Navigation fallback: serve offline page
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline') || caches.match('/');
+          }
+          return new Response('Network unavailable', { status: 503 });
         });
       })
   );
 });
 
-// Push notifications (future)
+// Push notifications
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
   const title = data.title || 'ProAI';

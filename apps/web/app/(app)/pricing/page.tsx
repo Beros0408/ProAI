@@ -9,6 +9,13 @@ import { BackButton } from '@/components/ui/BackButton'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
+const STRIPE_PRICES = {
+  pro_monthly: 'price_pro_monthly_test',
+  pro_yearly: 'price_pro_yearly_test',
+  business_monthly: 'price_business_monthly_test',
+  business_yearly: 'price_business_yearly_test',
+} as const
+
 const AGENTS_INFO = [
   { name: 'Marketing', desc: 'Stratégie contenu, posts LinkedIn, newsletters, SEO' },
   { name: 'Sales', desc: 'Prospection, scripts, pipeline, emails de vente' },
@@ -33,9 +40,9 @@ export default function PricingPage() {
   const paymentStatus = searchParams.get('payment')
 
   const proPrice = annual ? 23 : 29
-  const enterprisePrice = annual ? 79 : 99
+  const businessPrice = annual ? 63 : 79
 
-  const handleCheckout = async (plan: string) => {
+  const handleCheckout = async (plan: 'pro' | 'business') => {
     setLoading(plan)
     try {
       const supabase = createClient()
@@ -46,13 +53,16 @@ export default function PricingPage() {
         return
       }
 
-      const response = await fetch(`${API_URL}/api/v1/billing/create-checkout`, {
+      const priceKey = `${plan}_${annual ? 'yearly' : 'monthly'}` as keyof typeof STRIPE_PRICES
+      const price_id = STRIPE_PRICES[priceKey]
+
+      const response = await fetch(`${API_URL}/api/v1/billing/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ plan, annual }),
+        body: JSON.stringify({ price_id, plan }),
       })
 
       if (!response.ok) {
@@ -61,7 +71,7 @@ export default function PricingPage() {
       }
 
       const data = await response.json()
-      window.location.href = data.checkout_url
+      window.location.href = data.url
     } catch (err: any) {
       alert(err.message || t('pricing.error.generic'))
     } finally {
@@ -138,7 +148,7 @@ export default function PricingPage() {
             ))}
           </ul>
           <button onClick={() => router.push('/signup')} className="w-full py-3 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5" style={{ background: 'transparent', border: '1.5px solid rgba(255,255,255,0.2)', color: 'white' }}>
-            Tester gratuitement
+            {t('pricing.free.cta')}
           </button>
         </div>
 
@@ -146,7 +156,7 @@ export default function PricingPage() {
         <div className="rounded-2xl p-8 relative transition-all duration-300 hover:-translate-y-1" style={{ background: 'rgba(17,24,39,0.9)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '2px solid #0ea5e9', boxShadow: '0 8px 40px rgba(14,165,233,0.2)', transform: 'scale(1.03)' }}>
           <div className="absolute -top-4 left-1/2 -translate-x-1/2">
             <span className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold" style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', color: 'white', boxShadow: '0 4px 12px rgba(251,146,60,0.4)' }}>
-              <Star size={12} fill="white" /> Le plus choisi par nos utilisateurs
+              <Star size={12} fill="white" /> {t('pricing.popular')}
             </span>
           </div>
           <div className="mb-6 mt-2">
@@ -183,22 +193,26 @@ export default function PricingPage() {
             className="w-full py-3 rounded-full text-sm font-bold text-white transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)', boxShadow: '0 4px 20px rgba(251,146,60,0.3)' }}
           >
-            {loading === 'pro' ? <><Loader2 size={16} className="animate-spin" /> Redirection…</> : <>Passer au Pro <ArrowRight size={16} /></>}
+            {loading === 'pro' ? <><Loader2 size={16} className="animate-spin" /> Redirection…</> : <>{t('pricing.pro.cta')} <ArrowRight size={16} /></>}
           </button>
         </div>
 
-        {/* ENTERPRISE */}
-        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(139,92,246,0.4)] hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)]" style={{ background: 'var(--bg-surface)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}>
+        {/* BUSINESS */}
+        <div className="rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)]"
+          style={{ background: 'var(--bg-surface)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid var(--border-color)' }}
+          onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(139,92,246,0.35)' }}
+          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-color)' }}
+        >
           <div className="mb-6">
-            <h3 className="text-xl font-bold text-white mb-1">{t('pricing.enterprise.name')}</h3>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Pour les équipes à grande échelle</p>
+            <h3 className="text-xl font-bold text-white mb-1">{t('pricing.business.name')}</h3>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Pour scaler sans limite</p>
           </div>
           <div className="mb-6">
-            <span className="text-5xl font-extrabold text-white">{enterprisePrice}&#8364;</span>
+            <span className="text-5xl font-extrabold text-white">{businessPrice}&#8364;</span>
             <span className="text-[#94a3b8] ml-1">/mois</span>
-            {annual && <span className="ml-2 text-xs line-through text-[#64748b]">99&#8364;</span>}
+            {annual && <span className="ml-2 text-xs line-through text-[#64748b]">79&#8364;</span>}
           </div>
-          <p className="text-xs mb-6 px-3 py-2 rounded-lg" style={{ background: 'rgba(139,92,246,0.1)', color: '#a78bfa' }}>SLA garanti 99,9 % uptime</p>
+          <p className="text-xs mb-6 px-3 py-2 rounded-lg" style={{ background: 'rgba(139,92,246,0.1)', color: '#a78bfa' }}>Accès API complet + multi-utilisateurs</p>
           <ul className="space-y-3 mb-8">
             {[
               'Tout le plan Pro inclus',
@@ -217,12 +231,12 @@ export default function PricingPage() {
             ))}
           </ul>
           <button
-            onClick={() => handleCheckout('enterprise')}
-            disabled={loading === 'enterprise'}
+            onClick={() => handleCheckout('business')}
+            disabled={loading === 'business'}
             className="w-full py-3 rounded-full text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-60"
             style={{ background: 'transparent', border: '1.5px solid rgba(139,92,246,0.4)', color: '#a78bfa' }}
           >
-            {loading === 'enterprise' ? <><Loader2 size={16} className="animate-spin" /> Redirection…</> : <><MessageSquare size={16} /> Passer à Enterprise</>}
+            {loading === 'business' ? <><Loader2 size={16} className="animate-spin" /> Redirection…</> : <>{t('pricing.business.cta')} <ArrowRight size={16} /></>}
           </button>
         </div>
       </div>
