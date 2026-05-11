@@ -7,3 +7,5 @@ healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
+
+# Last updated: 2026-05-11 - Force fresh snapshot fetch (Next.js 14.2.35)
