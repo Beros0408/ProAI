@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
 router = APIRouter()
