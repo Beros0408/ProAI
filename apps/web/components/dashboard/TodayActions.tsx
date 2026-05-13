@@ -29,7 +29,7 @@ export function TodayActions() {
         {ACTIONS.map(action => (
           <li key={action.id} className="flex items-start gap-3 group hover-lift">
             {action.done ? (
-              <CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" style={{ color: 'var(--color-success-text, #86efac)' }} />
             ) : (
               <Circle className="w-4 h-4 text-muted mt-0.5 shrink-0" />
             )}

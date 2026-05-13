@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 import type { AgentType } from '@proai/types'
 
-const AGENT_CONFIG: Record<AgentType, { label: string; emoji: string; color: string }> = {
-  general: { label: 'Général', emoji: '🤖', color: 'bg-slate-500/10 text-slate-300 border-slate-500/20' },
-  marketing: { label: 'Marketing', emoji: '📣', color: 'bg-pink-500/10 text-pink-300 border-pink-500/20' },
-  sales: { label: 'Ventes', emoji: '💼', color: 'bg-green-500/10 text-green-300 border-green-500/20' },
-  automation: { label: 'Automatisation', emoji: '⚡', color: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/20' },
-  analytics: { label: 'Analytics', emoji: '📊', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
-  social_media: { label: 'Social Media', emoji: '📱', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
-  communication: { label: 'Communication', emoji: '💬', color: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20' },
+const AGENT_CONFIG: Record<AgentType, { label: string; emoji: string; badgeStyle: { background: string; color: string; border: string } }> = {
+  general:       { label: 'Général',        emoji: '🤖', badgeStyle: { background: 'rgba(100,116,139,0.15)', color: '#94a3b8',  border: '1px solid rgba(100,116,139,0.3)' } },
+  marketing:     { label: 'Marketing',      emoji: '📣', badgeStyle: { background: 'rgba(251,113,133,0.15)', color: '#fda4af',  border: '1px solid rgba(251,113,133,0.3)' } },
+  sales:         { label: 'Ventes',         emoji: '💼', badgeStyle: { background: 'rgba(134,239,172,0.15)', color: '#86efac',  border: '1px solid rgba(134,239,172,0.3)' } },
+  automation:    { label: 'Automatisation', emoji: '⚡', badgeStyle: { background: 'rgba(251,191,36,0.15)',  color: '#fcd34d',  border: '1px solid rgba(251,191,36,0.3)'  } },
+  analytics:     { label: 'Analytics',      emoji: '📊', badgeStyle: { background: 'rgba(96,165,250,0.15)',  color: '#93c5fd',  border: '1px solid rgba(96,165,250,0.3)'  } },
+  social_media:  { label: 'Social Media',   emoji: '📱', badgeStyle: { background: 'rgba(192,132,252,0.15)', color: '#d8b4fe',  border: '1px solid rgba(192,132,252,0.3)' } },
+  communication: { label: 'Communication',  emoji: '💬', badgeStyle: { background: 'rgba(45,212,191,0.15)',  color: '#5eead4',  border: '1px solid rgba(45,212,191,0.3)'  } },
 }
 
 interface Props {
@@ -21,10 +21,10 @@ export function AgentBadge({ agentType, size = 'sm' }: Props) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border font-medium',
-        config.color,
+        'inline-flex items-center gap-1.5 rounded-full font-medium',
         size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-3 py-1 text-sm',
       )}
+      style={config.badgeStyle}
     >
       <span>{config.emoji}</span>
       {config.label}

@@ -16,9 +16,11 @@ export function KPICard({ title, value, delta, icon: Icon }: Props) {
           <Icon className="w-4.5 h-4.5 text-primary" />
         </div>
         <span
-          className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-            positive ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'
-          }`}
+          className="text-xs font-medium px-2 py-0.5 rounded-full"
+          style={{
+            background: positive ? 'var(--color-success-bg, rgba(74,222,128,0.15))' : 'var(--color-error-bg, rgba(248,113,113,0.15))',
+            color: positive ? 'var(--color-success-text, #86efac)' : 'var(--color-error-text, #fca5a5)',
+          }}
         >
           {delta}
         </span>

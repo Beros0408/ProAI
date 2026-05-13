@@ -10,6 +10,14 @@
     --primary: #6366F1;
     --foreground: #E2E8F0;
     --muted: #64748B;
+    --color-success-text: #86efac;
+    --color-warning-text: #fcd34d;
+    --color-error-text: #fca5a5;
+    --color-info-text: #93c5fd;
+    --color-success-bg: rgba(74,222,128,0.15);
+    --color-warning-bg: rgba(251,191,36,0.15);
+    --color-error-bg: rgba(248,113,113,0.15);
+    --color-info-bg: rgba(96,165,250,0.15);
   }
 
   [data-theme="dark"] {
@@ -30,6 +38,26 @@
     --nav-active-bg: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(14,165,233,0.05));
     --nav-active-color: #38bdf8;
     --nav-indicator: #0ea5e9;
+    /* Semantic colors WCAG AA */
+    --color-success: #4ade80;
+    --color-success-bg: rgba(74,222,128,0.15);
+    --color-success-text: #86efac;
+    --color-warning: #fbbf24;
+    --color-warning-bg: rgba(251,191,36,0.15);
+    --color-warning-text: #fcd34d;
+    --color-error: #f87171;
+    --color-error-bg: rgba(248,113,113,0.15);
+    --color-error-text: #fca5a5;
+    --color-info: #60a5fa;
+    --color-info-bg: rgba(96,165,250,0.15);
+    --color-info-text: #93c5fd;
+    /* Chart accent palette */
+    --accent-ocean: #60a5fa;
+    --accent-coral: #fb7185;
+    --accent-purple: #c084fc;
+    --accent-amber: #fbbf24;
+    --accent-teal: #2dd4bf;
+    --accent-green: #86efac;
   }
 
   [data-theme="warm"] {
@@ -50,6 +78,26 @@
     --nav-active-bg: rgba(251,146,60,0.1);
     --nav-active-color: #fb923c;
     --nav-indicator: #fb923c;
+    /* Semantic colors WCAG AA (warm) */
+    --color-success: #4ade80;
+    --color-success-bg: rgba(74,222,128,0.12);
+    --color-success-text: #86efac;
+    --color-warning: #fbbf24;
+    --color-warning-bg: rgba(251,191,36,0.12);
+    --color-warning-text: #fcd34d;
+    --color-error: #f87171;
+    --color-error-bg: rgba(248,113,113,0.12);
+    --color-error-text: #fca5a5;
+    --color-info: #60a5fa;
+    --color-info-bg: rgba(96,165,250,0.12);
+    --color-info-text: #93c5fd;
+    /* Chart accent palette (warm) */
+    --accent-ocean: #60a5fa;
+    --accent-coral: #fb923c;
+    --accent-purple: #c084fc;
+    --accent-amber: #fbbf24;
+    --accent-teal: #2dd4bf;
+    --accent-green: #86efac;
   }
 
   * {
