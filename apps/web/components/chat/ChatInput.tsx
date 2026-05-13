@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { Send, Paperclip, Mic, X } from 'lucide-react'
+import { Send, Paperclip, Mic, MicOff, X } from 'lucide-react'
 
 const ACCEPTED_MIME = new Set([
   'image/png', 'image/jpeg', 'image/jpg', 'image/webp',
@@ -32,6 +32,7 @@ export function ChatInput({
   const [voiceSupported, setVoiceSupported] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const recognitionRef = useRef<any>(null)
 
   useEffect(() => {
     setVoiceSupported(
@@ -87,9 +88,15 @@ export function ChatInput({
   }
 
   const handleVoice = () => {
-    if (!voiceSupported || isRecording) return
+    if (!voiceSupported) return
+    if (isRecording) {
+      recognitionRef.current?.stop()
+      setIsRecording(false)
+      return
+    }
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     const recognition = new SR()
+    recognitionRef.current = recognition
     recognition.lang = 'fr-FR'
     recognition.interimResults = false
     recognition.onresult = (e: any) => {
@@ -209,19 +216,15 @@ export function ChatInput({
           type="button"
           onClick={handleVoice}
           disabled={!voiceSupported || disabled || isUploading}
-          className="p-2 rounded-lg transition-colors shrink-0 disabled:opacity-40"
-          aria-label={isRecording ? 'Écoute en cours...' : 'Entrée vocale'}
-          title={!voiceSupported ? 'Reconnaissance vocale non supportée par ce navigateur' : isRecording ? 'Écoute en cours...' : 'Cliquez pour dicter'}
+          className={`p-2 rounded-lg transition-all shrink-0 disabled:opacity-40 ${isRecording ? 'animate-pulse' : ''}`}
+          style={isRecording ? { background: 'var(--color-error-bg, rgba(248,113,113,0.15))' } : {}}
+          aria-label={isRecording ? 'Arrêter l\'enregistrement' : 'Entrée vocale'}
+          title={!voiceSupported ? 'Reconnaissance vocale non supportée par ce navigateur (Chrome recommandé)' : isRecording ? 'Cliquez pour arrêter' : 'Cliquez pour dicter'}
         >
-          <Mic
-            className="w-4 h-4"
-            style={{
-              color: isRecording ? '#ef4444' : '#64748b',
-              filter: isRecording ? 'drop-shadow(0 0 5px #ef4444)' : 'none',
-            }}
-          />
-          {isRecording && (
-            <span className="sr-only">Écoute en cours</span>
+          {isRecording ? (
+            <MicOff className="w-4 h-4" style={{ color: 'var(--color-error, #f87171)' }} />
+          ) : (
+            <Mic className="w-4 h-4" style={{ color: 'var(--text-muted, #64748b)' }} />
           )}
         </button>
 

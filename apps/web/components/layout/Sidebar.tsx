@@ -358,6 +358,34 @@ export function Sidebar() {
         </Link>
       </div>
 
+      {/* ── TARIFS ── */}
+      <div className="px-2 pb-1">
+        <Link
+          href="/pricing"
+          className={`flex items-center gap-3 rounded-xl transition-all duration-200 ${compact ? "justify-center px-2 py-2.5" : "px-3 py-2.5"}`}
+          style={{
+            color:      pathname === "/pricing" ? "var(--nav-active-color)" : "var(--text-muted)",
+            background: pathname === "/pricing" ? "var(--nav-active-bg)" : "transparent",
+          }}
+          title={compact ? t("nav.pricing") : undefined}
+        >
+          <Crown size={17} style={{ color: pathname === "/pricing" ? "var(--nav-active-color)" : "#fb923c" }} />
+          {!compact && (
+            <>
+              <span className="text-[13px] font-medium flex-1" style={{ color: pathname === "/pricing" ? "var(--nav-active-color)" : "var(--text-secondary)" }}>
+                {t("nav.pricing")}
+              </span>
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{ background: "rgba(251,146,60,0.15)", color: "#fb923c", border: "1px solid rgba(251,146,60,0.2)" }}
+              >
+                Pro
+              </span>
+            </>
+          )}
+        </Link>
+      </div>
+
       {/* ── RÉDUIRE ── */}
       <div className="px-2 pb-1">
         <button
@@ -374,8 +402,9 @@ export function Sidebar() {
       </div>
 
       {/* ── UTILISATEUR ── */}
-      <div
-        className={`mx-2 mb-2 rounded-xl p-3 ${compact ? "px-2" : ""}`}
+      <Link
+        href="/pricing"
+        className={`mx-2 mb-2 rounded-xl p-3 block transition-all duration-200 group cursor-pointer ${compact ? "px-2" : ""}`}
         style={{
           background: theme === 'warm' ? '#2a2018' : "var(--bg-surface, #111827)",
           border: theme === 'warm' ? '1px solid rgba(251,146,60,0.08)' : "1px solid var(--border-color, rgba(255,255,255,0.06))",
@@ -383,7 +412,7 @@ export function Sidebar() {
       >
         <div className={`flex items-center gap-2.5 ${compact ? "justify-center" : ""}`}>
           <div
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:scale-105 transition-transform"
             style={{ background: "rgba(14,165,233,0.15)", color: "#38bdf8" }}
           >
             U
@@ -393,12 +422,12 @@ export function Sidebar() {
               <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{t("nav.myspace")}</p>
               <div className="flex items-center gap-1">
                 <Crown size={9} style={{ color: "#fb923c" }} />
-                <span className="text-[10px]" style={{ color: "#fb923c" }}>{t("nav.freeplan")}</span>
+                <span className="text-[10px] group-hover:underline" style={{ color: "#fb923c" }}>{t("nav.freeplan")} · Upgrader →</span>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </Link>
     </aside>
   )
 }
