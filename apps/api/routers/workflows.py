@@ -217,7 +217,7 @@ async def create_workflow(
         raise HTTPException(status_code=500, detail="Could not create workflow") from exc
 
 
-@router.put("/{workflow_id}", response_model=WorkflowOut)
+@router.patch("/{workflow_id}", response_model=WorkflowOut)
 async def update_workflow(
     workflow_id: str,
     data: WorkflowUpdate,

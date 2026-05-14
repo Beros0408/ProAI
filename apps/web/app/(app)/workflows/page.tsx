@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Plus, Save, Zap, Mail, MessageSquare, CheckSquare,
   Users, Globe, Clock, GitBranch, Power, Trash2, Play,
@@ -80,29 +80,34 @@ export default function WorkflowsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [dirty, setDirty] = useState(false)
+  const [saveError, setSaveError] = useState(false)
+  const initialized = useRef(false)
 
   // Modal state: 'trigger' | 'action' | null
   const [modal, setModal] = useState<'trigger' | 'action' | null>(null)
 
   const selectedWorkflow = workflows.find(w => w.id === selectedId) ?? null
 
-  // ── Load ──
+  // ── Load ─────────────────────────────────────────────────────────────────────
+  // Stable callback (no selectedId dep) — avoids infinite re-fetch loop.
+  // useRef tracks whether we've already set the initial selection.
   const loadWorkflows = useCallback(async () => {
     setLoading(true)
     try {
       const data = await api.get<Workflow[]>('/api/v1/workflows/')
       setWorkflows(data)
-      if (data.length > 0 && !selectedId) {
+      if (!initialized.current && data.length > 0) {
+        initialized.current = true
         setSelectedId(data[0].id)
         const { id: _id, created_at: _ca, ...rest } = data[0]
         setEditing(rest)
       }
     } catch {
-      // fall through — backend returns mock data
+      // backend returns mock data on error — no action needed
     } finally {
       setLoading(false)
     }
-  }, [selectedId])
+  }, []) // stable reference — intentionally no deps
 
   useEffect(() => { loadWorkflows() }, [loadWorkflows])
 
@@ -146,10 +151,11 @@ export default function WorkflowsPage() {
     }
   }
 
-  // ── Save (PUT) ──
+  // ── Save (PATCH /{id}) ───────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!selectedId) return
     setSaving(true)
+    setSaveError(false)
     try {
       const payload = {
         name: editing.name,
@@ -162,11 +168,13 @@ export default function WorkflowsPage() {
           config: s.config,
         })),
       }
+      // PATCH /{id} — backend endpoint updated to match
       const updated = await api.patch<Workflow>(`/api/v1/workflows/${selectedId}`, payload)
       setWorkflows(prev => prev.map(w => w.id === selectedId ? updated : w))
       setDirty(false)
     } catch {
-      setDirty(false) // optimistic
+      setSaveError(true)
+      // Keep dirty=true so user knows save failed and can retry
     } finally {
       setSaving(false)
     }
@@ -262,7 +270,7 @@ export default function WorkflowsPage() {
 
         {/* Left: workflow list */}
         <aside
-          className="w-64 flex-shrink-0 border-r flex flex-col overflow-y-auto"
+          className="w-52 flex-shrink-0 border-r flex flex-col overflow-y-auto"
           style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
         >
           <div className="px-4 py-3 border-b text-xs font-semibold uppercase tracking-wider"
@@ -280,35 +288,30 @@ export default function WorkflowsPage() {
                 <div
                   key={wf.id}
                   onClick={() => selectWorkflow(wf)}
-                  className="group relative rounded-xl px-3 py-2.5 cursor-pointer transition-all"
+                  className="group relative rounded-lg px-2.5 py-2 cursor-pointer transition-all"
                   style={selectedId === wf.id
                     ? { background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)' }
                     : { background: 'transparent', border: '1px solid transparent' }
                   }
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-white truncate flex-1">{wf.name}</p>
+                  <div className="flex items-center justify-between gap-1">
+                    <p className="text-xs font-medium text-white truncate flex-1">{wf.name}</p>
                     <button
                       onClick={e => { e.stopPropagation(); handleDelete(wf.id) }}
-                      className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/20 transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:bg-red-500/20 transition-all shrink-0"
                     >
-                      <Trash2 className="w-3 h-3 text-red-400" />
+                      <Trash2 className="w-2.5 h-2.5 text-red-400" />
                     </button>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span
-                      className="text-[10px] px-1.5 py-0.5 rounded-full font-medium"
-                      style={wf.is_active
-                        ? { background: 'rgba(74,222,128,0.15)', color: '#4ade80' }
-                        : { background: 'rgba(100,116,139,0.15)', color: '#64748b' }
-                      }
-                    >
-                      {wf.is_active ? t('workflows.active') : t('workflows.draft')}
-                    </span>
-                    <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
-                      {wf.run_count} {t('workflows.run_count')}
-                    </span>
-                  </div>
+                  <span
+                    className="mt-0.5 inline-block text-[9px] px-1.5 py-0.5 rounded-full font-medium"
+                    style={wf.is_active
+                      ? { background: 'rgba(74,222,128,0.15)', color: '#4ade80' }
+                      : { background: 'rgba(100,116,139,0.15)', color: '#64748b' }
+                    }
+                  >
+                    {wf.is_active ? t('workflows.active') : t('workflows.draft')}
+                  </span>
                 </div>
               ))}
             </div>
@@ -330,7 +333,10 @@ export default function WorkflowsPage() {
                 placeholder={t('workflows.namePlaceholder')}
               />
               <div className="flex items-center gap-2 shrink-0">
-                {dirty && (
+                {saveError && (
+                  <span className="text-xs text-red-400 font-medium">✕ Erreur — réessayer</span>
+                )}
+                {dirty && !saveError && (
                   <span className="text-xs text-amber-400 font-medium">● Non sauvegardé</span>
                 )}
                 <button
