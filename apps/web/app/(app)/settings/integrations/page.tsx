@@ -42,6 +42,7 @@ export default function IntegrationsPage() {
   // Webhook state
   const [webhooks, setWebhooks] = useState<WebhookToken[]>([])
   const [loadingWebhooks, setLoadingWebhooks] = useState(true)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [historyId, setHistoryId] = useState<string | null>(null)
   const [configureId, setConfigureId] = useState<string | null>(null)
@@ -49,11 +50,15 @@ export default function IntegrationsPage() {
 
   const loadWebhooks = useCallback(async () => {
     setLoadingWebhooks(true)
+    setLoadError(null)
     try {
       const resp = await api.get<WebhooksResponse>('/api/v1/webhooks')
       setWebhooks(resp.webhooks ?? [])
-    } catch {
-      // user not logged in or API unavailable
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : ''
+      if (msg.includes('403') || msg.includes('401')) {
+        setLoadError('session_expired')
+      }
     } finally {
       setLoadingWebhooks(false)
     }
@@ -108,6 +113,22 @@ export default function IntegrationsPage() {
             + {t('webhook.new')}
           </button>
         </div>
+
+        {loadError === 'session_expired' && (
+          <div
+            className="mb-4 flex items-center gap-3 rounded-xl px-4 py-3"
+            style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+          >
+            <span>🔒</span>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-red-400">Session expirée</p>
+              <p className="text-xs text-slate-500">Votre session a expiré. Reconnectez-vous pour gérer vos webhooks.</p>
+            </div>
+            <a href="/login" className="rounded-lg px-3 py-1.5 text-xs font-semibold" style={{ background: '#ef4444', color: '#fff' }}>
+              Se reconnecter
+            </a>
+          </div>
+        )}
 
         {loadingWebhooks ? (
           <div className="flex items-center justify-center py-10">

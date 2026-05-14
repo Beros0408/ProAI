@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslation } from '@/lib/i18n/context'
+import { api } from '@/lib/api'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
@@ -42,19 +43,8 @@ export function WebhookCard({ webhook, onUpdate, onDelete, onViewHistory, onConf
     setTesting(true)
     setTestResult(null)
     try {
-      const { createClient } = await import('@/lib/supabase/client')
-      const supabase = createClient()
-      const { data } = await supabase.auth.getSession()
-      const token = data.session?.access_token
-      const res = await fetch(`${API_URL}/api/v1/webhooks/${webhook.id}/test`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      if (res.ok) {
-        setTestResult('ok')
-      } else {
-        setTestResult('error')
-      }
+      await api.post(`/api/v1/webhooks/${webhook.id}/test`, {})
+      setTestResult('ok')
     } catch {
       setTestResult('error')
     } finally {
