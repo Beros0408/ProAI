@@ -15,7 +15,7 @@ from core.security import get_optional_user
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-TABLE = "leads"
+TABLE = "crm_leads"
 
 # ── Pydantic models ────────────────────────────────────────────────────────
 
@@ -23,7 +23,7 @@ class LeadCreate(BaseModel):
     name: str
     email: str = ""
     company: str = ""
-    estimated_value: int = 0
+    estimated_value: float = 0
     # Enriched fields
     phone: Optional[str] = None
     job_title: Optional[str] = None
@@ -41,7 +41,7 @@ class LeadUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
     company: Optional[str] = None
-    estimated_value: Optional[int] = None
+    estimated_value: Optional[float] = None
     phone: Optional[str] = None
     job_title: Optional[str] = None
     source: Optional[Literal["linkedin", "website", "referral", "event", "other"]] = None
@@ -61,9 +61,10 @@ class Lead(BaseModel):
     company: str
     stage: str
     score: int
-    estimated_value: int = 0
+    estimated_value: float = 0
     notes: str = ""
     created_at: str
+    updated_at: Optional[str] = None
     # Enriched
     phone: Optional[str] = None
     job_title: Optional[str] = None
@@ -102,6 +103,7 @@ def _score_int(raw: Any) -> int:
 
 def _row_to_lead(row: Dict[str, Any]) -> Lead:
     created = str(row.get("created_at") or "")[:10]
+    updated = str(row.get("updated_at") or "")[:10] or None
     nc = row.get("next_contact_at")
     return Lead(
         id=str(row["id"]),
@@ -110,9 +112,10 @@ def _row_to_lead(row: Dict[str, Any]) -> Lead:
         company=row.get("company") or "",
         stage=row.get("stage") or "nouveau",
         score=_score_int(row.get("score")),
-        estimated_value=int(row.get("estimated_value") or 0),
+        estimated_value=float(row.get("estimated_value") or 0),
         notes=row.get("notes") or "",
         created_at=created,
+        updated_at=updated,
         phone=row.get("phone"),
         job_title=row.get("job_title"),
         source=row.get("source"),
