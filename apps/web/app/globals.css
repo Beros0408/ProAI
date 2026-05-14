@@ -1074,3 +1074,30 @@ a, button, input, select, textarea {
   background: rgba(251,146,60,0.08) !important;
   color: rgba(245,235,224,0.95) !important;
 }
+
+/* ============ WORKFLOW CANVAS ANIMATIONS ============ */
+
+@keyframes wf-flow {
+  from { stroke-dashoffset: 20; }
+  to   { stroke-dashoffset: 0;  }
+}
+
+@keyframes wf-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.6; transform: scale(1.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-10px); }
+}
+
+.wf-flow-line {
+  stroke-dasharray: 5 5;
+  animation: wf-flow 1.2s linear infinite;
+}
+
+.wf-dot {
+  transform-origin: center;
+  animation: wf-pulse 2s ease-in-out infinite;
+}
