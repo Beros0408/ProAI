@@ -78,7 +78,7 @@ const AGENT_TYPES: AgentConfig[] = [
     color: 'from-yellow-500 to-orange-600',
     hex: '#fb923c',
     capabilityKeys: ['agent.automation.cap.1', 'agent.automation.cap.2', 'agent.automation.cap.3', 'agent.automation.cap.4'],
-    questionKeys: ['agent.automation.q.1', 'agent.automation.q.2', 'agent.automation.q.3'],
+    questionKeys: ['agent.automation.q.1', 'agent.automation.q.2', 'agent.automation.q.3', 'agent.automation.q.4'],
   },
   {
     type: 'analytics',

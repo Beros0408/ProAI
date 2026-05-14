@@ -16,7 +16,7 @@ _QUICK_KEYWORDS: dict[str, list[str]] = {
     "sales": ["lead", "prospect", "crm", "pipe", "conversion", "relance", "deal", "closing", "script de vente"],
     "social_media": ["linkedin", "instagram", "tiktok", "twitter", "reels", "hashtag", "post", "publication", "réseaux sociaux"],
     "communication": ["email", "cold email", "objet", "séquence", "newsletter", "slack", "rédige un message"],
-    "automation": ["zapier", "make", "n8n", "workflow", "automatise", "automatisation", "intégration", "trigger", "tâche", "agenda", "planning"],
+    "automation": ["zapier", "make", "n8n", "notion", "airtable", "pipedream", "workflow", "automatise", "automatisation", "intégration", "trigger", "webhook", "api", "tâche", "agenda", "planning", "slack bot", "discord bot", "apps script", "power automate"],
     "analytics": ["kpi", "dashboard", "tableau de bord", "taux de conversion", "roi", "rapport", "statistiques", "analyse", "chiffres", "métriques"],
     "legal": ["contrat", "rgpd", "juridique", "droit", "cgv", "cgu", "sarl", "sas", "sasu", "inpi", "avocat", "société", "statut", "propriété intellectuelle", "marque", "rupture conventionnelle"],
 }
