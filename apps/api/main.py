@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.config import get_settings
 from core.redis import close_redis
-from routers import health, auth, chat, conversations, memory, mindmap, content, analyze, upload, billing, crm, workflows, agenda, reports, predictions, schedule, onboarding, welcome
+from routers import health, auth, chat, conversations, memory, mindmap, content, analyze, upload, billing, crm, workflows, agenda, reports, predictions, schedule, onboarding, welcome, webhooks
 
 settings = get_settings()
 
@@ -58,6 +58,7 @@ app.include_router(onboarding.router, prefix="/api/v1")
 
 app.include_router(billing.router, prefix="/api/v1")
 app.include_router(welcome.router, prefix="/api/v1")
+app.include_router(webhooks.router, prefix="/api/v1")
 
 @app.get("/")
 async def root():
