@@ -90,6 +90,16 @@ const AGENT_TYPES: AgentConfig[] = [
     capabilityKeys: ['agent.analytics.cap.1', 'agent.analytics.cap.2', 'agent.analytics.cap.3', 'agent.analytics.cap.4'],
     questionKeys: ['agent.analytics.q.1', 'agent.analytics.q.2', 'agent.analytics.q.3'],
   },
+  {
+    type: 'legal',
+    labelKey: 'legal_agent',
+    descKey: 'legal_desc',
+    emoji: '⚖️',
+    color: 'from-indigo-500 to-purple-600',
+    hex: '#a5b4fc',
+    capabilityKeys: ['agent.legal.cap.1', 'agent.legal.cap.2', 'agent.legal.cap.3', 'agent.legal.cap.4'],
+    questionKeys: ['agent.legal.q.1', 'agent.legal.q.2', 'agent.legal.q.3'],
+  },
 ]
 
 export default function ChatPage() {

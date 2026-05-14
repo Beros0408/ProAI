@@ -1,7 +1,7 @@
 from __future__ import annotations
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
-from agents import intent_classifier, marketing, sales, general, social_media, communication, automation, analytics
+from agents import intent_classifier, marketing, sales, general, social_media, communication, automation, analytics, legal
 
 
 class AgentState(TypedDict):
@@ -18,6 +18,7 @@ _QUICK_KEYWORDS: dict[str, list[str]] = {
     "communication": ["email", "cold email", "objet", "séquence", "newsletter", "slack", "rédige un message"],
     "automation": ["zapier", "make", "n8n", "workflow", "automatise", "automatisation", "intégration", "trigger", "tâche", "agenda", "planning"],
     "analytics": ["kpi", "dashboard", "tableau de bord", "taux de conversion", "roi", "rapport", "statistiques", "analyse", "chiffres", "métriques"],
+    "legal": ["contrat", "rgpd", "juridique", "droit", "cgv", "cgu", "sarl", "sas", "sasu", "inpi", "avocat", "société", "statut", "propriété intellectuelle", "marque", "rupture conventionnelle"],
 }
 
 
@@ -76,6 +77,11 @@ async def _analytics(state: AgentState) -> AgentState:
     return {**state, "response": resp}
 
 
+async def _legal(state: AgentState) -> AgentState:
+    resp = await legal.run(state["message"], state["history"])
+    return {**state, "response": resp}
+
+
 def build_graph() -> StateGraph:
     graph = StateGraph(AgentState)
     graph.add_node("classify", _classify)
@@ -86,6 +92,7 @@ def build_graph() -> StateGraph:
     graph.add_node("communication", _communication)
     graph.add_node("automation", _automation)
     graph.add_node("analytics", _analytics)
+    graph.add_node("legal", _legal)
 
     graph.set_entry_point("classify")
     graph.add_conditional_edges(
@@ -99,9 +106,10 @@ def build_graph() -> StateGraph:
             "communication": "communication",
             "automation":    "automation",
             "analytics":     "analytics",
+            "legal":         "legal",
         },
     )
-    for node in ("marketing", "sales", "general", "social_media", "communication", "automation", "analytics"):
+    for node in ("marketing", "sales", "general", "social_media", "communication", "automation", "analytics", "legal"):
         graph.add_edge(node, END)
 
     return graph.compile()

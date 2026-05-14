@@ -9,6 +9,7 @@ const AGENT_CONFIG: Record<AgentType, { label: string; emoji: string; badgeStyle
   analytics:     { label: 'Analytics',      emoji: '📊', badgeStyle: { background: 'rgba(96,165,250,0.15)',  color: '#93c5fd',  border: '1px solid rgba(96,165,250,0.3)'  } },
   social_media:  { label: 'Social Media',   emoji: '📱', badgeStyle: { background: 'rgba(192,132,252,0.15)', color: '#d8b4fe',  border: '1px solid rgba(192,132,252,0.3)' } },
   communication: { label: 'Communication',  emoji: '💬', badgeStyle: { background: 'rgba(45,212,191,0.15)',  color: '#5eead4',  border: '1px solid rgba(45,212,191,0.3)'  } },
+  legal:         { label: 'Juridique',      emoji: '⚖️', badgeStyle: { background: 'rgba(99,102,241,0.15)',  color: '#a5b4fc',  border: '1px solid rgba(99,102,241,0.3)'  } },
 }
 
 interface Props {
