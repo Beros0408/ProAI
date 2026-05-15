@@ -213,17 +213,10 @@ export default function ContentPage() {
     setErrorMessage('')
     setResult('')
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody()),
-      })
-      if (!response.ok) throw new Error(t('reports.serverError'))
-      const data = await response.json()
+      const data = await api.post<{ content: string; report?: string }>(endpoint, requestBody())
       setResult(data.content || data.report || t('content.result.empty'))
-    } catch (err) {
+    } catch {
       setErrorMessage(t('content.error.generate'))
-      void err
     } finally {
       setLoading(false)
     }
