@@ -34,7 +34,7 @@ _prompt = ChatPromptTemplate.from_messages([
 
 async def _analyze_text(message: str) -> str:
     settings = get_settings()
-    llm = ChatOpenAI(model="gpt-4o", api_key=settings.openai_api_key, temperature=0)
+    llm = ChatOpenAI(model="gpt-4o", api_key=settings.openai_api_key, temperature=0, model_kwargs={"response_format": {"type": "json_object"}})
     chain = _prompt | llm
     result = await chain.ainvoke({"message": message})
     return result.content
@@ -54,6 +54,12 @@ async def analyze_website(body: WebsiteAnalyzeRequest):
     )
     try:
         raw = await _analyze_text(prompt)
+        # Strip markdown code fences GPT sometimes wraps JSON in
+        raw = raw.strip()
+        if raw.startswith("```"):
+            raw = raw.split("```")[1]
+            if raw.startswith("json"):
+                raw = raw[4:]
         payload = json.loads(raw.strip())
         return WebsiteAnalyzeResponse(**payload)
     except json.JSONDecodeError:
