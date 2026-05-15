@@ -921,6 +921,12 @@ export const translations = {
     'notifications.empty': 'Aucune notification',
     'notifications.time.minutes_ago': 'il y a {n} min',
     'notifications.time.hours_ago': 'il y a {n} h',
+    'notifications.mock1.title': 'Agent Marketing',
+    'notifications.mock1.message': 'Votre campagne email a été générée avec succès.',
+    'notifications.mock2.title': 'Nouveau lead',
+    'notifications.mock2.message': "Alice Dubois vient d'entrer dans votre pipeline CRM.",
+    'notifications.mock3.title': 'Workflow déclenché',
+    'notifications.mock3.message': 'Séquence "Nurture B2B" exécutée pour 12 contacts.',
 
     // ── Landing page ──────────────────────────────────────────────────
     'landing.integrations.badge': 'Intégrations',
@@ -2049,6 +2055,12 @@ export const translations = {
     'notifications.empty': 'No notifications',
     'notifications.time.minutes_ago': '{n} min ago',
     'notifications.time.hours_ago': '{n} h ago',
+    'notifications.mock1.title': 'Marketing Agent',
+    'notifications.mock1.message': 'Your email campaign has been generated successfully.',
+    'notifications.mock2.title': 'New lead',
+    'notifications.mock2.message': 'Alice Dubois just entered your CRM pipeline.',
+    'notifications.mock3.title': 'Workflow triggered',
+    'notifications.mock3.message': 'Sequence "Nurture B2B" executed for 12 contacts.',
 
     // ── Landing page ──────────────────────────────────────────────────
     'landing.integrations.badge': 'Integrations',

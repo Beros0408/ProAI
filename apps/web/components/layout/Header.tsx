@@ -204,8 +204,8 @@ export function Header() {
                         style={{ background: n.read ? 'var(--border-color)' : (n.type === 'success' ? '#34d399' : theme === 'warm' ? '#fb923c' : '#0ea5e9') }}
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{n.title}</p>
-                        <p className="text-xs leading-relaxed mt-0.5" style={{ color: 'var(--text-secondary)' }}>{n.message}</p>
+                        <p className="text-xs font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{n.titleKey ? t(n.titleKey) : n.title}</p>
+                        <p className="text-xs leading-relaxed mt-0.5" style={{ color: 'var(--text-secondary)' }}>{n.messageKey ? t(n.messageKey) : n.message}</p>
                         <p className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>{formatTimeAgo(n.createdAt, t)}</p>
                       </div>
                     </button>
