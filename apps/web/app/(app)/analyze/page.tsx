@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { useTranslation } from '@/lib/i18n/context'
 import { BackButton } from '@/components/ui/BackButton'
+import { api } from '@/lib/api'
 
 export default function AnalyzePage() {
   const router = useRouter()
@@ -18,14 +19,9 @@ export default function AnalyzePage() {
     setResult(null)
 
     try {
-      const response = await fetch('/api/v1/analyze/website', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url }),
-      })
-      const data = await response.json()
+      const data = await api.post<{ score: number; seo: { summary: string }; performance: { summary: string }; accessibility: { summary: string }; best_practices: { summary: string }; recommendations: string[] }>('/api/v1/analyze/website', { url })
       setResult(data)
-    } catch (error) {
+    } catch {
       setResult({ score: 0, seo: { summary: '' }, performance: { summary: '' }, accessibility: { summary: '' }, best_practices: { summary: '' }, recommendations: [], error: t('error_analysis') })
     } finally {
       setLoading(false)

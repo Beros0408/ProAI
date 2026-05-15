@@ -7,6 +7,7 @@ import 'reactflow/dist/style.css'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/lib/i18n/context'
 import { BackButton } from '@/components/ui/BackButton'
+import { api } from '@/lib/api'
 
 const initialNodes: Node[] = []
 const initialEdges: Edge[] = []
@@ -27,25 +28,11 @@ export default function MindMapPage() {
 
     setIsLoading(true)
     try {
-      const response = await fetch('/api/v1/mindmap/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ idea }),
-      })
-
-      if (!response.ok) {
-        throw new Error(t('mindmap_generation_error'))
-      }
-
-      const data = await response.json()
-
+      const data = await api.post<{ nodes: Node[]; edges: Edge[] }>('/api/v1/mindmap/generate', { idea })
       setNodes(data.nodes)
       setEdges(data.edges)
       alert(t('mindmap_success'))
-    } catch (error) {
-      console.error('Erreur:', error)
+    } catch {
       alert(t('mindmap_generation_error'))
     } finally {
       setIsLoading(false)

@@ -7,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-router = APIRouter(prefix="/analyze", tags=["analyze"])
+router = APIRouter(tags=["analyze"])
 
 class WebsiteAnalyzeRequest(BaseModel):
     url: HttpUrl
