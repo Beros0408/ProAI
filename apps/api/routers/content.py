@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-router = APIRouter(prefix="/content", tags=["content"])
+router = APIRouter(tags=["content"])
 
 
 class LinkedInRequest(BaseModel):
