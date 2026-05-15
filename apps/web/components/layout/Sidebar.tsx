@@ -75,7 +75,8 @@ const SECTIONS: NavSection[] = [
     items: [
       { href: "/automations", icon: Zap,        labelKey: "nav.automations" },
       { href: "/analytics",   icon: BarChart3,  labelKey: "nav.analytics" },
-      { href: "/reports",     icon: FileText,   labelKey: "nav.reports" },
+      // TODO: Re-enable Reports after DB + AI integration refactor
+      // { href: "/reports",  icon: FileText,   labelKey: "nav.reports" },
       { href: "/predictions", icon: TrendingUp, labelKey: "nav.predictions" },
     ],
   },

@@ -1,5 +1,18 @@
 "use client"
 
+// TODO: Re-enable Reports after DB + AI integration refactor
+// Module hidden from nav — redirect direct URL access to dashboard
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
+export default function ReportsPage() {
+  const router = useRouter()
+  useEffect(() => { router.replace("/dashboard") }, [router])
+  return null
+}
+
+/* ─── Original implementation preserved below — restore when refactor is done ───
+
 import { useEffect, useMemo, useRef, useState } from "react"
 import { BarChart, Bar, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { FileText, Download, Eye, BarChart2, MessageSquare } from "lucide-react"
@@ -265,3 +278,5 @@ export default function ReportsPage() {
     </div>
   )
 }
+
+─── End of preserved implementation ─── */
