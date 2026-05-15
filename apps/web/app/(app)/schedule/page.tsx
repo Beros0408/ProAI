@@ -27,17 +27,17 @@ interface CalendarCell {
 // MONTHS and DAYS_OF_WEEK are computed inside the component via Intl (locale-aware)
 
 const INITIAL_EVENTS: ScheduledEvent[] = [
-  { id: 'linkedin-3', platform: 'linkedin', content: 'LinkedIn post on product roadmap', contentKey: 'schedule.mock.linkedin_roadmap', date: '2026-04-03', time: '09:00' },
-  { id: 'linkedin-7', platform: 'linkedin', content: 'ProAI features announcement', contentKey: 'schedule.mock.linkedin_features', date: '2026-04-07', time: '11:00' },
-  { id: 'linkedin-14', platform: 'linkedin', content: 'Growth hacking tip', contentKey: 'schedule.mock.linkedin_growth', date: '2026-04-14', time: '14:00' },
-  { id: 'linkedin-21', platform: 'linkedin', content: 'Customer testimonial', contentKey: 'schedule.mock.linkedin_testimonial', date: '2026-04-21', time: '16:00' },
-  { id: 'linkedin-28', platform: 'linkedin', content: 'Monthly wrap-up', contentKey: 'schedule.mock.linkedin_summary', date: '2026-04-28', time: '10:00' },
-  { id: 'instagram-5', platform: 'instagram', content: 'Creative product story', contentKey: 'schedule.mock.instagram_story', date: '2026-04-05', time: '12:30' },
-  { id: 'instagram-12', platform: 'instagram', content: 'Customer carousel post', contentKey: 'schedule.mock.instagram_carousel', date: '2026-04-12', time: '15:00' },
-  { id: 'instagram-19', platform: 'instagram', content: 'Behind-the-scenes video', contentKey: 'schedule.mock.instagram_video', date: '2026-04-19', time: '18:00' },
-  { id: 'instagram-26', platform: 'instagram', content: 'Training reel', contentKey: 'schedule.mock.instagram_reel', date: '2026-04-26', time: '17:00' },
-  { id: 'facebook-10', platform: 'facebook', content: 'Live event announcement', contentKey: 'schedule.mock.facebook_live', date: '2026-04-10', time: '13:00' },
-  { id: 'facebook-20', platform: 'facebook', content: 'Sponsored post', contentKey: 'schedule.mock.facebook_sponsored', date: '2026-04-20', time: '19:00' },
+  { id: 'linkedin-3', platform: 'linkedin', content: 'LinkedIn post on product roadmap', contentKey: 'schedule.mock.linkedin_roadmap', date: '2026-05-03', time: '09:00' },
+  { id: 'linkedin-7', platform: 'linkedin', content: 'ProAI features announcement', contentKey: 'schedule.mock.linkedin_features', date: '2026-05-07', time: '11:00' },
+  { id: 'linkedin-14', platform: 'linkedin', content: 'Growth hacking tip', contentKey: 'schedule.mock.linkedin_growth', date: '2026-05-14', time: '14:00' },
+  { id: 'linkedin-21', platform: 'linkedin', content: 'Customer testimonial', contentKey: 'schedule.mock.linkedin_testimonial', date: '2026-05-21', time: '16:00' },
+  { id: 'linkedin-28', platform: 'linkedin', content: 'Monthly wrap-up', contentKey: 'schedule.mock.linkedin_summary', date: '2026-05-28', time: '10:00' },
+  { id: 'instagram-5', platform: 'instagram', content: 'Creative product story', contentKey: 'schedule.mock.instagram_story', date: '2026-05-05', time: '12:30' },
+  { id: 'instagram-12', platform: 'instagram', content: 'Customer carousel post', contentKey: 'schedule.mock.instagram_carousel', date: '2026-05-12', time: '15:00' },
+  { id: 'instagram-19', platform: 'instagram', content: 'Behind-the-scenes video', contentKey: 'schedule.mock.instagram_video', date: '2026-05-19', time: '18:00' },
+  { id: 'instagram-26', platform: 'instagram', content: 'Training reel', contentKey: 'schedule.mock.instagram_reel', date: '2026-05-26', time: '17:00' },
+  { id: 'facebook-10', platform: 'facebook', content: 'Live event announcement', contentKey: 'schedule.mock.facebook_live', date: '2026-05-10', time: '13:00' },
+  { id: 'facebook-20', platform: 'facebook', content: 'Sponsored post', contentKey: 'schedule.mock.facebook_sponsored', date: '2026-05-20', time: '19:00' },
 ]
 
 const PLATFORM_PILL_STYLE: Record<ScheduledEvent['platform'], string> = {
@@ -108,8 +108,8 @@ export default function SchedulePage() {
     const name = new Intl.DateTimeFormat(intlLocale, { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
     return name.charAt(0).toUpperCase() + name.slice(1)
   })
-  const today = new Date(2026, 3, 30)
-  const [currentDate, setCurrentDate] = useState(new Date(2026, 3))
+  const today = new Date()
+  const [currentDate, setCurrentDate] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth()) })
   const [events, setEvents] = useState<ScheduledEvent[]>(INITIAL_EVENTS)
 
   // Pre-fill modal if redirected from content page with ?content=...&platform=...
@@ -151,7 +151,7 @@ export default function SchedulePage() {
 
   const handlePrevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1))
   const handleNextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))
-  const handleToday = () => setCurrentDate(new Date(2026, 3))
+  const handleToday = () => { const d = new Date(); setCurrentDate(new Date(d.getFullYear(), d.getMonth())) }
 
   const handleCellClick = (dateIso: string) => {
     setSelectedDay(dateIso)

@@ -71,6 +71,19 @@ function isToday(d: Date): boolean {
   return d.getDate() === now.getDate() && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
 }
 
+function generateMonthGrid(year: number, month: number): Date[] {
+  const firstDay = new Date(year, month, 1)
+  const startDay = (firstDay.getDay() + 6) % 7
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const prevMonthDays = new Date(year, month, 0).getDate()
+  return Array.from({ length: 42 }, (_, i) => {
+    const d = i - startDay + 1
+    if (d <= 0) return new Date(year, month - 1, prevMonthDays + d)
+    if (d > daysInMonth) return new Date(year, month + 1, d - daysInMonth)
+    return new Date(year, month, d)
+  })
+}
+
 const ICON_MAP: Record<string, React.ElementType> = {
   video: Video, phone: Phone, brain: Brain, coffee: Coffee, target: Target, pencil: Pencil,
 }
@@ -98,6 +111,7 @@ export default function AgendaPage() {
   const [chargeLevel, setChargeLevel] = useState(0)
   const [scheduledPostDates, setScheduledPostDates] = useState<Set<string>>(new Set())
   const gridRef = useRef<HTMLDivElement>(null)
+  const [selectedDayIdx, setSelectedDayIdx] = useState(((new Date().getDay() + 6) % 7))
 
   const weekDates = getWeekDates(weekOffset)
   const now = new Date()
@@ -183,7 +197,7 @@ export default function AgendaPage() {
         <button onClick={() => setWeekOffset(w => w - 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: 'var(--text-secondary)' }}><ChevronLeft size={18} /></button>
         <button onClick={() => setWeekOffset(0)} className="px-3 py-1 rounded-full text-xs font-medium hover:bg-[#1a2236]" style={{ color: '#94a3b8', border: '1px solid rgba(255,255,255,0.08)' }}>{t('agenda.today')}</button>
         <button onClick={() => setWeekOffset(w => w + 1)} className="p-1.5 rounded-lg hover:bg-[#1a2236]" style={{ color: 'var(--text-secondary)' }}><ChevronRight size={18} /></button>
-        <span className="text-sm font-semibold text-white ml-2">{weekDates[0].toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}</span>
+        <span className="text-sm font-semibold text-white ml-2">{weekDates[0].toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { month: 'long', year: 'numeric' }).replace(/^\w/, c => c.toUpperCase())}</span>
       </div>
       {showAiSuggestions && (
         <div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 animate-fade-up" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
@@ -192,6 +206,7 @@ export default function AgendaPage() {
         </div>
       )}
       <div className="flex gap-4 flex-1 min-h-0">
+        {view === 'week' && (
         <div className="flex-1 rounded-2xl overflow-hidden" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div className="grid grid-cols-8 border-b" style={{ borderColor: 'var(--border-color)' }}>
             <div className="p-3 text-xs font-medium" style={{ color: 'var(--text-muted)' }}><Clock size={14} /></div>
@@ -259,6 +274,110 @@ export default function AgendaPage() {
             ))}
           </div>
         </div>
+        )}
+        {view === 'day' && (
+        <div className="flex-1 rounded-2xl overflow-hidden flex flex-col" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          <div className="grid grid-cols-8 border-b" style={{ borderColor: 'var(--border-color)' }}>
+            <div className="p-3 text-xs font-medium flex items-center justify-center" style={{ color: 'var(--text-muted)' }}><Clock size={14} /></div>
+            {weekDates.map((d, i) => (
+              <button key={i} onClick={() => setSelectedDayIdx(i)} className={`p-3 text-center transition-colors w-full ${i === selectedDayIdx ? 'bg-[rgba(14,165,233,0.15)]' : isToday(d) ? 'bg-[rgba(14,165,233,0.08)]' : 'hover:bg-[#1a2236]'}`}>
+                <div className="text-[10px] uppercase font-semibold tracking-wider" style={{ color: i >= 5 ? '#fb923c' : '#64748b' }}>{DAYS_SHORT[i]}</div>
+                <div className={`text-lg font-bold mt-0.5 ${i === selectedDayIdx ? 'text-[#0ea5e9]' : isToday(d) ? 'text-[#0ea5e9]' : 'text-white'}`}>{d.getDate()}</div>
+                {(isToday(d) || i === selectedDayIdx) && <div className="w-1.5 h-1.5 rounded-full mx-auto mt-1" style={{ background: i === selectedDayIdx ? '#0ea5e9' : 'rgba(14,165,233,0.4)' }} />}
+              </button>
+            ))}
+          </div>
+          <div ref={gridRef} className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 340px)' }}>
+            {HOURS.map(hour => {
+              const cellKey = `day-${selectedDayIdx}-${hour}`
+              const cellEvents = events.filter(e => e.day === selectedDayIdx && e.startHour === hour)
+              const isHovered = hoveredCell === cellKey
+              return (
+                <div key={hour} className="grid grid-cols-[80px_1fr] relative" style={{ minHeight: '80px', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <div className="p-2 text-right pr-3 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>{`${hour.toString().padStart(2, '0')}:00`}</div>
+                  {weekOffset === 0 && isToday(weekDates[selectedDayIdx]) && hour === currentHour && (
+                    <div className="absolute left-[80px] right-0 z-20 pointer-events-none flex items-center" style={{ top: `${(currentMin / 60) * 100}%` }}>
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ background: '#ef4444', boxShadow: '0 0 8px #ef4444' }} />
+                      <div className="flex-1 h-[2px]" style={{ background: 'linear-gradient(90deg, #ef4444, transparent)' }} />
+                    </div>
+                  )}
+                  <div className="relative border-l transition-colors cursor-pointer" style={{ borderColor: 'var(--border-subtle)', background: isToday(weekDates[selectedDayIdx]) ? 'rgba(14,165,233,0.03)' : isHovered ? 'var(--bg-elevated)' : 'transparent' }} onMouseEnter={() => setHoveredCell(cellKey)} onMouseLeave={() => setHoveredCell(null)} onClick={() => cellEvents.length === 0 && openAddModal(selectedDayIdx, hour)}>
+                    {isHovered && cellEvents.length === 0 && (
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium" style={{ background: 'rgba(14,165,233,0.15)', color: '#38bdf8', border: '1px dashed rgba(14,165,233,0.3)' }}><Plus size={10} /> {t('agenda.add')}</div>
+                      </div>
+                    )}
+                    {cellEvents.map(event => {
+                      const colors = EVENT_COLORS[event.type] || EVENT_COLORS.meeting
+                      const dur = (event.endHour - event.startHour) + (event.endMin - event.startMin) / 60
+                      const Icon = ICON_MAP[event.icon] || CalendarDays
+                      return (
+                        <div key={event.id} className="absolute left-1 right-1 rounded-lg px-2 py-1.5 z-10 transition-all duration-200 hover:scale-[1.02] hover:z-20 hover:-translate-y-0.5 group" style={{ top: `${(event.startMin / 60) * 100}%`, height: `${dur * 80 - 4}px`, background: colors.bg, borderLeft: `3px solid ${colors.border}`, boxShadow: 'none' }} onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = `0 4px 16px ${colors.border}30` }} onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.boxShadow = 'none' }}>
+                          <div className="flex items-center gap-1.5"><Icon size={11} style={{ color: colors.text }} /><span className="text-[11px] font-semibold truncate" style={{ color: colors.text }}>{event.titleKey ? t(event.titleKey) : event.title}</span></div>
+                          <div className="text-[9px] mt-0.5" style={{ color: colors.text, opacity: 0.7 }}>{`${event.startHour.toString().padStart(2, '0')}:${event.startMin.toString().padStart(2, '0')} - ${event.endHour.toString().padStart(2, '0')}:${event.endMin.toString().padStart(2, '00')}`}</div>
+                          {event.aiSuggested && (
+                            <div className="flex items-center gap-1 mt-1">
+                              <button onClick={e => { e.stopPropagation(); acceptSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ background: 'rgba(52,211,153,0.2)', color: '#34d399' }}>{t('agenda.accept')}</button>
+                              <button onClick={e => { e.stopPropagation(); dismissSuggestion(event.id) }} className="px-1.5 py-0.5 rounded text-[9px]" style={{ color: 'var(--text-secondary)' }}><X size={10} /></button>
+                            </div>
+                          )}
+                          <div className="hidden group-hover:flex absolute top-1 right-1 gap-0.5">
+                            <button className="p-0.5 rounded" style={{ color: 'var(--text-secondary)' }}><Pencil size={10} /></button>
+                            <button onClick={e => { e.stopPropagation(); setEvents(prev => prev.filter(ev => ev.id !== event.id)) }} className="p-0.5 rounded" style={{ color: '#ef4444' }}><Trash2 size={10} /></button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        )}
+        {view === 'month' && (() => {
+          const monthDate = weekDates[0]
+          const monthCells = generateMonthGrid(monthDate.getFullYear(), monthDate.getMonth())
+          const eventDateMap: Record<string, CalEvent[]> = {}
+          events.forEach(ev => {
+            const d = weekDates[ev.day]
+            if (d) {
+              const key = d.toISOString().slice(0, 10)
+              if (!eventDateMap[key]) eventDateMap[key] = []
+              eventDateMap[key].push(ev)
+            }
+          })
+          return (
+            <div className="flex-1 rounded-2xl overflow-hidden flex flex-col" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
+              <div className="grid grid-cols-7 border-b" style={{ borderColor: 'var(--border-color)' }}>
+                {DAYS_SHORT.map((d, i) => (
+                  <div key={i} className="p-3 text-center text-[10px] uppercase font-semibold tracking-wider" style={{ color: i >= 5 ? '#fb923c' : '#64748b' }}>{d}</div>
+                ))}
+              </div>
+              <div className="overflow-y-auto flex-1" style={{ maxHeight: 'calc(100vh - 340px)' }}>
+                <div className="grid grid-cols-7">
+                  {monthCells.map((cell, i) => {
+                    const iso = cell.toISOString().slice(0, 10)
+                    const dayEvents = eventDateMap[iso] || []
+                    const todayCell = isToday(cell)
+                    const inMonth = cell.getMonth() === monthDate.getMonth()
+                    return (
+                      <div key={i} onClick={() => openAddModal((cell.getDay() + 6) % 7, 9)} className="p-2 min-h-[80px] border-b border-r cursor-pointer hover:bg-[#1a2236] transition-colors" style={{ borderColor: 'var(--border-subtle)', opacity: inMonth ? 1 : 0.3 }}>
+                        <div className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full ${todayCell ? 'bg-[#0ea5e9] text-white' : 'text-white'}`}>{cell.getDate()}</div>
+                        <div className="mt-1 flex flex-col gap-0.5">
+                          {dayEvents.slice(0, 3).map(ev => (
+                            <div key={ev.id} className="h-1.5 rounded-full w-full" style={{ background: EVENT_COLORS[ev.type]?.border || '#0ea5e9' }} />
+                          ))}
+                          {dayEvents.length > 3 && <div className="text-[9px]" style={{ color: 'var(--text-muted)' }}>+{dayEvents.length - 3}</div>}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )
+        })()}
         <div className="w-72 flex-shrink-0 rounded-2xl p-4 flex flex-col gap-4" style={{ background: 'rgba(17,24,39,0.7)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}>
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: '#0ea5e9' }}>{t('agenda.tasks')}</h3>
