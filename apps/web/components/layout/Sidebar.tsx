@@ -48,7 +48,8 @@ const SECTIONS: NavSection[] = [
     glow: "rgba(6,182,212,0.12)",
     items: [
       { href: "/content",   icon: PenTool,      labelKey: "nav.content" },
-      { href: "/analyze",   icon: Search,       labelKey: "nav.analyze" },
+      // TODO: Re-enable Analyzer after complete refactor (3 cascading bugs fixed but 500 persists)
+      // { href: "/analyze",   icon: Search,       labelKey: "nav.analyze" },
       { href: "/templates", icon: BookTemplate, labelKey: "nav.templates" },
       { href: "/mindmap",   icon: Brain,        labelKey: "nav.mindmap" },
     ],

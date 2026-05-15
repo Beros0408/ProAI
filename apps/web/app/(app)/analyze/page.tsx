@@ -1,3 +1,18 @@
+"use client"
+
+// TODO: Re-enable Analyzer after complete refactor (3 cascading bugs fixed but 500 persists)
+// Module hidden from nav — redirect direct URL access to dashboard
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+
+export default function AnalyzePage() {
+  const router = useRouter()
+  useEffect(() => { router.replace("/dashboard") }, [router])
+  return null
+}
+
+/* ─── Original implementation preserved below — restore when refactor is done ───
+
 'use client'
 
 import { useState } from 'react'
@@ -130,3 +145,5 @@ export default function AnalyzePage() {
     </div>
   )
 }
+
+─── End of preserved implementation ─── */
