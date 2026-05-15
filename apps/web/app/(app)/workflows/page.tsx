@@ -270,7 +270,7 @@ export default function WorkflowsPage() {
 
         {/* Left: workflow list */}
         <aside
-          className="w-52 flex-shrink-0 border-r flex flex-col overflow-y-auto"
+          className="w-44 flex-shrink-0 border-r flex flex-col overflow-y-auto"
           style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}
         >
           <div className="px-4 py-3 border-b text-xs font-semibold uppercase tracking-wider"
