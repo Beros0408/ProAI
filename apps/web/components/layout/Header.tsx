@@ -37,7 +37,7 @@ export function Header() {
   const bellRef = useRef<HTMLDivElement>(null)
 
   const foundKey = Object.entries(PAGE_TITLES).find(([k]) => pathname.startsWith(k))?.[1]
-  const title = foundKey ? t(foundKey) : 'ProAI'
+  const title = foundKey ? t(foundKey) : 'Krezia'
 
   useEffect(() => {
     if (!bellOpen) return

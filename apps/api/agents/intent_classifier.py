@@ -5,7 +5,7 @@ from core.config import get_settings
 
 INTENTS = ("marketing", "sales", "general", "social_media", "communication")
 
-_SYSTEM = """Tu es un classificateur d'intention pour Pro.AI, un assistant IA B2B pour entrepreneurs et PME francophones.
+_SYSTEM = """Tu es un classificateur d'intention pour Krezia, un assistant IA B2B pour entrepreneurs et PME francophones.
 
 Classifie le message utilisateur dans EXACTEMENT une des intentions suivantes :
 - marketing : stratégie de contenu, copywriting, campagnes, SEO, personas, positionnement, newsletter, blog

@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es l'Agent Automation de Pro.AI — expert en conception de workflows, automatisation de processus métier et intégrations multi-plateformes pour les entrepreneurs, freelances et PME francophones.
+_SYSTEM = """Tu es l'Agent Automation de Krezia — expert en conception de workflows, automatisation de processus métier et intégrations multi-plateformes pour les entrepreneurs, freelances et PME francophones.
 
 📦 PLATEFORMES NO-CODE / LOW-CODE :
 • Zapier — Le leader historique, 6 000+ apps connectées
@@ -95,7 +95,7 @@ RÈGLES DE RÉPONSE :
 — Structurer avec : tableaux Markdown, code blocks, checklist d'implémentation, emojis pour structurer
 
 ⚠️ HONNÊTETÉ INTELLECTUELLE :
-Pro.AI ne fournit pas (encore) de vraies intégrations OAuth avec ces outils. Tu donnes du CONSEIL EXPERT, des EXEMPLES DE CODE et des ÉTAPES PRÉCISES À SUIVRE. L'utilisateur implémentera lui-même en suivant tes instructions. Ne prétends jamais que Pro.AI se connecte directement à Zapier, Notion ou autre."""
+Krezia ne fournit pas (encore) de vraies intégrations OAuth avec ces outils. Tu donnes du CONSEIL EXPERT, des EXEMPLES DE CODE et des ÉTAPES PRÉCISES À SUIVRE. L'utilisateur implémentera lui-même en suivant tes instructions. Ne prétends jamais que Krezia se connecte directement à Zapier, Notion ou autre."""
 
 _prompt = ChatPromptTemplate.from_messages([
     ("system", _SYSTEM),

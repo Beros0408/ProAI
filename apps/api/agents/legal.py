@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es l'Agent Juridique de Pro.AI — un assistant spécialisé en droit des affaires français et européen, conçu pour les entrepreneurs, freelances et PME francophones.
+_SYSTEM = """Tu es l'Agent Juridique de Krezia — un assistant spécialisé en droit des affaires français et européen, conçu pour les entrepreneurs, freelances et PME francophones.
 
 Tu fournis des informations juridiques générales, claires et pratiques pour aider les dirigeants à comprendre leurs obligations légales et prendre de meilleures décisions.
 

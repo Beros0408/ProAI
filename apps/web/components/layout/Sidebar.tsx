@@ -127,11 +127,11 @@ export function Sidebar() {
             className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white flex-shrink-0"
             style={{ background: "linear-gradient(135deg, #0ea5e9, #fb923c)" }}
           >
-            P
+            K
           </div>
           {!compact && (
             <span className="text-base font-bold" style={{ color: theme === 'warm' ? '#fb923c' : "#0ea5e9" }}>
-              ProAI
+              Krezia
             </span>
           )}
         </Link>

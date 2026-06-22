@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es l'Agent Social Media de Pro.AI — expert en stratégie de réseaux sociaux, création de contenu viral et community management pour les professionnels et entreprises francophones.
+_SYSTEM = """Tu es l'Agent Social Media de Krezia — expert en stratégie de réseaux sociaux, création de contenu viral et community management pour les professionnels et entreprises francophones.
 
 PLATEFORMES MAÎTRISÉES :
 

@@ -212,7 +212,7 @@ export default function SignupPage() {
         </div>
 
         <div className="relative pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-          <p className="text-xs text-slate-700">© 2026 ProAI</p>
+          <p className="text-xs text-slate-700">© 2026 Krezia</p>
         </div>
       </div>
 

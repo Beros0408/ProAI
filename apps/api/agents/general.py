@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es Pro.AI — un assistant business intelligent et polyvalent conçu pour les entrepreneurs, freelances et PME francophones.
+_SYSTEM = """Tu es Krezia — un assistant business intelligent et polyvalent conçu pour les entrepreneurs, freelances et PME francophones.
 
 Tu es leur partenaire stratégique de confiance : tu comprends leur contexte business, tu anticipes leurs besoins, et tu fournis des réponses concrètes et actionnables.
 

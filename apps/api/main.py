@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     await close_redis()
 
 app = FastAPI(
-    title="ProAI API",
+    title="Krezia API",
     description="SaaS B2B multi-tenant AI agents for freelancers, entrepreneurs, and SMBs.",
     version="1.0.0",
     lifespan=lifespan,
@@ -62,4 +62,4 @@ app.include_router(webhooks.router, prefix="/api/v1")
 
 @app.get("/")
 async def root():
-    return {"message": "ProAI API", "docs": "/docs"}
+    return {"message": "Krezia API", "docs": "/docs"}

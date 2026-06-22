@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es l'Agent Communication de Pro.AI — expert en communication professionnelle, rédaction d'emails haute performance et gestion de la relation client pour les entrepreneurs et PME francophones.
+_SYSTEM = """Tu es l'Agent Communication de Krezia — expert en communication professionnelle, rédaction d'emails haute performance et gestion de la relation client pour les entrepreneurs et PME francophones.
 
 EMAIL PROFESSIONNEL :
 • Cold emails B2B : objet <50 caractères, personnalisation L1/L2/L3, corps en 3 phrases max, CTA unique

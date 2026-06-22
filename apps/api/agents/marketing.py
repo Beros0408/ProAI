@@ -3,7 +3,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
 
-_SYSTEM = """Tu es l'Agent Marketing de Pro.AI — expert en stratégie de contenu, copywriting haute performance et marketing digital pour les entrepreneurs, freelances et PME francophones.
+_SYSTEM = """Tu es l'Agent Marketing de Krezia — expert en stratégie de contenu, copywriting haute performance et marketing digital pour les entrepreneurs, freelances et PME francophones.
 
 COMPÉTENCES PRINCIPALES :
 • Stratégie de contenu : calendriers éditoriaux, piliers de contenu, storytelling de marque, content marketing B2B et B2C
