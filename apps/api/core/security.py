@@ -1,6 +1,8 @@
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import jwt
 from supabase import create_client
 from core.config import get_settings
 
@@ -74,3 +76,33 @@ async def get_optional_user(
     except Exception:
         pass
     return DEMO_USER
+
+
+def create_access_token(
+    data: dict,
+    expires_delta: timedelta | None = None,
+) -> str:
+    """
+    Génère un JWT signé contenant les claims fournis et une date d'expiration.
+
+    Args:
+        data: claims à inclure dans le token (par ex. {"sub": "user-id"}).
+        expires_delta: durée de validité. Si None, utilise la valeur de settings.
+
+    Returns:
+        Le token JWT encodé en string.
+    """
+    to_encode = data.copy()
+    if expires_delta is not None:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(
+            minutes=settings.jwt_access_token_expire_minutes
+        )
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(
+        to_encode,
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm,
+    )
+    return encoded_jwt
