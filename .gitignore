@@ -1,26 +1,37 @@
-﻿node_modules/
+# Dépendances
+node_modules/
 __pycache__/
 *.pyc
 .venv/
+
+# Builds
 .next/
 dist/
 build/
+
+# Variables d'environnement (tous .env sauf les exemples)
 .env
 .env.local
 .env.*.local
 !.env.example
 !.env.local.example
+
+# Éditeurs
 .vscode/
 .idea/
+
+# Système
 .DS_Store
 Thumbs.db
+
+# Tests & caches
 coverage/
 .pytest_cache/
 .turbo/
 *.log
 
-.env
-.env.local
-api/.env
+# Caches TypeScript
+*.tsbuildinfo
 
+# Config locale MCP (peut contenir des tokens)
 .mcp.json
