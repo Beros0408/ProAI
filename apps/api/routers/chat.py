@@ -10,7 +10,7 @@ from supabase import Client
 from agents.orchestrator import run_orchestrator
 from agents.tools import get_leads_context, get_tasks_context, get_analytics_context, get_action_cards
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 from schemas.chat import ActionCard, ChatRequest, ChatResponse, ChatMessage
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ def _detect_intent_keywords(message: str) -> str | None:
 @router.post("", response_model=ChatResponse)
 async def chat(
     body: ChatRequest,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]

@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from supabase import Client
 
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -140,7 +140,7 @@ def _replace_steps(supabase: Client, workflow_id: str, steps: List[WorkflowStepI
 
 @router.get("/", response_model=List[WorkflowOut])
 async def list_workflows(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -168,7 +168,7 @@ async def list_workflows(
 @router.get("/{workflow_id}", response_model=WorkflowOut)
 async def get_workflow(
     workflow_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -194,7 +194,7 @@ async def get_workflow(
 @router.post("/", response_model=WorkflowOut, status_code=201)
 async def create_workflow(
     data: WorkflowCreate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -221,7 +221,7 @@ async def create_workflow(
 async def update_workflow(
     workflow_id: str,
     data: WorkflowUpdate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -270,7 +270,7 @@ async def update_workflow(
 @router.patch("/{workflow_id}/toggle", response_model=WorkflowOut)
 async def toggle_workflow(
     workflow_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -305,7 +305,7 @@ async def toggle_workflow(
 @router.delete("/{workflow_id}")
 async def delete_workflow(
     workflow_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ) -> Response:
     user_id = current_user["user_id"]

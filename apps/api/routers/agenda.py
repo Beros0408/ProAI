@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from supabase import Client
 
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/agenda", tags=["agenda"])
@@ -98,7 +98,7 @@ def _row_to_task(row: Dict[str, Any]) -> Task:
 
 @router.get("/events", response_model=List[CalEvent])
 async def list_events(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -122,7 +122,7 @@ async def list_events(
 @router.post("/events", response_model=CalEvent)
 async def create_event(
     payload: CalEventBase,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -149,7 +149,7 @@ async def create_event(
 async def update_event(
     event_id: str,
     payload: CalEventBase,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -184,7 +184,7 @@ async def update_event(
 @router.delete("/events/{event_id}")
 async def delete_event(
     event_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -200,7 +200,7 @@ async def delete_event(
 
 @router.get("/tasks", response_model=List[Task])
 async def list_tasks(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -224,7 +224,7 @@ async def list_tasks(
 @router.post("/tasks", response_model=Task)
 async def create_task(
     payload: TaskBase,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -245,7 +245,7 @@ async def create_task(
 @router.patch("/tasks/{task_id}/toggle", response_model=Task)
 async def toggle_task(
     task_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -279,7 +279,7 @@ async def toggle_task(
 @router.delete("/tasks/{task_id}")
 async def delete_task(
     task_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -295,7 +295,7 @@ async def delete_task(
 
 @router.post("/smart-suggest", response_model=SmartSuggestResponse)
 async def smart_suggest(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]

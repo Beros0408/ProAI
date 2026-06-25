@@ -10,7 +10,7 @@ from supabase import Client
 
 from core.config import get_settings
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -146,7 +146,7 @@ def _build_stats(leads: List[Lead]) -> Dict[str, Any]:
 
 @router.get("/leads", response_model=LeadResponse)
 async def get_leads(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -169,7 +169,7 @@ async def get_leads(
 @router.post("/leads", response_model=Lead, status_code=201)
 async def create_lead(
     lead_data: LeadCreate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -203,7 +203,7 @@ async def create_lead(
 async def update_lead(
     lead_id: str,
     data: LeadUpdate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -232,7 +232,7 @@ async def update_lead(
 async def update_lead_stage(
     lead_id: str,
     stage: Literal["nouveau", "contacte", "negociation", "gagne"],
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -258,7 +258,7 @@ async def update_lead_stage(
 async def update_lead_score(
     lead_id: str,
     score: int,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -283,7 +283,7 @@ async def update_lead_score(
 @router.delete("/leads/{lead_id}")
 async def delete_lead(
     lead_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ) -> Response:
     user_id = current_user["user_id"]
@@ -298,7 +298,7 @@ async def delete_lead(
 @router.post("/leads/{lead_id}/ai-score")
 async def ai_score_lead(
     lead_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     """Score a lead with AI (0-100) and persist."""

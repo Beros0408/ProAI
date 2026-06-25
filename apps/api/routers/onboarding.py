@@ -9,7 +9,7 @@ from supabase import Client
 
 from core.config import get_settings
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/onboarding", tags=["onboarding"])
@@ -81,7 +81,7 @@ def _row_to_profile(row: Dict[str, Any]) -> BusinessProfileResponse:
 
 @router.get("/profile", response_model=BusinessProfileResponse)
 async def get_profile(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     """Return the business profile for the current user."""
@@ -107,7 +107,7 @@ async def get_profile(
 @router.post("/profile", response_model=BusinessProfileResponse)
 async def upsert_profile(
     payload: BusinessProfileCreate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     """Create or update the business profile for the current user."""

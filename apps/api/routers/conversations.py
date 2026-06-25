@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from supabase import Client
 
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 from schemas.conversation import (
     ConversationCreate,
     ConversationList,
@@ -28,7 +28,7 @@ MESSAGES_TABLE = "messages"
 
 @router.get("", response_model=ConversationList)
 async def list_conversations(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -56,7 +56,7 @@ async def list_conversations(
 @router.post("", response_model=ConversationResponse, status_code=status.HTTP_201_CREATED)
 async def create_conversation(
     body: ConversationCreate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -80,7 +80,7 @@ async def create_conversation(
 @router.delete("/{conversation_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_conversation(
     conversation_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -96,7 +96,7 @@ async def delete_conversation(
 @router.get("/{conversation_id}/messages", response_model=List[MessageResponse])
 async def list_messages(
     conversation_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]

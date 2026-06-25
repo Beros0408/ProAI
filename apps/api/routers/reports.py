@@ -9,7 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 from core.config import get_settings
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 router = APIRouter(prefix='/reports', tags=['reports'])
 
@@ -127,7 +127,7 @@ async def _generate_report_text(prompt_text: str) -> str:
 @router.post('/generate', response_model=ReportResponse)
 async def generate_report(
     payload: ReportGenerateRequest,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -174,7 +174,7 @@ async def generate_report(
 
 @router.get('', response_model=list[ReportResponse])
 async def get_reports(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     return _reports

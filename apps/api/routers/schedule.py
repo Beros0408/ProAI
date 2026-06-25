@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 from supabase import Client
 
 from core.database import get_supabase
-from core.security import get_optional_user
+from core.security import get_current_user
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/schedule", tags=["schedule"])
@@ -61,7 +61,7 @@ def _row_to_post(row: Dict[str, Any]) -> ScheduledPost:
 
 @router.get("/posts", response_model=List[ScheduledPost])
 async def list_posts(
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -85,7 +85,7 @@ async def list_posts(
 @router.post("/posts", response_model=ScheduledPost)
 async def create_post(
     payload: ScheduledPostBase,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -109,7 +109,7 @@ async def create_post(
 async def update_post_status(
     post_id: str,
     payload: ScheduledPostUpdate,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
@@ -134,7 +134,7 @@ async def update_post_status(
 @router.delete("/posts/{post_id}", status_code=204)
 async def delete_post(
     post_id: str,
-    current_user: dict = Depends(get_optional_user),
+    current_user: dict = Depends(get_current_user),
     supabase: Client = Depends(get_supabase),
 ):
     user_id = current_user["user_id"]
