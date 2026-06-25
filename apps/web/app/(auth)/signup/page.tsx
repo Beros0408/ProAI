@@ -137,12 +137,6 @@ export default function SignupPage() {
       setError(t('auth.error.generic'))
       setLoading(false)
     } else {
-      // Fire-and-forget welcome email
-      fetch(`${API_URL}/api/v1/welcome/send`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name: fullName }),
-      }).catch(() => {})
       setSuccess(true)
       setLoading(false)
     }
