@@ -1,10 +1,11 @@
 from __future__ import annotations
 from typing import Literal
 from pydantic import BaseModel, Field
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
+from core.security import get_current_user
 
 router = APIRouter(tags=["content"])
 
@@ -88,7 +89,10 @@ async def _generate_text(message: str) -> str:
 
 
 @router.post("/linkedin", response_model=ContentResponse)
-async def generate_linkedin(body: LinkedInRequest):
+async def generate_linkedin(
+    body: LinkedInRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Genere un post LinkedIn en {body.language} sur le sujet suivant : {body.topic}. "
         f"Utilise un ton {body.tone}, propose un hook fort, un corps de message structure, "
@@ -106,7 +110,10 @@ async def generate_linkedin(body: LinkedInRequest):
 
 
 @router.post("/newsletter", response_model=ContentResponse)
-async def generate_newsletter(body: NewsletterRequest):
+async def generate_newsletter(
+    body: NewsletterRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Redige une newsletter en {body.language} sur le theme : {body.topic}. "
         f"Structure-la en {body.sections} sections claires avec des titres, un court sommaire et une conclusion. "
@@ -124,7 +131,10 @@ async def generate_newsletter(body: NewsletterRequest):
 
 
 @router.post("/email", response_model=ContentResponse)
-async def generate_email(body: EmailRequest):
+async def generate_email(
+    body: EmailRequest,
+    current_user: dict = Depends(get_current_user),
+):
     type_map = {
         "cold": "un cold email professionnel pour un prospect froid",
         "followup": "un email de relance apres une premiere prise de contact",
@@ -147,7 +157,10 @@ async def generate_email(body: EmailRequest):
 
 
 @router.post("/instagram", response_model=ContentResponse)
-async def generate_instagram(body: InstagramRequest):
+async def generate_instagram(
+    body: InstagramRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Genere un contenu Instagram en {body.language} sur le sujet suivant : {body.subject}. "
         f"Format : {body.style}. Fournis une legende avec emojis, 30 hashtags et une suggestion de visuel. "
@@ -165,7 +178,10 @@ async def generate_instagram(body: InstagramRequest):
 
 
 @router.post("/facebook", response_model=ContentResponse)
-async def generate_facebook(body: FacebookRequest):
+async def generate_facebook(
+    body: FacebookRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Cree un post Facebook optimise pour engagement en {body.language} sur le sujet : {body.subject}. "
         f"Type : {body.type}. Propose aussi un ciblage et un call-to-action adapte."
@@ -182,7 +198,10 @@ async def generate_facebook(body: FacebookRequest):
 
 
 @router.post("/twitter", response_model=ContentResponse)
-async def generate_twitter(body: TwitterRequest):
+async def generate_twitter(
+    body: TwitterRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Genere un {body.format} en {body.language} sur le sujet : {body.subject}. "
         "Respecte la limite de 280 caracteres par tweet si necessaire et numerote chaque message pour un thread."
@@ -199,7 +218,10 @@ async def generate_twitter(body: TwitterRequest):
 
 
 @router.post("/blog", response_model=ContentResponse)
-async def generate_blog(body: BlogRequest):
+async def generate_blog(
+    body: BlogRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Redige un article de blog en {body.language} sur le sujet : {body.subject}. "
         f"Utilise les mots-cles : {body.keywords}. Longueur : {body.length}. "
@@ -217,7 +239,10 @@ async def generate_blog(body: BlogRequest):
 
 
 @router.post("/video-script", response_model=ContentResponse)
-async def generate_video_script(body: VideoScriptRequest):
+async def generate_video_script(
+    body: VideoScriptRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Redige un script video en {body.language} pour {body.platform} sur le sujet : {body.subject}. "
         f"Duree : {body.duration}. Fournis un hook intro, un developpement, un CTA et des timestamps."

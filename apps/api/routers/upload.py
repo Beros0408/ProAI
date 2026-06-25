@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import io
-from fastapi import APIRouter, Form, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from core.config import get_settings
+from core.security import get_current_user
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
@@ -45,6 +46,7 @@ async def _call_llm(messages: list) -> str:
 async def analyze_upload(
     file: UploadFile = File(...),
     message: str = Form(""),
+    current_user: dict = Depends(get_current_user),
 ):
     if not file.filename:
         raise HTTPException(status_code=400, detail="Aucun fichier reçu.")

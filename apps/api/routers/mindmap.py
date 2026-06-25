@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
+from core.security import get_current_user
 
 router = APIRouter()
 
@@ -34,7 +35,10 @@ _prompt = ChatPromptTemplate.from_messages([
 ])
 
 @router.post("/generate", response_model=MindMapResponse)
-async def generate_mindmap(request: MindMapRequest):
+async def generate_mindmap(
+    request: MindMapRequest,
+    current_user: dict = Depends(get_current_user),
+):
     try:
         settings = get_settings()
         llm = ChatOpenAI(model="gpt-4o", api_key=settings.openai_api_key, temperature=0.3)

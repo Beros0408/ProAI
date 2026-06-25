@@ -1,9 +1,10 @@
 from __future__ import annotations
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
+from core.security import get_current_user
 
 router = APIRouter(prefix='/predictions', tags=['predictions'])
 
@@ -55,7 +56,10 @@ async def _call_openai(message: str) -> str:
     return result.content
 
 @router.post('/sales', response_model=SalesPredictionResponse)
-async def predict_sales(payload: PredictionRequest):
+async def predict_sales(
+    payload: PredictionRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Analyse la tendance de ventes actuelle et fournis une projection pour les 3 prochains mois. Contexte : {payload.context or 'Données commerciales générales.'}"
     )
@@ -74,7 +78,10 @@ async def predict_sales(payload: PredictionRequest):
     )
 
 @router.post('/churn', response_model=ChurnPredictionResponse)
-async def predict_churn(payload: PredictionRequest):
+async def predict_churn(
+    payload: PredictionRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Évalue les risques de churn pour les clients clés et propose des actions prioritaires. Contexte : {payload.context or 'Clients actuels à risque.'}"
     )
@@ -94,7 +101,10 @@ async def predict_churn(payload: PredictionRequest):
     )
 
 @router.post('/trends', response_model=TrendsPredictionResponse)
-async def predict_trends(payload: PredictionRequest):
+async def predict_trends(
+    payload: PredictionRequest,
+    current_user: dict = Depends(get_current_user),
+):
     prompt = (
         f"Détecte les tendances marché les plus pertinentes pour les 3 prochains mois. Contexte : {payload.context or 'Écosystème SaaS et B2B.'}"
     )

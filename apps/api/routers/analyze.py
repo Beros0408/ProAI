@@ -2,10 +2,11 @@ from __future__ import annotations
 import json
 import httpx
 from pydantic import BaseModel, HttpUrl, Field
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from core.config import get_settings
+from core.security import get_current_user
 
 router = APIRouter(tags=["analyze"])
 
@@ -40,7 +41,10 @@ async def _analyze_text(message: str) -> str:
     return result.content
 
 @router.post("/website", response_model=WebsiteAnalyzeResponse)
-async def analyze_website(body: WebsiteAnalyzeRequest):
+async def analyze_website(
+    body: WebsiteAnalyzeRequest,
+    current_user: dict = Depends(get_current_user),
+):
     try:
         async with httpx.AsyncClient(timeout=20.0) as client:
             response = await client.get(str(body.url), follow_redirects=True)
